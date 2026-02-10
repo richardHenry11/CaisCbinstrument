@@ -1,0 +1,29 @@
+{
+  "appName": "Absence",
+  "login": "Masuk",
+  "email": "Email",
+  "password": "Kode Akses",
+  "register": "Daftar",
+  "enterSystem": "Masuk Sistem",
+  "takePicture": "Ambil Foto",
+  "chooseLang": "Pilih Bahasa",
+  "photoDesk": "Belum ada Foto..",
+
+
+
+  "gpsValid": "Validasi GPS - Kantor",
+  "badgeAllowed" : "GPS Diverifikasi - Diizinkan",
+  "badgeNotAllowed" : "GPS Ditolak - Ditolak",
+  "distance" : "Jarak ke Kantor",
+  "inButton" : "Masuk",
+  "outButton" : "Pulang",
+
+
+  "titlePilihDinas" : "Absensi",
+  "office" : "Kantor",
+  "field" : "Dinas Lapangan",
+  "wfh" : "Kerja Dirumah",
+  "cuti" : "Cuti",
+  "cutLap" : "Cuti Lapangan",
+  "sick" : "Sakit"
+}

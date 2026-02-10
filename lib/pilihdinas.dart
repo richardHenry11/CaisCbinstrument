@@ -5,11 +5,13 @@ import 'package:absence/drawer.dart';
 import 'package:absence/fieldDuty.dart';
 import 'package:absence/main.dart';
 import 'package:absence/officeAbsence.dart';
+import 'package:absence/settings.dart';
 import 'package:absence/sick.dart';
 import 'package:absence/lateness.dart';
 import 'package:absence/wfh.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 class PilihDinas extends StatefulWidget {
   const PilihDinas({super.key});
@@ -69,7 +71,7 @@ class _PilihDinasState extends State<PilihDinas> {
   }
 
   void  _dinasLuar() async {
-    final Att_type = "Dinas Luar";
+    final Att_type = "dinas_lapangan";
     final status = "dinas luar";
 
     final prefs = await SharedPreferences.getInstance();
@@ -142,10 +144,12 @@ class _PilihDinasState extends State<PilihDinas> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: 
-        Center(child: Text("Absence", style: TextStyle(color: const Color.fromARGB(255, 122, 122, 122),),)),
+        Center(child: Text(t.translate("titlePilihDinas"), style: TextStyle(color: const Color.fromARGB(255, 122, 122, 122),),)),
       ),
       drawer: AppSidebar(
         onMenuTap: (route) async {
@@ -164,10 +168,10 @@ class _PilihDinasState extends State<PilihDinas> {
               MaterialPageRoute(builder: (context) => Lateness())
             );
             break;
-            case "chart":
+            case "settings":
              Navigator.push(
               context, 
-              MaterialPageRoute(builder: (context) => Lateness())
+              MaterialPageRoute(builder: (context) => SettingsPage())
             );
             break;
             case "alarm":
@@ -231,7 +235,7 @@ class _PilihDinasState extends State<PilihDinas> {
                                 _dinasKantor();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => OfficeAbsence()));
                               }, 
-                              child: Text("Dinas Kantor", style: TextStyle(color: Colors.white),)
+                              child: Text(t.translate("office"), style: TextStyle(color: Colors.white),)
                             ),
                           ),
                           SizedBox(
@@ -247,7 +251,7 @@ class _PilihDinasState extends State<PilihDinas> {
                                 _dinasLuar();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => FieldDuty()));
                               }, 
-                              child: Text("Dinas Lapangan", style: TextStyle(color: Colors.white))
+                              child: Text(t.translate("field"), style: TextStyle(color: Colors.white))
                             ),
                           ),
                           SizedBox(
@@ -263,7 +267,7 @@ class _PilihDinasState extends State<PilihDinas> {
                                 _WFH();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => WFH()));
                               }, 
-                              child: Text("WFH", style: TextStyle(color: Colors.white))
+                              child: Text(t.translate("wfh"), style: TextStyle(color: Colors.white))
                             ),
                           ),
                         SizedBox(
@@ -279,7 +283,7 @@ class _PilihDinasState extends State<PilihDinas> {
                                 _cuti();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => Cuti()));
                               }, 
-                              child: Text("Cuti", style: TextStyle(color: Colors.white))
+                              child: Text(t.translate("cuti"), style: TextStyle(color: Colors.white))
                             ),
                           ),
                         SizedBox(
@@ -295,7 +299,7 @@ class _PilihDinasState extends State<PilihDinas> {
                                 _cutiLapangan();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => CutiLapangan()));
                               }, 
-                              child: Text("Cuti Lapangan", style: TextStyle(color: Colors.white))
+                              child: Text(t.translate("cutLap"), style: TextStyle(color: Colors.white))
                             ),
                           ),
                         SizedBox(
@@ -311,7 +315,7 @@ class _PilihDinasState extends State<PilihDinas> {
                                 _sakit();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => Sick()));
                               }, 
-                              child: Text("Sakit", style: TextStyle(color: Colors.white))
+                              child: Text(t.translate("sick"), style: TextStyle(color: Colors.white))
                             ),
                           ),
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.02)

@@ -23,6 +23,7 @@ class _DashboardState extends State<Dashboard> {
   String? _namePrefs;
   String? _idPrefs;
   bool? _isLoggedInPrefs;
+  int? _employeesId;
 
   // photo profile var
   String? _photoProfile;
@@ -39,8 +40,15 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> _initApp() async {
+    await _dateDestroyer();
     await _prefsCatcher();
     await _loadPhoto();
+  }
+
+  Future<void> _dateDestroyer() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('startDate');
+    await prefs.remove('endDate');
   }
 
   Future<void> _prefsCatcher() async {
@@ -48,8 +56,9 @@ class _DashboardState extends State<Dashboard> {
     _userPref = _prefs.getString('user') ?? 'who are you?';
     _tokenPrefs = _prefs.getString('token') ?? 'there is no token here, go away';
     _namePrefs = _prefs.getString('name') ?? 'who are you again?';
-    _idPrefs = _prefs.getString('id') ?? 'un ID fied :D';
+    _idPrefs = _prefs.getString('id') ?? 'unIDfied :D';
     _isLoggedInPrefs = _prefs.getBool('isLoggedIn');
+    _employeesId = _prefs.getInt('employeesId') ?? 0;
 
     // print save prefs state
     print("user: $_userPref");
@@ -57,6 +66,7 @@ class _DashboardState extends State<Dashboard> {
     print("name: $_namePrefs");
     print("id: $_idPrefs");
     print("isLoggedIn: $_isLoggedInPrefs");
+    print("employees ID: $_employeesId");
   }
 
   Future<void> _loadPhoto() async {
@@ -320,7 +330,7 @@ class _DashboardState extends State<Dashboard> {
                     //Button Funct 
                     Navigator.push(
                       context, 
-                      MaterialPageRoute(builder: (context) => rackupAbsence())
+                      MaterialPageRoute(builder: (context) => RackupAbsence())
                     );
                   }
                 ),

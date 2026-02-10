@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:absence/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http_parser/http_parser.dart';
+
 
 class Camera extends StatefulWidget {
   const Camera({super.key});
@@ -48,11 +52,79 @@ class _CameraState extends State<Camera> {
   // error treshold
   String? error;
 
+  // Location Treshold
+  double? _lat;
+  double? _lng;
+  String? _address;
+
   Future<bool> requestCameraPermission() async {
-  final status = await Permission.camera.request();
-  return status.isGranted;
+    final status = await Permission.camera.request();
+    return status.isGranted;
+  }
+
+  Future<void> _getLocation() async {
+    final permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      throw Exception("Location Permission denied");
+    }
+
+    final pos = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    _lat = pos.latitude;
+    _lng = pos.longitude;
+
+    final placemarks = await placemarkFromCoordinates(
+      _lat!,
+      _lng!,
+    );
+
+    final mark = placemarks.first;
+
+    _address =
+        "${mark.subLocality ?? ''}, ${mark.locality ?? ''}, ${mark.administrativeArea ?? ''}";
 }
 
+  Future<File> _drawGpsOverlay(File file) async {
+    final bytes = await file.readAsBytes();
+    final image = img.decodeImage(bytes)!;
+
+    final now = DateTime.now();
+
+    final text = """
+    ${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}:${now.second}
+    ${_lat!.toStringAsFixed(6)}, ${_lng!.toStringAsFixed(6)}
+    $_address
+    """;
+
+    img.drawString(
+      image,
+      text,
+      font: img.arial24,
+      x: 21,
+      y: image.height - 139,
+      color: img.ColorRgb8(0, 0, 0),
+    );
+
+    img.drawString(
+      image,
+      text,
+      font: img.arial24,
+      x: 20,
+      y: image.height - 140,
+      color: img.ColorRgb8(255, 255, 255),
+    );
+
+    final outFile = File(
+      '${file.parent.path}/gps_${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
+
+    await outFile.writeAsBytes(img.encodeJpg(image, quality: 85));
+    return outFile;
+  }
+ 
   @override
   void initState() {
     // TODO: implement initState
@@ -96,17 +168,20 @@ class _CameraState extends State<Camera> {
                                                 imageQuality: 75
                                                 );
     if (image != null) {
+      await _getLocation();
       setState(() {
         _photo = File(image.path);
         _faceValid = false;
       });
 
-      final fixedImage = await _normalizeImage(_photo!);
+      final normalized = await _normalizeImage(_photo!);
+      final stamped = await _drawGpsOverlay(normalized);
+
       setState(() {
-        _photo = fixedImage;
+        _photo = stamped;
       });
 
-      await recognizeFace(fixedImage);
+      await recognizeFace(stamped);
 
       // final image = await _controller.takePicture();
       // debugPrint("Photo Taken: ${image.path}");
@@ -145,7 +220,7 @@ class _CameraState extends State<Camera> {
     String status;
     // String attType;
 
-    if (hour < 8 || (hour == 8 && minute <= 9)) {
+    if (hour < 8 || (hour == 8 && minute <= 10)) {
       status = "Hadir";
       // attType = "Hadir";
     } else if (hour == 8 && minute >= 10 && minute <= 15) {
@@ -479,10 +554,11 @@ class _CameraState extends State<Camera> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text("Take Picture..", style: TextStyle(color: Colors.white)),
+        title: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white)),
       ),
       body:
         Padding(
@@ -492,7 +568,7 @@ class _CameraState extends State<Camera> {
             children: [
                 Expanded(
                   child: _photo == null 
-                  ? Center(child: Text("No Photo yet...", style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
+                  ? Center(child: Text(t.translate("photoDesk"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
                   : 
                   ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(20),

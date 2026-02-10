@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class CamPulang extends StatefulWidget {
   const CamPulang({super.key});
@@ -45,6 +47,11 @@ class _CamPulangState extends State<CamPulang> {
   // error treshold
   String? error;
 
+  // Location Treshold
+  double? _lat;
+  double? _lng;
+  String? _address;
+
   File? _photo;
   bool _isSubmitting = false;
 
@@ -58,6 +65,69 @@ class _CamPulangState extends State<CamPulang> {
     // TODO: implement initState
     super.initState();
     _prefsCatcher();
+  }
+
+  Future<void> _getLocation() async {
+    final permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      throw Exception("Location Permission denied");
+    }
+
+    final pos = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    _lat = pos.latitude;
+    _lng = pos.longitude;
+
+    final placemarks = await placemarkFromCoordinates(
+      _lat!,
+      _lng!,
+    );
+
+    final mark = placemarks.first;
+
+    _address =
+        "${mark.subLocality ?? ''}, ${mark.locality ?? ''}, ${mark.administrativeArea ?? ''}";
+}
+
+  Future<File> _drawGpsOverlay(File file) async {
+    final bytes = await file.readAsBytes();
+    final image = img.decodeImage(bytes)!;
+
+    final now = DateTime.now();
+
+    final text = """
+    ${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}:${now.second}
+    ${_lat!.toStringAsFixed(6)}, ${_lng!.toStringAsFixed(6)}
+    $_address
+    """;
+
+    img.drawString(
+      image,
+      text,
+      font: img.arial24,
+      x: 21,
+      y: image.height - 139,
+      color: img.ColorRgb8(0, 0, 0),
+    );
+
+    img.drawString(
+      image,
+      text,
+      font: img.arial24,
+      x: 20,
+      y: image.height - 140,
+      color: img.ColorRgb8(255, 255, 255),
+    );
+
+    final outFile = File(
+      '${file.parent.path}/gps_${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
+
+    await outFile.writeAsBytes(img.encodeJpg(image, quality: 85));
+    return outFile;
   }
 
   Future<File> _normalizeImage(File file) async {
@@ -96,17 +166,20 @@ class _CamPulangState extends State<CamPulang> {
                                                 imageQuality: 75
                                                 );
     if (image != null) {
+      await _getLocation();
       setState(() {
         _photo = File(image.path);
         _faceValid = false;
       });
 
-      final fixedImage = await _normalizeImage(_photo!);
+      final normalized = await _normalizeImage(_photo!);
+      final stamped = await _drawGpsOverlay(normalized);
+
       setState(() {
-        _photo = fixedImage;
+        _photo = stamped;
       });
 
-      await recognizeFace(fixedImage);
+      await recognizeFace(stamped);
 
       // final image = await _controller.takePicture();
       // debugPrint("Photo Taken: ${image.path}");

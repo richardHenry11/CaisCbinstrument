@@ -60,23 +60,23 @@ class AppSidebar extends StatelessWidget {
             onTap: () => onMenuTap("dashboard"),
           ),
 
-          _menuItem(
-            icon: MaterialCommunityIcons.clock_alert,
-            title: "Lateness Confirmation",
-            onTap: () => onMenuTap("lateness"),
-          ),
+          // _menuItem(
+          //   icon: MaterialCommunityIcons.clock_alert,
+          //   title: "Lateness Confirmation",
+          //   onTap: () => onMenuTap("lateness"),
+          // ),
 
           _menuItem(
-            icon: MaterialCommunityIcons.chart_line,
-            title: "Chart",
-            onTap: () => onMenuTap("chart"),
+            icon: MaterialCommunityIcons.cog,
+            title: "Settings",
+            onTap: () => onMenuTap("settings"),
           ),
 
-          _menuItem(
-            icon: MaterialCommunityIcons.alert,
-            title: "Alarm",
-            onTap: () => onMenuTap("alarm"),
-          ),
+          // _menuItem(
+          //   icon: MaterialCommunityIcons.alert,
+          //   title: "Alarm",
+          //   onTap: () => onMenuTap("alarm"),
+          // ),
 
           const Spacer(),
 

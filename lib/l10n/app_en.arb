@@ -1,0 +1,28 @@
+{
+  "appName": "Absence",
+  "login": "Login",
+  "email": "Email",
+  "password": "Access Code",
+  "register": "Register",
+  "enterSystem": "Enter the system",
+  "takePicture": "Take Picture",
+  "chooseLang": "Choose Language",
+  "photoDesk": "No Photo yet..",
+
+
+  "gpsValid": "GPS Validator - Office",
+  "badgeAllowed" : "GPS Verified - Allowed",
+  "badgeNotAllowed" : "GPS Unverified - Not Allowed",
+  "distance" : "Distance to Office",
+  "inButton" : "Check In",
+  "outButton" : "Check Out",
+
+
+  "titlePilihDinas" : "Absence",
+  "office" : "Office Absence",
+  "field" : "Field Duty",
+  "wfh" : "WFH",
+  "cuti" : "Annual Leave",
+  "cutLap" : "Field Duty Leave",
+  "sick" : "Sick"
+}

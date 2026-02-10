@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
 
 class Regist extends StatefulWidget {
   const Regist({super.key});
@@ -159,8 +160,20 @@ class _RegistState extends State<Regist> {
 
   Future<String> fileToBase64Image(File file) async {
     final bytes = await file.readAsBytes();
-    final base64Str = base64Encode(bytes);
+    final image = img.decodeImage(bytes)!;
+
+    final resized = img.copyResize(
+        image,
+        width: 720,
+      );
+
+    final jpg = img.encodeJpg(
+      resized,
+      quality: 65
+    );
+    final base64Str = base64Encode(jpg);
     return 'data:image/jpeg;base64,$base64Str';
+
   }
 
   Future<void> _regist() async {

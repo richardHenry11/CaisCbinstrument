@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:absence/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 // import 'package:http/http.dart' as http;
@@ -7,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class LemburCounter extends StatelessWidget {
   final String title;
@@ -118,6 +122,7 @@ class LemburCounter extends StatelessWidget {
       height: MediaQuery.sizeOf(context).height * 0.045,
       child: TextField(
         controller: controller,
+        enabled: false,
         readOnly: true,
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
@@ -126,6 +131,13 @@ class LemburCounter extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           filled: true,
           fillColor: const Color.fromARGB(255, 3, 23, 58),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 219, 219, 219),
+              width: 1,
+            ),
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(
@@ -191,10 +203,19 @@ class Lemur extends StatefulWidget {
 }
 
 class _LemurState extends State<Lemur> {
-  // Controller TextEditing
+  // Base64image controller
+    Future<String> imageToBase64(File imageFile) async {
+      final bytes = await imageFile.readAsBytes();
+      return base64Encode(bytes);
+    }
+
+    // Controller TextEditing
     TextEditingController _date = TextEditingController();
+
     // Var form
     DateTime? date;
+    String? _token;
+    String? _name;
 
     // state Weekdays
     int lemburW1 = 0;
@@ -218,7 +239,7 @@ class _LemurState extends State<Lemur> {
     final TextEditingController workingListCtrl = TextEditingController();
 
     // dateTime picker formatter
-    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
     // image picker
     final ImagePicker _picker = ImagePicker();
@@ -226,6 +247,190 @@ class _LemurState extends State<Lemur> {
 
     // working prove photo
     File? _workingPhoto;
+
+    // submit button state
+    bool _isActivated = false;
+
+    // error treshold
+    String? error;
+
+    @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadDateFromPrefs();
+    workingListCtrl.addListener(_validateSubmit);
+  }
+
+    Future<void> _loadDateFromPrefs() async {
+      final prefs = await SharedPreferences.getInstance();
+      final storedDate = prefs.getString('selected_absence_date');
+      final token = prefs.getString('token');
+      final name = prefs.getString('name');
+
+      if (storedDate != null && storedDate.isNotEmpty) {
+        setState(() {
+          date = DateTime.parse(storedDate);
+          _date.text = storedDate;           
+          _token = token;
+          _name = name;
+
+          print(date);
+          print(_token);
+          print(_name);
+        });
+      }
+    }
+
+    void _validateSubmit() {
+      final isValid =
+          _photo != null &&
+          _workingPhoto != null &&
+          _date.text.isNotEmpty &&
+          workingListCtrl.text.isNotEmpty;
+
+      if (_isActivated != isValid) {
+        setState(() {
+          _isActivated = isValid;
+        });
+      }
+    }
+
+    Future<void> _submitApi() async {
+      if(_token == null){
+        _logout();
+        return;
+      }
+
+      if (_photo == null || _workingPhoto == null) return;
+
+      // To base6eimage
+      final base64Image1 = await imageToBase64(_photo!);
+      final photoDataApproval = "data:image/jpeg;base64,$base64Image1";
+      final base64Image2 = await imageToBase64(_workingPhoto!);
+      final photoDataWorking = "data:image/jpeg;base64,$base64Image2";
+
+      debugPrint("PHOTO LENGTH approval: ${photoDataApproval.length}");
+      debugPrint("PHOTO PREFIX approval: ${photoDataApproval.substring(0, 30)}");
+      debugPrint("full photo approval: ${photoDataApproval}");
+      debugPrint("PHOTO LENGTH Working: ${photoDataWorking.length}");
+      debugPrint("PHOTO PREFIX Working: ${photoDataWorking.substring(0, 30)}");
+      debugPrint("full photo Working: ${photoDataWorking}");
+
+
+      final url = "https://cais.cbinstrument.com/auth/absensi/input-lembur";
+      final headers = {
+        "Authorization":"Bearer $_token",
+        "Content-Type":"application/json"
+        };
+      final body = jsonEncode(
+       {
+        "nama": _name,
+        "tanggal_lembur": _date.text,
+        "lembur_weekday_1": lemburW1,
+        "lembur_weekday_2": lemburW2,
+
+        "lembur_weekend_1": lemburWE1,
+        "lembur_weekend_2": lemburWE2,
+        "lembur_weekend_3": lemburWE3,
+
+        "daftar_pekerjaan": workingListCtrl.text,
+        "bukti_persetujuan_atasan": photoDataApproval,
+        "bukti_pekerjaan": [photoDataWorking]
+       }  
+      );
+
+      final postResponse = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body
+      );
+
+      if (postResponse.statusCode == 200) {
+        final resBody = jsonDecode(postResponse.body);
+        print(resBody);
+        print("Absence Fuccessful");
+        _thxForAbsence();
+      } else {
+        final body = jsonDecode(postResponse.body);
+        _thxForAbsenceFailed();
+        error = body['error'];
+        print("Absence Failed");
+        print("$error");
+      }
+    }
+
+    Future<void> _thxForAbsenceFailed() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return AlertDialog(
+          title: 
+            Column(
+              children: [
+                Text("Absence Failed", style: TextStyle(color: Colors.red)),
+                Divider()
+              ],
+            ),
+          content: Text("$error", style: TextStyle(color: Colors.black),),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+                  backgroundColor: Colors.green
+                ),
+                onPressed: (){
+                  // button Funct
+                  Navigator.of(context).pop();
+                }, 
+                child: Text("OK", style: TextStyle(color: Colors.white),)
+              ),
+            )
+          ],
+        );
+      }
+    );
+  }
+
+  Future<void> _thxForAbsence() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return AlertDialog(
+          title: 
+            Column(
+              children: [
+                // Text("", style: TextStyle(color: Colors.green)),
+                Icon(MaterialCommunityIcons.check_decagram, color: Colors.green, size: 80,),
+                // Divider()
+              ],
+            ),
+          content: 
+            Text("Report Has been Sent, and will be checked by HR :)", style: TextStyle(color: Colors.green, fontSize: 15),),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+                  backgroundColor: Colors.green
+                ),
+                onPressed: (){
+                  // button Funct
+                  Navigator.of(context).pop();
+                }, 
+                child: Text("OK", style: TextStyle(color: Colors.white),)
+              ),
+            )
+          ],
+        );
+      }
+    );
+  }
 
     void incW1() => setState(() {
       lemburW1++;
@@ -286,42 +491,44 @@ class _LemurState extends State<Lemur> {
 
     Future<void> _setTimeToPrefs() async {
     final prefs = await SharedPreferences.getInstance();
+    final formatted = formatter.format(date!);
 
     await prefs.setString(
       'date',
-      formatter.format(date!),
+      formatted,
     );
 
     debugPrint(
-      "Date: $date"
+      "Date: $formatted"
     );
   }
 
   Future<DateTime?> _pickDateTime(BuildContext context) async {
-    // PILIH TANGGAL
-    final DateTime? pickedDate = await showDatePicker(
+    /// PICK DATE
+    final DateTime? date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
 
-    if (pickedDate == null) return null;
+    if (date == null) {
+      return null;
+    }
 
-    // PILIH JAM & MENIT
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+    // // Pick Time
+    // final TimeOfDay? time = await showTimePicker(
+    //   context: context, 
+    //   initialTime: TimeOfDay.now());
 
-    if (pickedTime == null) return null;
+    // if (time == null) {
+    //   return null;
+    // }
 
     return DateTime(
-      pickedDate.year,
-      pickedDate.month,
-      pickedDate.day,
-      pickedTime.hour,
-      pickedTime.minute,
+      date.year,
+      date.month,
+      date.day,
     );
   }
 
@@ -372,6 +579,7 @@ class _LemurState extends State<Lemur> {
       setState(() {
         _photo = fixedImage;
       });
+      _validateSubmit();
     }
   }
 
@@ -407,6 +615,7 @@ class _LemurState extends State<Lemur> {
       setState(() {
         _workingPhoto = File(image.path);
       });
+      _validateSubmit();
     }
   }
 
@@ -420,8 +629,32 @@ class _LemurState extends State<Lemur> {
       setState(() {
         _workingPhoto = File(image.path);
       });
+      _validateSubmit();
     }
   } 
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (_) => MyHomePage()),
+      (route) => false, 
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    workingListCtrl.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -460,7 +693,7 @@ class _LemurState extends State<Lemur> {
                               }
                             },
                           ),
-                      //   ElevatedButton(onPressed: (){ _setTimeToPrefs(); }, child: Text("Set to prefs")
+                        ElevatedButton(onPressed: (){ _setTimeToPrefs(); }, child: Text("Set to prefs"))
                       // )
                     ],
                   )
@@ -549,10 +782,11 @@ class _LemurState extends State<Lemur> {
                             onPressed:() async {
                               final file = await _takePhotoFromGallery();
                               
-                              if (_photo != null || _photo == null) {
+                              if (file != null) {
                                 setState(() {
                                   _photo = file;
                                 });
+                                _validateSubmit();
                               }
                             },
                             child: Text("Open File", style: TextStyle(color: Colors.white),)
@@ -818,22 +1052,32 @@ class _LemurState extends State<Lemur> {
               ),
             ),
 
+            if (!_isActivated)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Text(
+                            "Lengkapi semua data untuk submit",
+                            style: TextStyle(color: Colors.orangeAccent, fontSize: 12),
+                          ),
+                        ),
+
             // Button Submit
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.9,
               height: MediaQuery.sizeOf(context). height * 0.07,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  backgroundColor: Colors.green
+              onPressed: _isActivated ? _submitApi : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _isActivated ? Colors.green : Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: (){
-              
-                }, 
-                child: Text("Submit Report", style: TextStyle(color: Colors.white),)
               ),
+              child: const Text(
+                "Submit Report",
+                style: TextStyle(color: Colors.white),
+              ),
+            )
             )
           ]
         ),

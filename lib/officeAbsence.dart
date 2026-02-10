@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+// import 'l10n/app_localizations.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 class dateTimePicker extends StatelessWidget {
   const dateTimePicker({super.key});
@@ -269,10 +271,11 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
     super.dispose();
   }
 
-  bool get _isShiftSelected => _savedShiftType == "masuk" || _savedShiftType == "pulang";
+  // bool get _isShiftSelected => _savedShiftType == "masuk" || _savedShiftType == "pulang";
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return
     Scaffold(
       body: 
@@ -342,7 +345,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                   Icon(Icons.location_on, color: Colors.white, size: 12,),
                                   Padding(
                                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
-                                    child: Text("GPS Validator - Office", style: TextStyle(color: Colors.white, fontSize: 12),
+                                    child: Text(t.translate("gpsValid"), style: TextStyle(color: Colors.white, fontSize: 12),
                                     ),
                                   ),
                                   SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
@@ -363,10 +366,10 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                             color: Colors.white,
                                           ),
                                           const SizedBox(width: 6),
-                                          Text(
+                                          Text(t.translate(
                                             _canPressButton
-                                                ? "GPS Verified - Allowed"
-                                                : "Outside Allowed Area",
+                                                ? ("badgeAllowed")
+                                                : ("badgeNotAllowed")),
                                             style: const TextStyle(color: Colors.white, fontSize: 8),
                                           ),
                                         ],
@@ -386,7 +389,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Distance to Office: ", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                    Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
                                     Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
                                   ],
                                 ),
@@ -502,7 +505,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                     );
                                   }
                                 : null,  
-                                child: Text("Masuk", style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
+                                child: Text(t.translate("inButton"), style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
                               )
                             ),
 
@@ -527,7 +530,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                       );
                                     }
                                   : null, 
-                                child: Text("Pulang", style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
+                                child: Text(t.translate("outButton"), style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
                               )
                             )
                           ],

@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:absence/main.dart';
+import 'package:absence/rackupAbsence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Lateness extends StatefulWidget {
   const Lateness({super.key});
@@ -13,6 +18,21 @@ class Lateness extends StatefulWidget {
 }
 
 class _LatenessState extends State<Lateness> {
+  // state prefs catcher
+  Map<String, dynamic>? latenessData;
+  String? userName;
+  String? savedToken;
+  int? id;
+
+  // base64Img state
+    Future<String> imageToBase64(File imageFile) async {
+      final bytes = await imageFile.readAsBytes();
+      return base64Encode(bytes);
+    }
+
+  // error treshold
+  String errorMessage = '';
+
   // image picker
   final ImagePicker _picker = ImagePicker();
   File? _photo;
@@ -22,6 +42,9 @@ class _LatenessState extends State<Lateness> {
     final status = await Permission.camera.request();
     return status.isGranted;
   }
+
+  // text editing controller
+  TextEditingController _keterangan = TextEditingController();
 
   // Dropdown list
   List<String> _dropdownItem = ["Macet", "Kendaraan Bermasalah", "Urusan Keluarga", "Gangguan Kesehatan", "Lainnya"];
@@ -36,10 +59,10 @@ class _LatenessState extends State<Lateness> {
     }
 
     // Resize optimal untuk face recognition
-    final resized = img.copyResize(decoded, width: 800);
+    final resized = img.copyResize(decoded, width: 720);
 
     // Encode ulang ke JPEG (buang format aneh kamera)
-    final jpg = img.encodeJpg(resized, quality: 90);
+    final jpg = img.encodeJpg(resized, quality: 75);
 
     final newFile = File(
       '${file.parent.path}/normalized_${DateTime.now().millisecondsSinceEpoch}.jpg',
@@ -47,6 +70,40 @@ class _LatenessState extends State<Lateness> {
 
     await newFile.writeAsBytes(jpg);
     return newFile;
+  }
+
+  Future<void> _prefsCatcher() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString('lateness_data');
+    final name = prefs.getString('name');
+    final token = prefs.getString('token');
+    final savedId = prefs.getInt('employeesId');
+
+    if(raw == null) return;
+
+    setState(() {
+      latenessData = jsonDecode(raw) as Map<String, dynamic>;
+      userName = name;
+      savedToken = token;
+      id = savedId;
+    });
+
+    print("Lateness Data_id : $id");
+    print("Username : $userName");
+    print("savedToken : $savedToken");
+    print("lateness Data: $latenessData");
+  }
+
+  String safeText(dynamic value) {
+    if (value == null || value.toString().isEmpty) return "-";
+    return value.toString();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _prefsCatcher();
   }
 
   Future<void> _takePhoto() async {
@@ -80,13 +137,161 @@ class _LatenessState extends State<Lateness> {
   Future<File?> _takePhotoFromGallery() async {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 75
+      imageQuality: 75,
     );
 
-    if (image == null) {
-      return null;
+    if (image == null) return null;
+
+    final original = File(image.path);
+    final fixed = await _normalizeImage(original);
+
+    return fixed;
+  }
+
+  Future<void> _submitAPI() async {
+    if(savedToken == "" || savedToken == null || savedToken == "null"){
+      print("token expired");
+      await _logout();
     }
-    return File(image.path);
+
+    // foto !null
+    if (_photo == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please upload photo")),
+      );
+      return;
+    }
+
+    // base64Image converter
+    final base64 = await imageToBase64(_photo!);
+    final res = "data:image/jpeg;base64,$base64";
+    debugPrint("PHOTO LENGTH approval: ${res.length}");
+    debugPrint("PHOTO PREFIX approval: ${res.substring(0, 30)}");
+    debugPrint("full photo approval: ${res}");
+
+    final url = "https://cais.cbinstrument.com/auth/absensi/konfirmasi";
+    final headers = {
+      "Content-Type":"application/json",
+      "Authorization": "Bearer $savedToken"
+    };
+    final body = jsonEncode({
+      "id_absensi": "$id",
+      "alasan": _selectedReason,
+      "keterangan": _keterangan.text,
+      "foto_bukti": res
+    });
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: body
+    );
+
+    if (response.statusCode == 200) {
+      final resBody = jsonDecode(response.body);
+      print(resBody);
+      print("Absence FUCKcessful");
+      _thxForAbsence();
+    } else {
+      final resBody = jsonDecode(response.body);
+      print(resBody);
+        setState(() {
+          errorMessage = resBody['message'] ?? 'Failed to submit confirmation';
+        });
+      _thxForAbsenceFailed();
+    }
+  }
+
+  Future<void> _thxForAbsenceFailed() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return AlertDialog(
+          title: 
+            Column(
+              children: [
+                Text("Absence Failed", style: TextStyle(color: Colors.red)),
+                Divider()
+              ],
+            ),
+          content: Text(errorMessage, style: TextStyle(color: Colors.black),),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+                  backgroundColor: Colors.green
+                ),
+                onPressed: (){
+                  // button Funct
+                  Navigator.of(context).pop();
+                }, 
+                child: Text("OK", style: TextStyle(color: Colors.white),)
+              ),
+            )
+          ],
+        );
+      }
+    );
+  }
+
+  Future<void> _thxForAbsence() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return AlertDialog(
+          title: 
+            Column(
+              children: [
+                // Text("", style: TextStyle(color: Colors.green)),
+                Icon(MaterialCommunityIcons.check_decagram, color: Colors.green, size: 80,),
+                // Divider()
+              ],
+            ),
+          content: 
+            Text("Report Has been Sent, and will be checked by HR :)", style: TextStyle(color: Colors.green, fontSize: 15),),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+                  backgroundColor: Colors.green
+                ),
+                onPressed: (){
+                  // button Funct
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context, 
+                    MaterialPageRoute(builder: (context) => RackupAbsence())
+                  );
+                }, 
+                child: Text("OK", style: TextStyle(color: Colors.white),)
+              ),
+            )
+          ],
+        );
+      }
+    );
+  }
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (_) => MyHomePage()),
+      (route) => false, 
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("Token Exp :(", style: TextStyle(color: Colors.white)),
+      ),
+    );
   }
 
   @override
@@ -145,7 +350,7 @@ class _LatenessState extends State<Lateness> {
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Name", style: TextStyle(color: Colors.white),)),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text("........", style: TextStyle(color: Colors.white))),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(safeText(userName), style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
                                     ),
@@ -157,7 +362,7 @@ class _LatenessState extends State<Lateness> {
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Date", style: TextStyle(color: Colors.white))),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text("........", style: TextStyle(color: Colors.white))),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text(safeText(latenessData?['date']), style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
                                     ),
@@ -169,7 +374,7 @@ class _LatenessState extends State<Lateness> {
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Check In", style: TextStyle(color: Colors.white))),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text("........", style: TextStyle(color: Colors.white))),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text(safeText(latenessData?['check_in']), style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
                                     ),
@@ -197,7 +402,26 @@ class _LatenessState extends State<Lateness> {
                             child: Card(
                               color: Colors.lightGreen,
                               child:
-                              Center(child: Text("You're not absent yet"))
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(child: Text(safeText(latenessData?['status'] == 'late' ? "T4" 
+                                                      : latenessData?['status'] == 'T1' ? "T1"
+                                                      : latenessData?['status'] == 'T2' ? "T2"
+                                                      : latenessData?['status'] == 'T3' ? "T3"
+                                                      : ""),
+                                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                    )
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child:
+                                    Text(latenessData?['status'] == 'late' ? "you're late over than 30 minutes!! :(" : "You're late !!",
+                                      style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic),
+                                    )
+                                  )
+                                ],
+                              )
                             ),
                           )
                         ),
@@ -297,6 +521,7 @@ class _LatenessState extends State<Lateness> {
                                 ),
                               ),
                               child: TextField(
+                                controller: _keterangan,
                                 maxLines: 5, // multiline
                                 style: const TextStyle(color: Colors.white),
                                 cursorColor: Colors.white,
@@ -361,36 +586,39 @@ class _LatenessState extends State<Lateness> {
                                 ),
                               ),
                           SizedBox(height:10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                              ),
+                              onPressed: _takePhoto,
+                              icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                              label: const Text("Take Photo", style: TextStyle(color: Colors.white),),
                             ),
-                            onPressed: _takePhoto,
-                            icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                            label: const Text("Take Photo", style: TextStyle(color: Colors.white),),
-                          ),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                              ),
+                              onPressed: () async {
+                                final file = await _takePhotoFromGallery();
+                        
+                                if (file != null) {
+                                  setState(() {
+                                    _photo = file;
+                                  });
+                                }
+                              },
+                              icon: const Icon(MaterialCommunityIcons.file, color: Colors.white,),
+                              label: const Text("Choose File", style: TextStyle(color: Colors.white),),
                             ),
-                            onPressed: () async {
-                              final file = await _takePhotoFromGallery();
-
-                              if (file != null || file == null) {
-                                setState(() {
-                                  _photo = file;
-                                });
-                              }
-                            },
-                            icon: const Icon(MaterialCommunityIcons.file, color: Colors.white,),
-                            label: const Text("Choose File", style: TextStyle(color: Colors.white),),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   )
@@ -412,7 +640,7 @@ class _LatenessState extends State<Lateness> {
                   ),
                   onPressed:(){
                     // Button Funct Here!
-                
+                    _submitAPI();
                   }, 
                   child: Text("Send Lateness Confirmation", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),)
                 ),
