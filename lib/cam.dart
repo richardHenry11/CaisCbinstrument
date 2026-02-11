@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:absence/l10n/app_localizations.dart';
+import 'package:absence/main.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -505,9 +506,9 @@ class _CameraState extends State<Camera> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
                   backgroundColor: Colors.green
                 ),
-                onPressed: (){
+                onPressed: (){ error == 'Token tidak valid' ?
                   // button Funct
-                  Navigator.of(context).pop();
+                   _logout() : Navigator.of(context).pop();
                 }, 
                 child: Text("OK", style: TextStyle(color: Colors.white),)
               ),
@@ -549,6 +550,23 @@ class _CameraState extends State<Camera> {
           ],
         );
       }
+    );
+  }
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (_) => MyHomePage()),
+      (route) => false, 
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+      ),
     );
   }
 
