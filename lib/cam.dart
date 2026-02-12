@@ -391,7 +391,7 @@ class _CameraState extends State<Camera> {
             "${now.second.toString().padLeft(2, '0')}";
     }
 
-    final header = "Bearer $_savedToken";
+    final header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MTc2ODYzODgxOCwiaWF0IjoxNzY4Mzc5NjE4fQ.Hgt16CXYPDm9RAaLczIcdhtKobgRyBitNWrH8au_S9E";
 
     final body = {
       "name": _savedName,
@@ -434,6 +434,7 @@ class _CameraState extends State<Camera> {
   // }
 
   Future<void> _confirmSubmitAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -445,7 +446,7 @@ class _CameraState extends State<Camera> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Confirmation", style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
+                    Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
                     Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
                   ],
                 ),
@@ -453,7 +454,7 @@ class _CameraState extends State<Camera> {
               ],
             ),
           content: 
-          Text("R U Sureee????!!!!???", style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
+          Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
           actions: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -464,7 +465,7 @@ class _CameraState extends State<Camera> {
                 // button Funct
                  Navigator.of(context).pop();
               }, 
-              child: Text("Cancel", style: TextStyle(color: Colors.white),)
+              child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -476,7 +477,7 @@ class _CameraState extends State<Camera> {
                 _submitAbsence();
                 Navigator.of(context).pop();
               }, 
-              child: Text("Sure", style: TextStyle(color: Colors.white),)
+              child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
             )
           ],
         );
@@ -485,6 +486,7 @@ class _CameraState extends State<Camera> {
   }
 
   Future<void> _thxForAbsenceFailed() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -493,7 +495,7 @@ class _CameraState extends State<Camera> {
           title: 
             Column(
               children: [
-                Text("Absence Failed", style: TextStyle(color: Colors.red)),
+                Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
                 Divider()
               ],
             ),
@@ -520,6 +522,7 @@ class _CameraState extends State<Camera> {
   }
 
   Future<void> _thxForAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -528,7 +531,7 @@ class _CameraState extends State<Camera> {
           title: 
             Column(
               children: [
-                Text("Thank You.. ^_^", style: TextStyle(color: Colors.green)),
+                Text(t.translate("thx"), style: TextStyle(color: Colors.green)),
                 Divider()
               ],
             ),
@@ -555,6 +558,7 @@ class _CameraState extends State<Camera> {
 
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
+    final t = AppLocalizations.of(context)!;
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
@@ -565,7 +569,8 @@ class _CameraState extends State<Camera> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+        content: 
+        Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -603,7 +608,7 @@ class _CameraState extends State<Camera> {
                 ),
                 onPressed: _takePhoto,
                 icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                label: const Text("Take Photo", style: TextStyle(color: Colors.white),),
+                label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
               ),
               SizedBox(height: 8),
               if (_faceMessage.isNotEmpty)
@@ -677,7 +682,7 @@ class _CameraState extends State<Camera> {
                   ),
                   onPressed: _photo != null && _faceValid && !_isSubmitting
                   ? _confirmSubmitAbsence : null,
-                  child: Text(_isSubmitting ? "Submitting..." : "Submit Absent", 
+                  child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
                     style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
                     fontSize: 15, 
                     fontWeight: FontWeight.w900)

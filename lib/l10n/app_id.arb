@@ -5,10 +5,7 @@
   "password": "Kode Akses",
   "register": "Daftar",
   "enterSystem": "Masuk Sistem",
-  "takePicture": "Ambil Foto",
   "chooseLang": "Pilih Bahasa",
-  "photoDesk": "Belum ada Foto..",
-
 
 
   "gpsValid": "Validasi GPS - Kantor",
@@ -25,5 +22,19 @@
   "wfh" : "Kerja Dirumah",
   "cuti" : "Cuti",
   "cutLap" : "Cuti Lapangan",
-  "sick" : "Sakit"
+  "sick" : "Sakit",
+
+  "takePhoto" : "Ambil Foto",
+  "photoDesk": "Belum ada Foto..",
+  "takePicture": "Ambil Foto",
+  "isSubmit" : "mengirim..",
+  "Submit" : "Ambil Foto Dulu",
+  "gallery" : "Pilih File",
+  "failed" : "Gagal Absen",
+  "thx" : "Terimakasihh... ^_^",
+  "confirm" : "Konfirmasi",
+  "rusure" : "Apa kamu yakin??!",
+  "cancel" : "Batalkan",
+  "sure" : "Ya",
+  "dadah" : "Selamat Tinggal ^_^"
 }

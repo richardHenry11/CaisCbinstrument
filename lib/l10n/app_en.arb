@@ -5,9 +5,7 @@
   "password": "Access Code",
   "register": "Register",
   "enterSystem": "Enter the system",
-  "takePicture": "Take Picture",
   "chooseLang": "Choose Language",
-  "photoDesk": "No Photo yet..",
 
 
   "gpsValid": "GPS Validator - Office",
@@ -24,5 +22,19 @@
   "wfh" : "WFH",
   "cuti" : "Annual Leave",
   "cutLap" : "Field Duty Leave",
-  "sick" : "Sick"
+  "sick" : "Sick",
+
+  "takePhoto" : "Take Photo",
+  "photoDesk": "No Photo yet..",
+  "takePicture": "Take Picture",
+  "isSubmit" : "Submitting..",
+  "Submit" : "Take Photo First",
+  "gallery" : "Choose File",
+  "failed" : "Absence Failed",
+  "thx" : "Thank youu... ^_^",
+  "confirm" : "Confirmation",
+  "rusure" : "R U Sureee????!!!!???",
+  "cancel" : "Cancel",
+  "sure" : "Sure",
+  "dadah" : "Goodbye.. ^_^"
 }

@@ -451,7 +451,7 @@ class _RegistState extends State<Regist> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: MediaQuery.sizeOf(context).width * 0.7,
+                    width: MediaQuery.sizeOf(context).width * 0.9,
                     child: Card(
                       color: const Color.fromARGB(255, 67, 57, 158),
                       child: 
@@ -487,7 +487,7 @@ class _RegistState extends State<Regist> {
                                   // ====== employee's lists =======
                                   _isLoadingNames ? const CircularProgressIndicator() :
                                   SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.6,
+                                    width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child:  
                                     DropdownButtonFormField(
@@ -519,7 +519,7 @@ class _RegistState extends State<Regist> {
                                   // ====== Leader's lists =======
                                   _loadingLeader ? const CircularProgressIndicator() :
                                   SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.6,
+                                    width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child:  
                                     DropdownButtonFormField(
@@ -549,7 +549,7 @@ class _RegistState extends State<Regist> {
                                   // Office Email
                                   SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
                                   SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.6,
+                                    width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child: TextFormField(
                                       controller: _email,
@@ -575,7 +575,7 @@ class _RegistState extends State<Regist> {
                                   // Password
                                   SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
                                   SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.6,
+                                    width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child: TextFormField(
                                       controller: _password,
@@ -601,7 +601,7 @@ class _RegistState extends State<Regist> {
                                   // Re-Password
                                   SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
                                   SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.6,
+                                    width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child: TextFormField(
                                       controller: _repassword,
@@ -624,35 +624,41 @@ class _RegistState extends State<Regist> {
                                     ),
                                   ),
         
-                                  Divider(thickness: 2, endIndent: MediaQuery.sizeOf(context).width * 0.1, indent: MediaQuery.sizeOf(context).width * 0.1,),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Divider(thickness: 2, endIndent: MediaQuery.sizeOf(context).width * 0.05, indent: MediaQuery.sizeOf(context).width * 0.05,),
+                                  ),
         
                                   //====== PHOTO TAKING ========
-                                  Container(
-                                    width: MediaQuery.sizeOf(context).width * 0.5,
-                                    height: MediaQuery.sizeOf(context).height * 0.25,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.blueAccent, style: BorderStyle.solid),
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.black12,
-                                    ),
-                                    child: Builder(
-                                      builder: (_) {
-                                        File? currentImage;
-                                        if (_currentStep == 0) currentImage = _frontFace;
-                                        if (_currentStep == 1) currentImage = _leftFace;
-                                        if (_currentStep == 2) currentImage = _rightFace;
-        
-                                        return currentImage == null
-                                            ? Icon(Icons.camera_alt, size: 60, color: Colors.white70)
-                                            : ClipRRect(
-                                                borderRadius: BorderRadius.circular(12),
-                                                child: Image.file(
-                                                  currentImage,
-                                                  fit: BoxFit.cover,
-                                                  width: double.infinity,
-                                                ),
-                                              );
-                                      },
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width * 0.5,
+                                      height: MediaQuery.sizeOf(context).height * 0.25,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.blueAccent, style: BorderStyle.solid),
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.black12,
+                                      ),
+                                      child: Builder(
+                                        builder: (_) {
+                                          File? currentImage;
+                                          if (_currentStep == 0) currentImage = _frontFace;
+                                          if (_currentStep == 1) currentImage = _leftFace;
+                                          if (_currentStep == 2) currentImage = _rightFace;
+                                            
+                                          return currentImage == null
+                                              ? Icon(Icons.camera_alt, size: 60, color: Colors.white70)
+                                              : ClipRRect(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  child: Image.file(
+                                                    currentImage,
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                  ),
+                                                );
+                                        },
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: MediaQuery.sizeOf(context).height * 0.005,),
@@ -681,26 +687,30 @@ class _RegistState extends State<Regist> {
                                       if ((_currentStep == 0 && _frontFace != null) ||
                                         (_currentStep == 1 && _leftFace != null) ||
                                         (_currentStep == 2 && _rightFace != null))
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                          )
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red.shade300,
+                                            padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10)
+                                            )
+                                          ),
+                                          onPressed: retryStep,
+                                          child: Text('Ulangi Foto', style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
                                         ),
-                                        onPressed: retryStep,
-                                        child: Text('Ulangi Foto', style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
                                       ),
                                       // ========== take Photo ==========
                                       if (!_isPhotoCompleted)
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 12),
+                                        padding: const EdgeInsets.only(top: 12, left: 5),
                                         child: ElevatedButton.icon(
                                           icon: Icon(Icons.camera_alt),
                                           label: Text('Buka Kamera', style: TextStyle(color: Colors.white),),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.blueAccent,
-                                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                            padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(12),
                                             ),
@@ -716,7 +726,7 @@ class _RegistState extends State<Regist> {
                                     padding: const EdgeInsets.only(top: 3),
                                     child: 
                                     SizedBox(
-                                      width: MediaQuery.sizeOf(context).width * 0.6,
+                                      width: MediaQuery.sizeOf(context).width * 0.75,
                                       child: Card(
                                         color: Colors.green.withOpacity(0.5),
                                         child: 

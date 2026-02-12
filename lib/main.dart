@@ -98,6 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController AccessCodeController = TextEditingController();
   bool _isLoading = false;
 
+  // password visible stakeholder
+  bool _isVisible = false;
+
   void _login() async {
   setState(() => _isLoading = true);
   print(_isLoading);
@@ -187,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.7,
+                  width: MediaQuery.sizeOf(context).width * 0.9,
                   child: Card(
                     color: const Color.fromARGB(255, 67, 57, 158),
                     child: 
@@ -198,11 +201,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.asset('assets/logoBiru.png', width: 220, height: 65),
                         ),
                         SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.5,
+                          width: MediaQuery.sizeOf(context).width * 0.75,
                           child: 
                           Divider(
                             thickness: 1, 
                             color: Colors.grey,
+                            // indent: MediaQuery.sizeOf(context).width * 0.05,
+                            // endIndent: MediaQuery.sizeOf(context).width * 0.05,
                           ),
                         ),
                         Padding(
@@ -220,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Column(
                               children: [
                                 SizedBox(
-                                  width: MediaQuery.sizeOf(context).width * 0.6,
+                                  width: MediaQuery.sizeOf(context).width * 0.75,
                                   height: MediaQuery.sizeOf(context).height * 0.06,
                                   child: TextFormField(
                                     controller: emailController,
@@ -243,11 +248,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
                                 SizedBox(
-                                  width: MediaQuery.sizeOf(context).width * 0.6,
+                                  width: MediaQuery.sizeOf(context).width * 0.75,
                                   height: MediaQuery.sizeOf(context).height * 0.06,
                                   child: TextFormField(
                                     controller: AccessCodeController,
-                                    obscureText: true,
+                                    obscureText: !_isVisible,
                                     decoration: InputDecoration(
                                       hintText: "Access Code",
                                       hintStyle: TextStyle(color: const Color.fromARGB(
@@ -261,19 +266,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                         borderSide: BorderSide.none
                                       ),
                                       filled: true,
-                                      fillColor: Colors.white
+                                      fillColor: Colors.white,
+
+                                      suffixIcon: IconButton(
+                                        onPressed: (){
+                                          setState(() {
+                                            _isVisible = !_isVisible;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          _isVisible == true ? Icons.visibility
+                                          : Icons.visibility_off,
+                                          color: Colors.grey,
+                                        )
+                                      )
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                                  padding: const EdgeInsets.only(top: 10.0, left: 15.0, right: 3.0),
                                   child: 
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       // Regist
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width * 0.3,
+                                        width: MediaQuery.sizeOf(context).width * 0.38,
+                                        height: MediaQuery.sizeOf(context).height * 0.06,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: const Color.fromARGB(255, 73, 197, 254),
@@ -292,7 +311,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                       // login
                                       SizedBox(
-                                        width: MediaQuery.sizeOf(context).width * 0.3,
+                                        width: MediaQuery.sizeOf(context).width * 0.38,
+                                        height: MediaQuery.sizeOf(context).height * 0.06,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: const Color.fromARGB(255, 73, 197, 254),
@@ -318,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text("Beta Version - Protected by advanced security protocols", style: TextStyle(color: const Color.fromARGB(
-                                                                255, 195, 195, 195), fontSize: 8, fontWeight: FontWeight.w800),
+                                                                255, 195, 195, 195), fontSize: 10, fontWeight: FontWeight.w800),
                           ),
                         )
                       ],
