@@ -174,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       body: 
       SizedBox(
@@ -305,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           (){
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => Regist()));
                                           }, 
-                                          child: Text('Regist', style: TextStyle(color: Colors.white),)
+                                          child: Text(t.translate("reg"), style: TextStyle(color: Colors.white),)
                                         ),
                                       ),
 
@@ -325,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           (){
                                             _login();
                                           }, 
-                                          child: Text('Enter the system', style: TextStyle(color: Colors.white),)
+                                          child: Text(t.translate("in"), style: TextStyle(color: Colors.white),)
                                         ),
                                       ),
                                     ],
@@ -337,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // Padding(padding: EdgeInsets.all(5.0)),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Text("Beta Version - Protected by advanced security protocols", style: TextStyle(color: const Color.fromARGB(
+                          child: Text(t.translate("beta"), style: TextStyle(color: const Color.fromARGB(
                                                                 255, 195, 195, 195), fontSize: 10, fontWeight: FontWeight.w800),
                           ),
                         )

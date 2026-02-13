@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absence/main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -12,6 +13,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 class CamPulang extends StatefulWidget {
   const CamPulang({super.key});
@@ -212,9 +214,10 @@ class _CamPulangState extends State<CamPulang> {
 
   Future<void> recognizeFace(File imageFile) async {
   setState(() {
+    final t = AppLocalizations.of(context)!;
     _faceValid = false;
     _similarity = null;
-    _faceMessage = "Checking...";
+    _faceMessage = t.translate("checking");
   });
 
   final request = http.MultipartRequest(
@@ -228,8 +231,9 @@ class _CamPulangState extends State<CamPulang> {
   final body = await response.stream.bytesToString();
 
   if (response.statusCode != 200) {
+    final t = AppLocalizations.of(context)!;
     setState(() {
-      _faceMessage = "Failed to face verifying";
+      _faceMessage = t.translate("nor");
       _faceValid = false;
     });
     return;
@@ -240,7 +244,8 @@ class _CamPulangState extends State<CamPulang> {
 
   if (faces == null || faces.isEmpty) {
     setState(() {
-      _faceMessage = "No face detected";
+      final t = AppLocalizations.of(context)!;
+      _faceMessage = t.translate("noFace");
       _faceValid = false;
     });
     return;
@@ -248,7 +253,8 @@ class _CamPulangState extends State<CamPulang> {
 
   if (faces.length != 1) {
     setState(() {
-      _faceMessage = "Make sure only one face is visible";
+      final t = AppLocalizations.of(context)!;
+      _faceMessage = t.translate("oneFace");
       _faceValid = false;
     });
     return;
@@ -290,7 +296,8 @@ class _CamPulangState extends State<CamPulang> {
 
   if (matched == null) {
     setState(() {
-      _faceMessage = "Face is not Verified";
+      final t = AppLocalizations.of(context)!;
+      _faceMessage = t.translate("unrecog");
       _faceValid = false;
     });
     return;
@@ -299,11 +306,12 @@ class _CamPulangState extends State<CamPulang> {
   final sim = matched['similarity'];
 
   setState(() {
+    final t = AppLocalizations.of(context)!;
     _similarity = sim;
     _faceValid = sim >= 0.95;
     _faceMessage = _faceValid
-        ? "Face Verified"
-        : "Face Unknown";
+        ? t.translate("recoged")
+        : t.translate("unfaced");
   });
 
   print("similarities : $_similarity");
@@ -392,6 +400,7 @@ class _CamPulangState extends State<CamPulang> {
   // }
 
   Future<void> _confirmSubmitAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -403,7 +412,7 @@ class _CamPulangState extends State<CamPulang> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Confirmation", style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
+                    Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
                     Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
                   ],
                 ),
@@ -411,7 +420,7 @@ class _CamPulangState extends State<CamPulang> {
               ],
             ),
           content: 
-          Text("R U Sureee????!!!!???", style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
+          Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
           actions: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -422,7 +431,7 @@ class _CamPulangState extends State<CamPulang> {
                 // button Funct
                  Navigator.of(context).pop();
               }, 
-              child: Text("Cancel", style: TextStyle(color: Colors.white),)
+              child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -434,7 +443,7 @@ class _CamPulangState extends State<CamPulang> {
                 _submitAbsence();
                 Navigator.of(context).pop();
               }, 
-              child: Text("Sure", style: TextStyle(color: Colors.white),)
+              child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
             )
           ],
         );
@@ -443,6 +452,7 @@ class _CamPulangState extends State<CamPulang> {
   }
 
   Future<void> _thxForAbsenceFailed() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -451,7 +461,7 @@ class _CamPulangState extends State<CamPulang> {
           title: 
             Column(
               children: [
-                Text("Absence Failed", style: TextStyle(color: Colors.red)),
+                Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
                 Divider()
               ],
             ),
@@ -464,10 +474,10 @@ class _CamPulangState extends State<CamPulang> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
                   backgroundColor: Colors.green
                 ),
-                onPressed: (){
+                onPressed: (){ error == 'Token tidak valid' ?
                   // button Funct
-                  Navigator.of(context).pop();
-                }, 
+                   _logout() : Navigator.of(context).pop();
+                },
                 child: Text("OK", style: TextStyle(color: Colors.white),)
               ),
             )
@@ -478,6 +488,7 @@ class _CamPulangState extends State<CamPulang> {
   }
 
   Future<void> _thxForAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -486,7 +497,7 @@ class _CamPulangState extends State<CamPulang> {
           title: 
             Column(
               children: [
-                Text("Thank You.. ^_^", style: TextStyle(color: Colors.green)),
+                Text(t. translate("thx"), style: TextStyle(color: Colors.green)),
                 Divider()
               ],
             ),
@@ -511,12 +522,32 @@ class _CamPulangState extends State<CamPulang> {
     );
   }
 
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final t = AppLocalizations.of(context)!;
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (_) => MyHomePage()),
+      (route) => false, 
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: 
+        Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text("Take Picture..", style: TextStyle(color: Colors.white)),
+        title: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white)),
       ),
       body:
         Padding(
@@ -526,7 +557,7 @@ class _CamPulangState extends State<CamPulang> {
             children: [
                 Expanded(
                   child: _photo == null 
-                  ? Center(child: Text("Pulang No Photo yet...", style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
+                  ? Center(child: Text(t.translate("photoDeskPulang"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
                   : 
                   ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(20),
@@ -543,7 +574,7 @@ class _CamPulangState extends State<CamPulang> {
                 ),
                 onPressed: _takePhoto,
                 icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                label: const Text("Take Photo", style: TextStyle(color: Colors.white),),
+                label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
               ),
               SizedBox(height: 8),
               if (_faceMessage.isNotEmpty)
@@ -616,7 +647,7 @@ class _CamPulangState extends State<CamPulang> {
                   ),
                   onPressed: _photo != null && _faceValid && !_isSubmitting
                   ? _confirmSubmitAbsence : null,
-                  child: Text(_isSubmitting ? "Submitting..." : "Submit Absent", 
+                  child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"),
                     style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
                     fontSize: 15, 
                     fontWeight: FontWeight.w900)

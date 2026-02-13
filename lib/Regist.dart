@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:absence/l10n/app_localizations.dart';
 
 class Regist extends StatefulWidget {
   const Regist({super.key});
@@ -434,6 +435,7 @@ class _RegistState extends State<Regist> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       body: 
       SingleChildScrollView(
@@ -497,7 +499,7 @@ class _RegistState extends State<Regist> {
                                           ),
                                           fillColor: Colors.white,
                                           filled: true,
-                                          label: Text("Select User"),
+                                          label: Text(t.translate("user")),
                                       ),
                                       value: _selectedEmployee,
                                       items: _employeeNames.map((name){
@@ -529,7 +531,7 @@ class _RegistState extends State<Regist> {
                                           ),
                                           fillColor: Colors.white,
                                           filled: true,
-                                          label: Text("Select Leader")
+                                          label: Text(t.translate("leader"))
                                       ),
                                       value: _selectedLeaders,
                                       items: _leaderNames.map((name){
@@ -555,7 +557,7 @@ class _RegistState extends State<Regist> {
                                       controller: _email,
                                       // obscureText: true,
                                       decoration: InputDecoration(
-                                        hintText: "Office Email",
+                                        hintText: t.translate("emailOffice"),
                                         hintStyle: TextStyle(color: const Color.fromARGB(
                                                                 255, 195, 195, 195)),
                                         enabledBorder: OutlineInputBorder(
@@ -581,7 +583,7 @@ class _RegistState extends State<Regist> {
                                       controller: _password,
                                       obscureText: true,
                                       decoration: InputDecoration(
-                                        hintText: "Password",
+                                        hintText: t.translate("pas"),
                                         hintStyle: TextStyle(color: const Color.fromARGB(
                                                                 255, 195, 195, 195)),
                                         enabledBorder: OutlineInputBorder(
@@ -607,7 +609,7 @@ class _RegistState extends State<Regist> {
                                       controller: _repassword,
                                       obscureText: true,
                                       decoration: InputDecoration(
-                                        hintText: "Re-Password",
+                                        hintText: t.translate("repas"),
                                         hintStyle: TextStyle(color: const Color.fromARGB(
                                                                 255, 195, 195, 195)),
                                         enabledBorder: OutlineInputBorder(
@@ -698,7 +700,7 @@ class _RegistState extends State<Regist> {
                                             )
                                           ),
                                           onPressed: retryStep,
-                                          child: Text('Ulangi Foto', style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
+                                          child: Text(t.translate('retake'), style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
                                         ),
                                       ),
                                       // ========== take Photo ==========
@@ -707,7 +709,7 @@ class _RegistState extends State<Regist> {
                                         padding: const EdgeInsets.only(top: 12, left: 5),
                                         child: ElevatedButton.icon(
                                           icon: Icon(Icons.camera_alt),
-                                          label: Text('Buka Kamera', style: TextStyle(color: Colors.white),),
+                                          label: Text(t.translate("camreg"), style: TextStyle(color: Colors.white),),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.blueAccent,
                                             padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
@@ -734,7 +736,7 @@ class _RegistState extends State<Regist> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: 
                                           Text(
-                                            'Photo ${_currentStep + 1}: ${steps[_currentStep]}',
+                                            t.translate(_currentStep == 0 ? 'photo1' : _currentStep == 1 ? 'photo2' : 'photo3'),
                                             style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
                                           ),
                                         ),
@@ -764,7 +766,7 @@ class _RegistState extends State<Regist> {
                                             (){
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
                                             }, 
-                                            child: Text('Back to Login', style: TextStyle(color: Colors.white),)
+                                            child: Text(t.translate("backLogin"), style: TextStyle(color: Colors.white),)
                                           ),
                                         ),
         
@@ -785,7 +787,7 @@ class _RegistState extends State<Regist> {
                                               await _regist();
                                             }, 
                                             child: Text(
-                                              'Register', 
+                                              t.translate("okReg"), 
                                               style: TextStyle(color: Colors.white),
                                             )
                                           ),
@@ -799,7 +801,7 @@ class _RegistState extends State<Regist> {
                           // Padding(padding: EdgeInsets.all(5.0)),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Text("Beta Version - Protected by advanced security protocols", style: TextStyle(color: const Color.fromARGB(
+                            child: Text(t.translate("beta"), style: TextStyle(color: const Color.fromARGB(
                                                                   255, 195, 195, 195), fontSize: 8, fontWeight: FontWeight.w800),
                             ),
                           )

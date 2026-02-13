@@ -14,6 +14,8 @@
   "distance" : "Jarak ke Kantor",
   "inButton" : "Masuk",
   "outButton" : "Pulang",
+  "whichOne" : "Pilih dulu",
+  "absent" : "Absen",
 
 
   "titlePilihDinas" : "Absensi",
@@ -24,11 +26,13 @@
   "cutLap" : "Cuti Lapangan",
   "sick" : "Sakit",
 
+
   "takePhoto" : "Ambil Foto",
   "photoDesk": "Belum ada Foto..",
+  "photoDeskPulang" : "Belum ada Foto pulang..",
   "takePicture": "Ambil Foto",
   "isSubmit" : "mengirim..",
-  "Submit" : "Ambil Foto Dulu",
+  "Submit" : "Kirim Absen",
   "gallery" : "Pilih File",
   "failed" : "Gagal Absen",
   "thx" : "Terimakasihh... ^_^",
@@ -36,5 +40,35 @@
   "rusure" : "Apa kamu yakin??!",
   "cancel" : "Batalkan",
   "sure" : "Ya",
-  "dadah" : "Selamat Tinggal ^_^"
+  "dadah" : "Selamat Tinggal ^_^",
+  "verified" : "Face Verified",
+  "oneFace" : "Pastikan hanya satu wajah Yang tampil",
+  "noFace" : "Wajah Tidak Terdeteksi, Ulang Foto",
+  "nor" : "Gagal Memverifikasi Wajah, Silahkan ulang foto",
+  "unrecog" : "Wajah tidak Dikenali, Silahkan foto ulang!",
+  "recoged" : "Wajah Terverifikasi",
+  "unfaced" : "Wajah Tidak dikenali",
+  "checking" : "Mengecek ...",
+
+
+  "reg" : "Daftar",
+  "in" : "Masuk Ke sistem",
+  "beta" : "Versi Beta - Dilindungi oleh protokol keamanan lanjut",
+
+
+  "user" : "Pilih User",
+  "leader" : "Pilih Leader",
+  "emailOffice" :"Email Kantor",
+  "pas" : "Sandi",
+  "repas" : "Ulang Sandi",
+  "camreg" : "Buka Kamera",
+  "photo1" : "Foto 1 : Hadap Muka ke Depan Kamera",
+  "photo2" : "Foto 2 : Putar Sedikit ke Kiri",
+  "photo3" : "Foto 3 : Putar Sedikit ke Kanan",
+  "retake" : "Ulangi",
+  "okReg" : "Daftar",
+  "backLogin" : "Kembali Ke Login"
+  
+
+
 }

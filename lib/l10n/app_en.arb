@@ -14,6 +14,8 @@
   "distance" : "Distance to Office",
   "inButton" : "Check In",
   "outButton" : "Check Out",
+  "whichOne" : "Which One",
+  "absent" : "Tap to Absent",
 
 
   "titlePilihDinas" : "Absence",
@@ -24,11 +26,13 @@
   "cutLap" : "Field Duty Leave",
   "sick" : "Sick",
 
+
   "takePhoto" : "Take Photo",
   "photoDesk": "No Photo yet..",
+  "photoDeskPulang" : "No Checkout Photo yet..",
   "takePicture": "Take Picture",
   "isSubmit" : "Submitting..",
-  "Submit" : "Take Photo First",
+  "Submit" : "Submit Absent",
   "gallery" : "Choose File",
   "failed" : "Absence Failed",
   "thx" : "Thank youu... ^_^",
@@ -36,5 +40,34 @@
   "rusure" : "R U Sureee????!!!!???",
   "cancel" : "Cancel",
   "sure" : "Sure",
-  "dadah" : "Goodbye.. ^_^"
+  "dadah" : "Goodbye.. ^_^",
+  "verified" : "Face Verified",
+  "oneFace" : "Make sure only one face is visible",
+  "noFace" : "No face detected, pls retry!",
+  "nor" : "Failed to face verifying, please retry",
+  "unrecog" : "Face is not Verified, please retaking Photo",
+  "recoged" : "Face Verified",
+  "unfaced" : "Face Unknown",
+  "checking" : "Checking ...",
+
+
+  "reg" : "Register",
+  "in" : "Enter System",
+  "beta" : "Beta Version - Protected by advanced security protocols",
+
+
+  "user" : "Select User",
+  "leader" : "Select Leader",
+  "emailOffice" :"Office Email",
+  "pas" : "Password",
+  "repas" : "Re-Password",
+  "camreg" : "Open Camera",
+  "photo1" : "Photo 1 : straight face frontfacing camera",
+  "photo2" : "Photo 1 : rotate ur face lil bit to the left",
+  "photo3" : "Photo 1 : rotate ur face lil bit to the right",
+  "retake" : "Retake",
+  "okReg" : "Register",
+  "backLogin" : "Back To Login"
+
+  
 }

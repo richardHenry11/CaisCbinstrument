@@ -248,8 +248,19 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
   }
 
   Future<void> _logout() async {
+    final t = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    // await prefs.clear();
+    // clear all only selected prefs
+    await prefs.remove('isLoggedIn');
+    await prefs.remove('token');
+    await prefs.remove('user');
+    await prefs.remove('name');
+    await prefs.remove('id');
+    await prefs.remove('employeesId');
+    await prefs.remove('attendance_type');
+    await prefs.remove('status');
+    await prefs.remove('shift_type');
 
     Navigator.pushAndRemoveUntil(
       context, 
@@ -259,7 +270,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+        content: Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
       ),
     );
   }

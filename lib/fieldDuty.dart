@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 class dateTimePicker extends StatelessWidget {
   const dateTimePicker({super.key});
@@ -208,6 +209,7 @@ class _FieldDutyState extends State<FieldDuty> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return
     Scaffold(
       body: 
@@ -277,7 +279,7 @@ class _FieldDutyState extends State<FieldDuty> {
                                   Icon(Icons.location_on, color: Colors.white, size: 12,),
                                   Padding(
                                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
-                                    child: Text("GPS Validator - Office", style: TextStyle(color: Colors.white, fontSize: 12),
+                                    child: Text(t.translate("gpsValid"), style: TextStyle(color: Colors.white, fontSize: 12),
                                     ),
                                   ),
                                   SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
@@ -297,7 +299,7 @@ class _FieldDutyState extends State<FieldDuty> {
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
-                                            "GPS Verified - Flexible Area",
+                                            t.translate("badgeAllowed"),
                                           style: const TextStyle(color: Colors.white, fontSize: 8),
                                         ),
                                       ],
@@ -315,7 +317,7 @@ class _FieldDutyState extends State<FieldDuty> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Distance to Office: ", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                    Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
                                     Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
                                   ],
                                 ),
@@ -391,7 +393,7 @@ class _FieldDutyState extends State<FieldDuty> {
                                   // button Funct
                                   _masukShiftType();
                                 }, 
-                                child: Text("Masuk", style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
+                                child: Text(t.translate("inButton"), style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
                               )
                             ),
 
@@ -410,7 +412,7 @@ class _FieldDutyState extends State<FieldDuty> {
                                   // button Funct
                                   _pulangShiftType();
                                 }, 
-                                child: Text("Pulang", style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
+                                child: Text(t.translate("outButton"), style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
                               )
                             )
                           ],
@@ -442,8 +444,8 @@ class _FieldDutyState extends State<FieldDuty> {
 
                             child: Text(
                               !_isShiftSelected
-                                  ? "Which one"
-                                  : "Tap To Absent",
+                                  ? t.translate("whichOne")
+                                  : t.translate("absent"),
                               style: const TextStyle(color: Colors.white),
                             ),
                           ),

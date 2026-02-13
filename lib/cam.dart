@@ -250,105 +250,111 @@ class _CameraState extends State<Camera> {
   }
 
   Future<void> recognizeFace(File imageFile) async {
-  setState(() {
-    _faceValid = false;
-    _similarity = null;
-    _faceMessage = "Checking...";
-  });
-
-  final request = http.MultipartRequest(
-    'POST',
-    Uri.parse("https://cais-ai.cbinstrument.com/api/v1/recognition/recognize"),
-  )
-    ..headers['x-api-key'] = '23e225bf-8f28-4493-a870-39019954fdae'
-    ..files.add(await http.MultipartFile.fromPath('file', imageFile.path, contentType: MediaType('image', 'jpeg')));
-
-  final response = await request.send();
-  final body = await response.stream.bytesToString();
-
-  if (response.statusCode != 200) {
     setState(() {
-      _faceMessage = "Failed to face verifying";
+      final t = AppLocalizations.of(context)!;
       _faceValid = false;
+      _similarity = null;
+      _faceMessage = t.translate("checking");
     });
-    return;
-  }
 
-  final data = jsonDecode(body);
-  final faces = data['result'];
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse("https://cais-ai.cbinstrument.com/api/v1/recognition/recognize"),
+    )
+      ..headers['x-api-key'] = '23e225bf-8f28-4493-a870-39019954fdae'
+      ..files.add(await http.MultipartFile.fromPath('file', imageFile.path, contentType: MediaType('image', 'jpeg')));
 
-  if (faces == null || faces.isEmpty) {
-    setState(() {
-      _faceMessage = "No face detected";
-      _faceValid = false;
-    });
-    return;
-  }
+    final response = await request.send();
+    final body = await response.stream.bytesToString();
 
-  if (faces.length != 1) {
-    setState(() {
-      _faceMessage = "Make sure only one face is visible";
-      _faceValid = false;
-    });
-    return;
-  }
-
-  final result = data['result'][0];
-  // final subjects = result['subjects'] as List?;
-  final subjects = result['subjects'];
-
-    if (subjects == null || subjects.isEmpty) {
+    if (response.statusCode != 200) {
+      final t = AppLocalizations.of(context)!;
       setState(() {
-        _faceMessage = "Face Unknown";
+        _faceMessage = t.translate("nor");
         _faceValid = false;
       });
       return;
     }
 
-    Map<String, dynamic>? matched;
+    final data = jsonDecode(body);
+    final faces = data['result'];
 
-    for (final s in subjects) {
-      if (s['subject'] == _savedName) {
-        matched = s;
-        break;
-      }
+    if (faces == null || faces.isEmpty) {
+      setState(() {
+        final t = AppLocalizations.of(context)!;
+        _faceMessage = t.translate("noFace");
+        _faceValid = false;
+      });
+      return;
     }
 
-  // if (subjects == null || subjects.isEmpty) {
-  //   setState(() {
-  //     _faceMessage = "Face Unknown";
-  //     _faceValid = false;
-  //   });
-  //   return;
-  // }
+    if (faces.length != 1) {
+      setState(() {
+        final t = AppLocalizations.of(context)!;
+        _faceMessage = t.translate("oneFace");
+        _faceValid = false;
+      });
+      return;
+    }
 
-  // final matched = subjects.firstWhere(
-  //   (s) => s['subject'] == _savedName,
-  //   orElse: () => null,
-  // );
+    final result = data['result'][0];
+    // final subjects = result['subjects'] as List?;
+    final subjects = result['subjects'];
 
-  if (matched == null) {
+      if (subjects == null || subjects.isEmpty) {
+        setState(() {
+          _faceMessage = "Face Unknown";
+          _faceValid = false;
+        });
+        return;
+      }
+
+      Map<String, dynamic>? matched;
+
+      for (final s in subjects) {
+        if (s['subject'] == _savedName) {
+          matched = s;
+          break;
+        }
+      }
+
+    // if (subjects == null || subjects.isEmpty) {
+    //   setState(() {
+    //     _faceMessage = "Face Unknown";
+    //     _faceValid = false;
+    //   });
+    //   return;
+    // }
+
+    // final matched = subjects.firstWhere(
+    //   (s) => s['subject'] == _savedName,
+    //   orElse: () => null,
+    // );
+
+    if (matched == null) {
+      setState(() {
+        final t = AppLocalizations.of(context)!;
+        _faceMessage = t.translate("unrecog");
+        _faceValid = false;
+      });
+      return;
+    }
+
+    final sim = matched['similarity'];
+
     setState(() {
-      _faceMessage = "Face is not Verified";
-      _faceValid = false;
+      final t = AppLocalizations.of(context)!;
+      _similarity = sim;
+      _faceValid = sim >= 0.95;
+      _faceMessage = _faceValid
+          ? t.translate("recoged")
+          : t.translate("unfaced");
     });
-    return;
+
+    print("similarities : $_similarity");
+    print("face valid : $_faceValid");
+    print("face Message : $_faceMessage");
   }
-
-  final sim = matched['similarity'];
-
-  setState(() {
-    _similarity = sim;
-    _faceValid = sim >= 0.95;
-    _faceMessage = _faceValid
-        ? "Face Verified"
-        : "Face Unknown";
-  });
-
-  print("similarities : $_similarity");
-  print("face valid : $_faceValid");
-  print("face Message : $_faceMessage");
-}
 
   Future<void> _submitAbsence() async {
     await _updateStatusByTime();
@@ -391,7 +397,7 @@ class _CameraState extends State<Camera> {
             "${now.second.toString().padLeft(2, '0')}";
     }
 
-    final header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MTc2ODYzODgxOCwiaWF0IjoxNzY4Mzc5NjE4fQ.Hgt16CXYPDm9RAaLczIcdhtKobgRyBitNWrH8au_S9E";
+    final header = "Bearer $_savedToken";
 
     final body = {
       "name": _savedName,
