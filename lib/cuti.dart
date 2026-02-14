@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:intl/intl.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 
 class dateTimePicker extends StatelessWidget {
@@ -241,6 +242,7 @@ class _CutiState extends State<Cuti> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return
     Scaffold(
       body: 
@@ -292,7 +294,7 @@ class _CutiState extends State<Cuti> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
-                        Text("Date Periods", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
+                        Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
 
                         // DateTime Picker
