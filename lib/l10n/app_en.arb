@@ -84,5 +84,22 @@
   "inputGoods" : "Goods Input",
   "lateness" : "Confirmation \n Lateness",
   "rackupAbsent" : "My Absent",
-  "logout" : "Logout"
+  "logout" : "Logout",
+
+
+  "failedPicture" : "Failed to Load Image",
+  "dateRackup" : "Date",
+  "in" : "In",
+  "out" : "Out",
+  "prove" : "Prove",
+  "confirmOT" : "Overtime Confirmation",
+  "confirmation" : "Confirmation",
+  "deduction" : "Deduction (Rp.-)",
+  "reason" : "Reasoning",
+  "latenessSaved" : "Lateness Data Saved.",
+  "lateConfirm" : "Lateness Confirmation",
+  "rackup" : "Rackup Absent",
+  "Filter" : "Filter",
+  "loadingDat" : "Loading..." ,
+  "noData" : "No Data"
 }

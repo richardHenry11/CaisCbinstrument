@@ -84,5 +84,22 @@
   "inputGoods" : "Input Barang Masuk",
   "lateness" : "Konfirmasi\nKeterlambatan",
   "rackupAbsent" : "Absensi Saya",
-  "logout" : "Logout"
+  "logout" : "Logout",
+
+
+  "failedPicture" : "Gagal memuat gambar",
+  "dateRackup" : "Tanggal",
+  "in" : "Masuk",
+  "out" : "Pulang",
+  "prove" : "Bukti",
+  "confirmOT" : "Konfirmasi Lembur",
+  "confirmation" : "konfirmasi",
+  "deduction" : "Pemotongan (Rp.-)",
+  "reason" : "Alasan",
+  "latenessSaved" : "Data keterlambatan tersimpan",
+  "lateConfirm" : "Konfimasi Keterlambatan",
+  "rackup" : "Rekap absen",
+  "Filter" : "Saring",
+  "loadingDat" : "Memuat..." ,
+  "noData" : "Data Kosong"
 }

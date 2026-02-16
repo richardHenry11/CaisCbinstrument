@@ -7,6 +7,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 const String baseImageUrl = "https://cais.cbinstrument.com/";
 
@@ -24,6 +25,7 @@ bool isLate(String? checkIn) {
 }
 
 void showPhotoPreview(BuildContext context, String imagePath) {
+  final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) {
@@ -37,7 +39,7 @@ void showPhotoPreview(BuildContext context, String imagePath) {
                   "$baseImageUrl$imagePath",
                   fit: BoxFit.contain,
                   errorBuilder: (_, __, ___) =>
-                      const Center(child: Text("Gagal memuat gambar", style: TextStyle(color: Colors.white))),
+                      Center(child: Text(t.translate("failedPict"), style: TextStyle(color: Colors.white))),
                 ),
               ),
               Positioned(
@@ -97,6 +99,7 @@ Future<Map<String, dynamic>?> getLatenessFromPrefs() async {
 }
 
 Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
+  final t = AppLocalizations.of(context)!;
   return Column(
     children: [
       // =================== DATE ===================
@@ -115,7 +118,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    "Tanggal",
+                    t.translate("dateRackup"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
@@ -152,8 +155,8 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
       // =================== TIME ===================
       Row(
         children: [
-          _timeColumn(context, "Check In", item['check_in']),
-          _timeColumn(context, "Check Out", item['check_out']),
+          _timeColumn(context, t.translate("in"), item['check_in']),
+          _timeColumn(context, t.translate("out"), item['check_out']),
         ],
       ),
 
@@ -164,11 +167,11 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
         children: [
           Row(
             children: [
-              _photoButton(context, "In", item['has_photo_in'], item['photo_check_in'],),
+              _photoButton(context, t.translate('in'), item['has_photo_in'], item['photo_check_in'],),
               SizedBox(width: 8),
-              _photoButton(context, "Out", item['has_photo_out'], item['photo_check_out']),
+              _photoButton(context, t.translate("out"), item['has_photo_out'], item['photo_check_out']),
               SizedBox(width: 8),
-              _photoButton(context, "Prove", item['proof_photo'] != "", item['proof_photo']),
+              _photoButton(context, t.translate("prove"), item['proof_photo'] != "", item['proof_photo']),
             ],
           ),
           SizedBox(
@@ -196,7 +199,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
               Icon(MaterialCommunityIcons.alarm, color: Colors.red,),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
-                child: Text("Overtime Confirmation", style: TextStyle(color: Colors.white),),
+                child: Text(t.translate("confirmOT"), style: TextStyle(color: Colors.white),),
               ),
             ],
           )
@@ -216,7 +219,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
               Icon(Icons.check_box, color: Colors.green, size: 15),
               SizedBox(width: 8),
               Text(
-                'Confirmation',
+                t.translate("confirmation"),
                 style: TextStyle(color: Colors.grey),
               ),
             ],
@@ -252,7 +255,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
               Icon(Icons.attach_money, color: Colors.white, size: 20),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Text("Deduction (Rp.-)", style: TextStyle(color: Colors.grey),),
+                child: Text(t.translate("deduction"), style: TextStyle(color: Colors.grey),),
               )
             ],
           ),
@@ -285,7 +288,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
               Icon(MaterialCommunityIcons.file_document_edit, color: Colors.white, size: 15,),
               Padding(
                 padding: EdgeInsetsGeometry.only(left: 8.0),
-                child: Text("Reasoning", style: TextStyle(color: Colors.grey),),
+                child: Text(t.translate("reason"), style: TextStyle(color: Colors.grey),),
               )
             ],
           ),
@@ -318,7 +321,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Lateness data saved'),
+                      content: Text(t.translate("latenessSaved")),
                     ),
                   );
 
@@ -333,7 +336,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
                     Icon(Icons.warning, color: Colors.white),
                     SizedBox(width: 8),
                     Text(
-                      "Lateness Confirmation",
+                      t.translate("lateConfirm"),
                       style: TextStyle(color: Colors.white),
                     ),
                   ],
@@ -635,11 +638,12 @@ class _RackupAbsenceState extends State<RackupAbsence> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 189, 189, 189),
-        title: Text("Rackup Absence"),
+        title: Text(t.translate("rackup")),
       ),
       body: 
       SingleChildScrollView(
@@ -661,7 +665,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                       controller: _startDate,
                       style: TextStyle(color: const Color.fromARGB(255, 227, 227, 227)),
                       decoration: InputDecoration(
-                            labelText: 'Start Date & Time',
+                            labelText: t.translate("startDate"),
                             labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                             prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                           ),
@@ -682,7 +686,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                       controller: _endDate,
                       style: TextStyle(color: const Color.fromARGB(255, 218, 218, 218)),
                       decoration: InputDecoration(
-                            labelText: 'End Date & Time',
+                            labelText: t.translate("endDate"),
                             labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                             prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                           ),
@@ -721,7 +725,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                             Icon(Icons.search, color: const Color.fromARGB(255, 88, 88, 88)),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Filter", style: TextStyle(color: Colors.white)),
+                              child: Text(t.translate("filter"), style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         ) 
@@ -741,13 +745,12 @@ class _RackupAbsenceState extends State<RackupAbsence> {
               ? Padding(
                   padding: const EdgeInsets.all(32),
                   child: Column(
-                    children: const [
+                    children: [
                       CircularProgressIndicator(
                         color: Colors.white,
                       ),
                       SizedBox(height: 12),
-                      Text(
-                        "Loading data...",
+                      Text(t.translate("loadingDat"),
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -755,7 +758,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                 ) : absences.isEmpty
                   ? Center(
                       child: Text(
-                        "No data",
+                        t.translate("noData"),
                         style: TextStyle(color: Colors.white),
                       ),
                     )
