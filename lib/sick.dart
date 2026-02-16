@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:absence/l10n/app_localizations.dart';
 // import 'package:latlong2/latlong.dart';
 
 class dateTimePicker extends StatelessWidget {
@@ -249,6 +250,7 @@ class _SickState extends State<Sick> {
   }
 
   Future<void> _logout() async {
+    final t = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
@@ -260,7 +262,7 @@ class _SickState extends State<Sick> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+        content: Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -274,6 +276,7 @@ class _SickState extends State<Sick> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return
     Scaffold(
       body: 
@@ -326,7 +329,7 @@ class _SickState extends State<Sick> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
-                          Text("Date Periods", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
+                          Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
                           SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
         
                           // DateTime Picker
@@ -335,7 +338,7 @@ class _SickState extends State<Sick> {
                             readOnly: true,
                             style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
                             decoration: InputDecoration(
-                              labelText: 'Start Date & Time',
+                              labelText: t.translate("startDate"),
                               labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                               prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                             ),
@@ -354,7 +357,7 @@ class _SickState extends State<Sick> {
                             readOnly: true,
                             style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
                             decoration: InputDecoration(
-                              labelText: 'End Date & Time',
+                              labelText: t.translate("endDate"),
                               labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                               prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                             ),
@@ -387,7 +390,7 @@ class _SickState extends State<Sick> {
                                     Icon(Icons.location_on, color: Colors.white, size: 12,),
                                     Padding(
                                       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
-                                      child: Text("GPS Validator - Office", style: TextStyle(color: Colors.white, fontSize: 12),
+                                      child: Text(t.translate("gpsValid"), style: TextStyle(color: Colors.white, fontSize: 12),
                                       ),
                                     ),
                                     SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
@@ -407,7 +410,7 @@ class _SickState extends State<Sick> {
                                           ),
                                           const SizedBox(width: 6),
                                           Text(
-                                              "GPS Verified - Flexible Area",
+                                              t.translate("badgeAllowed"),
                                             style: const TextStyle(color: Colors.white, fontSize: 8),
                                           ),
                                         ],
@@ -425,7 +428,7 @@ class _SickState extends State<Sick> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Distance to Office: ", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                      Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
                                       Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
                                     ],
                                   ),
@@ -502,7 +505,7 @@ class _SickState extends State<Sick> {
                                   }
                                 : null,
                               child: Text( getValidRangeTime() ? 
-                                "Tap To Absent" : "Fill the date above",
+                                t.translate("absent") : t.translate("fillDate"),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),

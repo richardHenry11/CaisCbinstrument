@@ -70,5 +70,19 @@
   "backLogin" : "Back To Login",
 
 
-  "period" : "Date Periods"
+  "period" : "Date Periods",
+  "startDate" : "Start Date & Time",
+  "endDate" : "End Date & Time",
+  "fillDate" : "Fill the date above",
+
+
+  "expired" : "Token Expired",
+  "absentDashboard" : "Absent",
+  "reportLap" : "Field duty report",
+  "reportLemur" : "Overtime Report",
+  "disiplineGraph" : "Absent Graph",
+  "inputGoods" : "Goods Input",
+  "lateness" : "Confirmation \n Lateness",
+  "rackupAbsent" : "My Absent",
+  "logout" : "Logout"
 }

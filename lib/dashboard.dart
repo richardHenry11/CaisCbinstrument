@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absence/l10n/app_localizations.dart';
 import 'package:absence/lateness.dart';
 import 'package:absence/lemur.dart';
 import 'package:absence/main.dart';
@@ -8,6 +9,8 @@ import 'package:absence/rackupAbsence.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as ktp;
+import 'dart:io';
+
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -30,6 +33,26 @@ class _DashboardState extends State<Dashboard> {
   String? _position;
   String? _name;
   String? _role;
+  
+  Future<ktp.Response?> safeGet(
+      String url,
+      Map<String, String> headers,
+  ) async {
+    try {
+      return await ktp.get(Uri.parse(url), headers: headers);
+    } on HandshakeException catch (_) {
+      debugPrint("SSL Handshake Error → Auto logout");
+      await _logoutExpired();
+      return null;
+    } on SocketException catch (_) {
+      debugPrint("No Internet Connection");
+      return null;
+    } catch (e) {
+      debugPrint("Unknown error: $e");
+      return null;
+    }
+  }
+
 
 
   @override
@@ -75,13 +98,17 @@ class _DashboardState extends State<Dashboard> {
       "Authorization": "Bearer $_tokenPrefs"
     };
 
-    final responses = await ktp.get(
-      Uri.parse(url),
-      headers: headers
-    );
 
-    debugPrint("STATUS: ${responses.statusCode}");
-    debugPrint("RAW BODY: ${responses.body}");
+
+    final responses = await safeGet(url, headers);
+
+    if (responses == null) return;
+
+    if (responses.statusCode == 401) {
+      debugPrint("Token expired → auto logout");
+      await _logout();
+      return;
+    }
 
     if (responses.statusCode != 200) {
       debugPrint("Request gagal, kemungkinan token invalid / expired");
@@ -120,7 +147,7 @@ class _DashboardState extends State<Dashboard> {
   //     "x-api-key" : "23e225bf-8f28-4493-a870-39019954fdae"
   //   };
 
-  //   final response = await ktp.get(
+  //   final response = await ktp.get(  
   //     Uri.parse(url),
   //     headers: headers
   //   );
@@ -139,6 +166,7 @@ class _DashboardState extends State<Dashboard> {
   // }
 
   Future<void> _logout() async {
+    final t = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
@@ -150,7 +178,25 @@ class _DashboardState extends State<Dashboard> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+        content: Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+
+  Future<void> _logoutExpired() async {
+    final t = AppLocalizations.of(context)!;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (_) => MyHomePage()),
+      (route) => false, 
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(t.translate("expired"), style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -203,6 +249,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
@@ -275,17 +322,17 @@ class _DashboardState extends State<Dashboard> {
           Expanded(
             child: GridView.count(
               padding: const EdgeInsets.all(16),
-              crossAxisCount: 2, // 2 jejer
+              crossAxisCount: 2, // 2 row
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              childAspectRatio: 1, // kotak (ubah kalau mau tinggi)
+              childAspectRatio: 1, // square (adjustable height and width)
               children: [
-                menuCard(Icons.dashboard, "Dashboard",
-                  (){
-                    // Button funct
-                  }
-                ),
-                menuCard(Icons.how_to_reg, "Absen",
+                // menuCard(Icons.dashboard, "Dashboard",
+                //   (){
+                //     // Button funct
+                //   }
+                // ),
+                menuCard(Icons.how_to_reg, t.translate("absenDashboard"),
                   (){
                     // Button funct
                     Navigator.pushReplacement(
@@ -294,29 +341,29 @@ class _DashboardState extends State<Dashboard> {
                     );
                   }
                 ),
-                menuCard(Icons.location_on, "Report Dinas\nLapangan",
+                menuCard(Icons.location_on, t.translate("reportLapangan"),
                   (){
                     // Button funct
                    
                   }
                 ),
-                menuCard(Icons.nightlight, "Report Lembur",
+                menuCard(Icons.nightlight, t.translate("reportLemur"),
                   (){
                     // Button funct
                      Navigator.push(context, MaterialPageRoute(builder: (context) => Lemur()));
                   }
                 ),
-                menuCard(Icons.bar_chart, "Grafik Kedisiplinan",
+                menuCard(Icons.bar_chart, t.translate("disiplineGraph"),
                   (){
                     // Button funct
                   }
                 ),
-                menuCard(Icons.inventory, "Input Barang Masuk",
+                menuCard(Icons.inventory, t.translate("inputGoods"),
                   (){
                     // Button funct
                   }
                 ),
-                menuCard(Icons.warning, "Konfirmasi\nKeterlambatan",
+                menuCard(Icons.warning, t.translate("lateness"),
                   (){
                     // Button funct
                     Navigator.push(
@@ -325,7 +372,7 @@ class _DashboardState extends State<Dashboard> {
                     );
                   }
                 ),
-                menuCard(Icons.access_time, "Absensi Saya", 
+                menuCard(Icons.access_time, t.translate("rackupAbsent"), 
                   (){
                     //Button Funct 
                     Navigator.push(
@@ -336,7 +383,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 menuCard(
                   Icons.logout,
-                  "Logout",
+                  t.translate("logout"),
                   () async {
                     await _logout();
                   },

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:intl/intl.dart';
+import 'package:absence/l10n/app_localizations.dart';
 
 
 class dateTimePicker extends StatelessWidget {
@@ -216,6 +217,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
   }
 
   Future<void> _logout() async {
+    final t = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
@@ -227,7 +229,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+        content: Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -241,6 +243,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return
     Scaffold(
       body: 
@@ -292,7 +295,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
-                        Text("Date Periods", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
+                        Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
 
                         // DateTime Picker
@@ -301,7 +304,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
                           readOnly: true,
                           style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
                           decoration: InputDecoration(
-                            labelText: 'Start Date & Time',
+                            labelText: t.translate("startDate"),
                             labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                             prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                           ),
@@ -320,7 +323,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
                           readOnly: true,
                           style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
                           decoration: InputDecoration(
-                            labelText: 'End Date & Time',
+                            labelText: t.translate("endDate"),
                             labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                             prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                           ),
@@ -353,7 +356,7 @@ class _CutiLapanganState extends State<CutiLapangan> {
                                 }
                               : null,
                             child: Text( getValidRangeTime() ? 
-                              "Tap To Absent" : "Fill the date above",
+                              t.translate("absent") : t.translate("fillDate"),
                               style: const TextStyle(color: Colors.white),
                             ),
                           ),

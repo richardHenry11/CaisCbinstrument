@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:absence/main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:absence/l10n/app_localizations.dart';
 // import 'package:path/path.dart' as p;
 
 class CamAndFile extends StatefulWidget {
@@ -197,6 +199,7 @@ class _CamAndFileState extends State<CamAndFile> {
   }
 
   Future<void> _confirmSubmitAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -208,7 +211,7 @@ class _CamAndFileState extends State<CamAndFile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Confirmation", style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
+                    Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
                     Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
                   ],
                 ),
@@ -216,7 +219,7 @@ class _CamAndFileState extends State<CamAndFile> {
               ],
             ),
           content: 
-          Text("R U Sureee????!!!!???", style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
+          Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
           actions: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -227,7 +230,7 @@ class _CamAndFileState extends State<CamAndFile> {
                 // button Funct
                  Navigator.of(context).pop();
               }, 
-              child: Text("Cancel", style: TextStyle(color: Colors.white),)
+              child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -239,7 +242,7 @@ class _CamAndFileState extends State<CamAndFile> {
                 _submitAbsence();
                 Navigator.of(context).pop();
               }, 
-              child: Text("Sure", style: TextStyle(color: Colors.white),)
+              child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
             )
           ],
         );
@@ -248,6 +251,7 @@ class _CamAndFileState extends State<CamAndFile> {
   }
 
   Future<void> _thxForAbsenceFailed() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -256,7 +260,7 @@ class _CamAndFileState extends State<CamAndFile> {
           title: 
             Column(
               children: [
-                Text("Absence Failed", style: TextStyle(color: Colors.red)),
+                Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
                 Divider()
               ],
             ),
@@ -269,9 +273,9 @@ class _CamAndFileState extends State<CamAndFile> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
                   backgroundColor: Colors.green
                 ),
-                onPressed: (){
+                onPressed: (){ error == 'Token tidak valid' ?
                   // button Funct
-                  Navigator.of(context).pop();
+                   _logout() : Navigator.of(context).pop();
                 }, 
                 child: Text("OK", style: TextStyle(color: Colors.white),)
               ),
@@ -283,6 +287,7 @@ class _CamAndFileState extends State<CamAndFile> {
   }
 
   Future<void> _thxForAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -291,7 +296,7 @@ class _CamAndFileState extends State<CamAndFile> {
           title: 
             Column(
               children: [
-                Text("Thank You.. ^_^", style: TextStyle(color: Colors.green)),
+                Text(t.translate("thx"), style: TextStyle(color: Colors.green)),
                 Divider()
               ],
             ),
@@ -316,12 +321,32 @@ class _CamAndFileState extends State<CamAndFile> {
     );
   }
 
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final t = AppLocalizations.of(context)!;
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (_) => MyHomePage()),
+      (route) => false, 
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: 
+        Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text("Take Picture..", style: TextStyle(color: Colors.white)),
+        title: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white)),
       ),
       body:
         Padding(
@@ -331,7 +356,7 @@ class _CamAndFileState extends State<CamAndFile> {
             children: [
                 Expanded(
                   child: _photo == null 
-                  ? Center(child: Text("No Photo yet...", style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
+                  ? Center(child: Text(t.translate("photoDesk"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
                   : 
                   ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(20),
@@ -351,7 +376,7 @@ class _CamAndFileState extends State<CamAndFile> {
                     ),
                     onPressed: _takePhoto,
                     icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                    label: const Text("Take Photo", style: TextStyle(color: Colors.white),),
+                    label: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white),),
                   ),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
@@ -368,9 +393,9 @@ class _CamAndFileState extends State<CamAndFile> {
                       }
                     },
                     icon: const Icon(Icons.folder, color: Colors.white,),
-                    label: const Text("From Files", style: TextStyle(color: Colors.white),),
+                    label: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
                   ),
-                  ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("test"))
+                  // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("test"))
                 ],
               ),
               SizedBox(height: 8),
@@ -423,7 +448,7 @@ class _CamAndFileState extends State<CamAndFile> {
                   ),
                   onPressed: _photo != null && !_isSubmitting
                   ? _confirmSubmitAbsence : null,
-                  child: Text(_isSubmitting ? "Submitting..." : "Submit Absent", 
+                  child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
                     style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
                     fontSize: 15, 
                     fontWeight: FontWeight.w900)

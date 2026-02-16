@@ -70,5 +70,19 @@
   "backLogin" : "Kembali Ke Login",
   
 
-  "period" : "Periode Tanggal"
+  "period" : "Periode Tanggal",
+  "startDate" : "Tanggal Mulai & Waktu",
+  "endDate" : "Sampai Tanggal & Waktu",
+  "fillDate" : "Isi Tanggal diatas",
+
+
+  "expired" : "Token telah Expired",
+  "absentDashboard" : "Absen",
+  "reportLap" : "Report Dinas\nLapangan",
+  "reportLemur" : "Report Lembur",
+  "disiplineGraph" : "Grafik Kedisiplinan",
+  "inputGoods" : "Input Barang Masuk",
+  "lateness" : "Konfirmasi\nKeterlambatan",
+  "rackupAbsent" : "Absensi Saya",
+  "logout" : "Logout"
 }
