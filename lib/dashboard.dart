@@ -106,7 +106,14 @@ class _DashboardState extends State<Dashboard> {
 
     if (responses.statusCode == 401) {
       debugPrint("Token expired → auto logout");
-      await _logout();
+      await _logoutExpired();
+      return;
+    }
+
+     // 🔥 Check wether its json or html
+    if (!responses.body.trim().startsWith('{')) {
+      debugPrint("Rsponse ain't not JSON → it's prolly redirect/login");
+      await _logoutExpired();
       return;
     }
 
@@ -332,7 +339,7 @@ class _DashboardState extends State<Dashboard> {
                 //     // Button funct
                 //   }
                 // ),
-                menuCard(Icons.how_to_reg, t.translate("absenDashboard"),
+                menuCard(Icons.how_to_reg, t.translate("absentDashboard"),
                   (){
                     // Button funct
                     Navigator.pushReplacement(
@@ -341,7 +348,7 @@ class _DashboardState extends State<Dashboard> {
                     );
                   }
                 ),
-                menuCard(Icons.location_on, t.translate("reportLapangan"),
+                menuCard(Icons.location_on, t.translate("reportLap"),
                   (){
                     // Button funct
                    

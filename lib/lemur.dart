@@ -11,6 +11,7 @@ import 'package:image/image.dart' as img;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:absence/l10n/app_localizations.dart';
 
 class LemburCounter extends StatelessWidget {
   final String title;
@@ -658,6 +659,7 @@ class _LemurState extends State<Lemur> {
   
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body:
@@ -679,7 +681,7 @@ class _LemurState extends State<Lemur> {
                           readOnly: true,
                             style: TextStyle(color: const Color.fromARGB(255, 218, 218, 218)),
                             decoration: InputDecoration(
-                            labelText: 'Date Overtime',
+                            labelText: t.translate('dateOvertime'),
                             labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
                             prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                             ),
@@ -693,7 +695,7 @@ class _LemurState extends State<Lemur> {
                               }
                             },
                           ),
-                        ElevatedButton(onPressed: (){ _setTimeToPrefs(); }, child: Text("Set to prefs"))
+                        ElevatedButton(onPressed: (){ _setTimeToPrefs(); }, child: Text(t.translate('setToPrefs')))
                       // )
                     ],
                   )
@@ -717,7 +719,7 @@ class _LemurState extends State<Lemur> {
                           Icon(MaterialCommunityIcons.check_circle, color: Colors.green, size: 20),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text("Leader Approval", style: TextStyle(color: Colors.white)),
+                            child: Text(t. translate("leaderApproval"), style: TextStyle(color: Colors.white)),
                           )
                         ],
                       )
@@ -731,7 +733,7 @@ class _LemurState extends State<Lemur> {
                           Icon(MaterialCommunityIcons.alert, color: Colors.yellow, size: 15),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text("must be filled as an approve from leader", style: TextStyle(color: Colors.yellow, fontSize: 10)),
+                            child: Text(t.translate("mustBeFilled"), style: TextStyle(color: Colors.yellow, fontSize: 10)),
                           )
                         ],
                       ),
@@ -740,7 +742,7 @@ class _LemurState extends State<Lemur> {
                       padding: const EdgeInsets.all(10), 
                       child:
                         _photo == null ?
-                        Center(child: SizedBox(height: MediaQuery.sizeOf(context).height * 0.1, child: Text("No Photo detected", style: TextStyle(color: Colors.redAccent)))) 
+                        Center(child: SizedBox(height: MediaQuery.sizeOf(context).height * 0.1, child: Text("photoDesk", style: TextStyle(color: Colors.redAccent)))) 
                         : SizedBox(
                           width: MediaQuery.sizeOf(context).width * 0.8,
                           height: MediaQuery.sizeOf(context).height * 0.4,
@@ -768,7 +770,7 @@ class _LemurState extends State<Lemur> {
                             onPressed:(){
                               _takePhoto();
                             },
-                            child: Text("Take Photo", style: TextStyle(color: Colors.white),)
+                            child: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white),)
                           ),
                               
                           // =========== photo from gallery ===========
@@ -789,7 +791,7 @@ class _LemurState extends State<Lemur> {
                                 _validateSubmit();
                               }
                             },
-                            child: Text("Open File", style: TextStyle(color: Colors.white),)
+                            child: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),)
                           ),
                         ],
                       ),
@@ -803,19 +805,19 @@ class _LemurState extends State<Lemur> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.9,
               child: Card(
-                color: const Color.fromARGB(255, 66, 91, 130),
+                color: Color.fromARGB(255, 66, 91, 130),
                 child:
                   Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
+                              padding: EdgeInsets.only(right: 8.0),
                               child: Icon(MaterialCommunityIcons.clock, size: 20, color: Colors.purpleAccent,),
                             ),
-                            Text("Overtime Duration", style: TextStyle(color: Colors.white),),
+                            Text(t.translate("OverDur"), style: TextStyle(color: Colors.white),),
                           ],
                         ),
                       ),
@@ -827,7 +829,7 @@ class _LemurState extends State<Lemur> {
                             color: const Color.fromARGB(255, 94, 129, 186),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Text("WEEKDAY", style: TextStyle(color: Colors.lightBlueAccent, fontSize: 10, fontWeight: FontWeight.bold),),
+                              child: Text(t.translate("weekday"), style: TextStyle(color: Colors.lightBlueAccent, fontSize: 10, fontWeight: FontWeight.bold),),
                             ),
                           ),
                         ],
@@ -836,7 +838,7 @@ class _LemurState extends State<Lemur> {
 
                     // ================ Lembur Weekday 1 =====================
                     LemburCounter(
-                      title: "Overtime Weekday 1",
+                      title: t.translate("over1"),
                       value: lemburW1,
                       max: 3,
                       controller: w1Ctrl,
@@ -846,7 +848,7 @@ class _LemurState extends State<Lemur> {
 
                     // ================ Lembur Weekday 2 =====================
                     LemburCounter(
-                      title: "Overtime Weekday 2",
+                      title: t.translate("over2"),
                       value: lemburW2,
                       max: 4,
                       controller: w2Ctrl,
@@ -871,7 +873,7 @@ class _LemurState extends State<Lemur> {
 
                     // ================ Lembur Weekend 1 =====================
                     LemburCounter(
-                      title: "Overtime Weekend 1",
+                      title: t.translate("overEnd1"),
                       value: lemburWE1,
                       max: 3,
                       controller: we1Ctrl,
@@ -881,7 +883,7 @@ class _LemurState extends State<Lemur> {
 
                     // ================ Lembur Weekend 2 =====================
                     LemburCounter(
-                      title: "Overtime Weekend 2",
+                      title: t.translate("overEnd2"),
                       value: lemburWE2,
                       max: 4,
                       controller: we2Ctrl,
@@ -891,7 +893,7 @@ class _LemurState extends State<Lemur> {
 
                     // ================ Lembur Weekend 2 =====================
                     LemburCounter(
-                      title: "Overtime Weekend 3",
+                      title: t.translate("overEnd3"),
                       value: lemburWE3,
                       max: 4,
                       controller: we3Ctrl,
@@ -919,7 +921,7 @@ class _LemurState extends State<Lemur> {
                             padding: const EdgeInsets.only(right: 8),
                             child: Icon(MaterialCommunityIcons.file_document, color: Colors.blue,),
                           ),
-                          Text("Working List", style: TextStyle(color: Colors.white),),
+                          Text(t.translate("overWorkingList"), style: TextStyle(color: Colors.white),),
                         ],
                       ),
                     ),
@@ -927,7 +929,7 @@ class _LemurState extends State<Lemur> {
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Row(
                         children: [
-                          Text("* wajib", style: TextStyle(color: Colors.red)),
+                          Text(t.translate("must"), style: TextStyle(color: Colors.red)),
                         ],
                       ),
                     ),
@@ -943,7 +945,7 @@ class _LemurState extends State<Lemur> {
                           maxLines: 4,
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            hintText: "what are u working...",
+                            hintText: t.translate("whatWork"),
                             hintStyle: const TextStyle(
                               color: Color.fromARGB(255, 180, 180, 180),
                               fontSize: 12,
@@ -988,7 +990,7 @@ class _LemurState extends State<Lemur> {
                           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top:10.0),
                           child: Icon(MaterialCommunityIcons.image_album, color: const Color.fromARGB(255, 255, 115, 105)),
                         ),
-                        Text("Working Photo Proof", style: TextStyle(color: Colors.white),)
+                        Text(t.translate("workPhoto"), style: TextStyle(color: Colors.white),)
                       ],
                     ),
 
@@ -999,8 +1001,7 @@ class _LemurState extends State<Lemur> {
                         ? Center(
                             child: SizedBox(
                               height: MediaQuery.sizeOf(context).height * 0.12,
-                              child: const Text(
-                                "No working photo selected",
+                              child: Text(t.translate("noPhotoWorking"),
                                 style: TextStyle(color: Colors.orangeAccent),
                               ),
                             ),
@@ -1032,7 +1033,7 @@ class _LemurState extends State<Lemur> {
                               ),
                             ),
                             onPressed: _takeWorkingPhoto,
-                            child: const Text("Take Photo"),
+                            child: Text(t.translate("takePhoto")),
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -1042,7 +1043,7 @@ class _LemurState extends State<Lemur> {
                               ),
                             ),
                             onPressed: _pickWorkingPhotoFromGallery,
-                            child: const Text("Open File"),
+                            child: Text(t.translate("gallery")),
                           ),
                         ],
                       ),
@@ -1053,10 +1054,10 @@ class _LemurState extends State<Lemur> {
             ),
 
             if (!_isActivated)
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 8),
                           child: Text(
-                            "Lengkapi semua data untuk submit",
+                            t.translate("fillData"),
                             style: TextStyle(color: Colors.orangeAccent, fontSize: 12),
                           ),
                         ),
@@ -1073,8 +1074,8 @@ class _LemurState extends State<Lemur> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text(
-                "Submit Report",
+              child: Text(
+                t.translate("submitOver"),
                 style: TextStyle(color: Colors.white),
               ),
             )

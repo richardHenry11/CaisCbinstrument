@@ -725,7 +725,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                             Icon(Icons.search, color: const Color.fromARGB(255, 88, 88, 88)),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(t.translate("filter"), style: TextStyle(color: Colors.white)),
+                              child: Text(t.translate("Filter"), style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         ) 

@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:absence/l10n/app_localizations.dart';
 
 class Lateness extends StatefulWidget {
   const Lateness({super.key});
@@ -237,6 +238,7 @@ class _LatenessState extends State<Lateness> {
   }
 
   Future<void> _thxForAbsence() async {
+    final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false, 
@@ -251,7 +253,7 @@ class _LatenessState extends State<Lateness> {
               ],
             ),
           content: 
-            Text("Report Has been Sent, and will be checked by HR :)", style: TextStyle(color: Colors.green, fontSize: 15),),
+            Text(t.translate("reportLateSent"), style: TextStyle(color: Colors.green, fontSize: 15),),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
@@ -296,10 +298,11 @@ class _LatenessState extends State<Lateness> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 189, 189, 189),
-        title: Text("Lateness Confirmation"),
+        title: Text(t.translate("lateConfirm")),
       ),
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: SingleChildScrollView(
@@ -328,7 +331,7 @@ class _LatenessState extends State<Lateness> {
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: Icon(MaterialCommunityIcons.alarm, color: Colors.redAccent),
                             ),
-                            Text("Absence Data", style: TextStyle(color: Colors.white),),
+                            Text(t.translate("absenDat"), style: TextStyle(color: Colors.white),),
                           ],
                         ),
                       ),
@@ -349,7 +352,7 @@ class _LatenessState extends State<Lateness> {
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Name", style: TextStyle(color: Colors.white),)),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("name"), style: TextStyle(color: Colors.white),)),
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(safeText(userName), style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
@@ -361,7 +364,7 @@ class _LatenessState extends State<Lateness> {
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Date", style: TextStyle(color: Colors.white))),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("date"), style: TextStyle(color: Colors.white))),
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text(safeText(latenessData?['date']), style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
@@ -373,7 +376,7 @@ class _LatenessState extends State<Lateness> {
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Check In", style: TextStyle(color: Colors.white))),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("cekin"), style: TextStyle(color: Colors.white))),
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text(safeText(latenessData?['check_in']), style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
@@ -385,7 +388,7 @@ class _LatenessState extends State<Lateness> {
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text("Location", style: TextStyle(color: Colors.white))),
+                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("location"), style: TextStyle(color: Colors.white))),
                                           SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text("........", style: TextStyle(color: Colors.white))),
                                         ],
                                       ),
@@ -416,7 +419,7 @@ class _LatenessState extends State<Lateness> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 8.0),
                                     child:
-                                    Text(latenessData?['status'] == 'late' ? "you're late over than 30 minutes!! :(" : "You're late !!",
+                                    Text(latenessData?['status'] == 'late' ? t.translate("urlatee") : t.translate("urlate"),
                                       style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic),
                                     )
                                   )
@@ -455,7 +458,7 @@ class _LatenessState extends State<Lateness> {
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: Icon(MaterialCommunityIcons.file_document_edit, color: Colors.blueAccent),
                             ),
-                            Text("Lateness Reason", style: TextStyle(color: Colors.white),),
+                            Text(t.translate("lateReason"), style: TextStyle(color: Colors.white),),
                           ],
                         ),
                       ),
@@ -470,7 +473,7 @@ class _LatenessState extends State<Lateness> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: const Color.fromARGB(255, 3, 23, 58),
-                            labelText: "Select Reason",
+                            labelText: t.translate("selectReason"),
                             labelStyle: const TextStyle(color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -495,8 +498,8 @@ class _LatenessState extends State<Lateness> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // ===== Label =====
-                            const Text(
-                              "Keterangan Tambahan",
+                            Text(
+                              t.translate("nb"),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -523,10 +526,10 @@ class _LatenessState extends State<Lateness> {
                               child: TextField(
                                 controller: _keterangan,
                                 maxLines: 5, // multiline
-                                style: const TextStyle(color: Colors.white),
+                                style: TextStyle(color: Colors.white),
                                 cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: "Tulis keterangan tambahan...",
+                                decoration: InputDecoration(
+                                  hintText: t.translate("writenb"),
                                   hintStyle: TextStyle(color: Colors.white54),
                                   contentPadding: EdgeInsets.all(16),
                                   border: InputBorder.none, // hilangkan border default
@@ -565,7 +568,7 @@ class _LatenessState extends State<Lateness> {
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: Icon(MaterialCommunityIcons.camera, color: const Color.fromARGB(255, 236, 255, 24)),
                             ),
-                            Text("Lateness Reason", style: TextStyle(color: Colors.white),),
+                            Text(t.translate("latenessReasonProve"), style: TextStyle(color: Colors.white),),
                           ],
                         ),
                       ),
@@ -573,7 +576,7 @@ class _LatenessState extends State<Lateness> {
                       SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
                              _photo == null 
                               ? Center(child: 
-                              SizedBox(height: MediaQuery.sizeOf(context).height * 0.1, child: Text("No Photo yet...", style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),)))
+                              SizedBox(height: MediaQuery.sizeOf(context).height * 0.1, child: Text(t.translate("photoDesk"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),)))
                               : 
                               SizedBox(
                                 width: MediaQuery.sizeOf(context).width * 0.8,
@@ -598,7 +601,7 @@ class _LatenessState extends State<Lateness> {
                               ),
                               onPressed: _takePhoto,
                               icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                              label: const Text("Take Photo", style: TextStyle(color: Colors.white),),
+                              label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
                             ),
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
@@ -615,7 +618,7 @@ class _LatenessState extends State<Lateness> {
                                 }
                               },
                               icon: const Icon(MaterialCommunityIcons.file, color: Colors.white,),
-                              label: const Text("Choose File", style: TextStyle(color: Colors.white),),
+                              label: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
                             ),
                           ],
                         ),
@@ -642,7 +645,7 @@ class _LatenessState extends State<Lateness> {
                     // Button Funct Here!
                     _submitAPI();
                   }, 
-                  child: Text("Send Lateness Confirmation", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),)
+                  child: Text(t.translate("sendLate"), style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),)
                 ),
               )
             ],

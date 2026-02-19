@@ -101,5 +101,41 @@
   "rackup" : "Rekap absen",
   "Filter" : "Saring",
   "loadingDat" : "Memuat..." ,
-  "noData" : "Data Kosong"
-}
+  "noData" : "Data Kosong",
+
+  "dateOvertime" : "Tanggal Lembur",
+  "setToPrefs" : "Set tanggal",
+  "leaderApproval" : "Persetujuan Leader",
+  "mustBeFilled" : "Harus diisi, sebagai Approval dari Leader",
+  "OverDur" : "Durasi Lembur",
+  "weekday" : "WEEKDAY",
+  "over1" : "Lembur Weekday 1",
+  "over2" : "Lembur Weekday 2",
+  "overEnd1" : "Lembur Weekend 1",
+  "overEnd2" : "Lembur Weekend 2",
+  "overEnd3" : "Lembur Weekend 3",
+  "overWorkingList" : "List Kerjaan",
+  "must" : "* wajib",
+  "whatWork" : "apa yang kamu kerjakan...",
+  "workPhoto" : "Bukti photo pekerjaan",
+  "noPhotoWorking" : "Belum ada Foto dipilih",
+  "fillData" : "Lengkapi semua data untuk submit",
+  "submitOver" : "Kirim Laporan",
+
+
+  "reportLateSent" : "Report sudah dikirim, dan akan dilihat HR :)",
+  "lateConfirm" : "Konfirmasi Keterlambatan",
+  "absenDat" : "Data Absen",
+  "name" : "Nama",
+  "date" : "Tanggal",
+  "cekin" : "Masuk",
+  "location" : "Lokasi",
+  "urlatee" : "Kamu Terlambat lebih dari 30 menit :(",
+  "urlate" : "kamu Terlambatt !!",
+  "lateReason" : "Alasan Keterlambatan",
+  "selectReason" : "Pilih ALasan",
+  "nb" : "Keterangan Tambahan",
+  "writenb" : "Tulis keterangan tambahan...",
+  "latenessReasonProve" : "Photo Alasan",
+  "sendLate" : "Kirim konfirmasi keterlambatan"
+  }
