@@ -260,9 +260,18 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
+        toolbarHeight: 80,
+        centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 174, 174, 174),
         title: 
-        Center(child: Image.asset("assets/logoBiru.png", width: MediaQuery.sizeOf(context).width * 0.45, height: 80,)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset("assets/logoBiru.png", width: MediaQuery.sizeOf(context).width * 0.45, height: 40,),
+            Text("Automation & integrated System", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
+          ],
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
