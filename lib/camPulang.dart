@@ -66,14 +66,28 @@ class _CamPulangState extends State<CamPulang> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _prefsCatcher();
+    
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _initPage();
+    });
+  }
+
+  Future<void> _initPage() async {
+    await _prefsCatcher();
+    await _takePhoto();
   }
 
   Future<void> _getLocation() async {
     final permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      throw Exception("Location Permission denied");
+      // throw Exception("Location Permission denied");
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Location permission denied")),
+      );
+      return;
     }
 
     final pos = await Geolocator.getCurrentPosition(
@@ -170,6 +184,7 @@ class _CamPulangState extends State<CamPulang> {
                                                 );
     if (image != null) {
       await _getLocation();
+      if (!mounted) return;
       setState(() {
         _photo = File(image.path);
         _faceValid = false;
@@ -178,6 +193,7 @@ class _CamPulangState extends State<CamPulang> {
       final normalized = await _normalizeImage(_photo!);
       final stamped = await _drawGpsOverlay(normalized);
 
+      if (!mounted) return;
       setState(() {
         _photo = stamped;
       });
@@ -195,6 +211,7 @@ class _CamPulangState extends State<CamPulang> {
 
   Future<void> _prefsCatcher() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       _savedUser = prefs.getString('user') ?? "Who is there?";
       _savedToken = prefs.getString('token') ?? "this is token";
@@ -214,6 +231,7 @@ class _CamPulangState extends State<CamPulang> {
   }
 
   Future<void> recognizeFace(File imageFile) async {
+  if (!mounted) return;
   setState(() {
     final t = AppLocalizations.of(context)!;
     _faceValid = false;
@@ -233,6 +251,7 @@ class _CamPulangState extends State<CamPulang> {
 
   if (response.statusCode != 200) {
     final t = AppLocalizations.of(context)!;
+    if (!mounted) return;
     setState(() {
       _faceMessage = t.translate("nor");
       _faceValid = false;
@@ -244,6 +263,7 @@ class _CamPulangState extends State<CamPulang> {
   final faces = data['result'];
 
   if (faces == null || faces.isEmpty) {
+    if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
       _faceMessage = t.translate("noFace");
@@ -253,6 +273,7 @@ class _CamPulangState extends State<CamPulang> {
   }
 
   if (faces.length != 1) {
+    if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
       _faceMessage = t.translate("oneFace");
@@ -266,6 +287,7 @@ class _CamPulangState extends State<CamPulang> {
   final subjects = result['subjects'];
 
     if (subjects == null || subjects.isEmpty) {
+      if (!mounted) return;
       setState(() {
         _faceMessage = "Face Unknown";
         _faceValid = false;
@@ -296,6 +318,7 @@ class _CamPulangState extends State<CamPulang> {
   // );
 
   if (matched == null) {
+    if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
       _faceMessage = t.translate("unrecog");
@@ -306,6 +329,7 @@ class _CamPulangState extends State<CamPulang> {
 
   final sim = matched['similarity'];
 
+  if (!mounted) return;
   setState(() {
     final t = AppLocalizations.of(context)!;
     _similarity = sim;
@@ -388,11 +412,19 @@ class _CamPulangState extends State<CamPulang> {
         print(resBody);
       print("Absence Fuccessful");
       _thxForAbsence();
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
     } else {
       final bodi = jsonDecode(responses.body);
       print("Absence Failed");
       error = bodi['error'];
       _thxForAbsenceFailed();
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
     }
   }
 

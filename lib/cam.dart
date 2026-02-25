@@ -67,7 +67,13 @@ class _CameraState extends State<Camera> {
     final permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      throw Exception("Location Permission denied");
+      // throw Exception("Location Permission denied");
+
+      if(!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Location permission denied")),
+      );
+      return;
     }
 
     final pos = await Geolocator.getCurrentPosition(
@@ -131,7 +137,15 @@ class _CameraState extends State<Camera> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _prefsCatcher();
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initPage();
+    });
+  }
+
+  Future<void> _initPage() async {
+    await _prefsCatcher();
+    await _takePhoto();
   }
 
   Future<File> _normalizeImage(File file) async {
@@ -196,6 +210,7 @@ class _CameraState extends State<Camera> {
 
   Future<void> _prefsCatcher() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       _savedUser = prefs.getString('user') ?? "Who is there?";
       _savedToken = prefs.getString('token') ?? "this is token";
@@ -243,6 +258,7 @@ class _CameraState extends State<Camera> {
 
     await prefs.setString('status', status);
 
+    if (!mounted) return;
     setState(() {
       _savedStatus = status;
     });
@@ -251,6 +267,7 @@ class _CameraState extends State<Camera> {
   }
 
   Future<void> recognizeFace(File imageFile) async {
+    if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
       _faceValid = false;
@@ -270,6 +287,7 @@ class _CameraState extends State<Camera> {
 
     if (response.statusCode != 200) {
       final t = AppLocalizations.of(context)!;
+      if (!mounted) return;
       setState(() {
         _faceMessage = t.translate("nor");
         _faceValid = false;
@@ -281,6 +299,7 @@ class _CameraState extends State<Camera> {
     final faces = data['result'];
 
     if (faces == null || faces.isEmpty) {
+      if (!mounted) return;
       setState(() {
         final t = AppLocalizations.of(context)!;
         _faceMessage = t.translate("noFace");
@@ -290,6 +309,7 @@ class _CameraState extends State<Camera> {
     }
 
     if (faces.length != 1) {
+      if (!mounted) return;
       setState(() {
         final t = AppLocalizations.of(context)!;
         _faceMessage = t.translate("oneFace");
@@ -303,6 +323,7 @@ class _CameraState extends State<Camera> {
     final subjects = result['subjects'];
 
       if (subjects == null || subjects.isEmpty) {
+        if (!mounted) return;
         setState(() {
           _faceMessage = "Face Unknown";
           _faceValid = false;
@@ -343,6 +364,7 @@ class _CameraState extends State<Camera> {
 
     final sim = matched['similarity'];
 
+    if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
       _similarity = sim;
@@ -428,11 +450,19 @@ class _CameraState extends State<Camera> {
         print(resBody);
       print("Absence Fuccessful");
       _thxForAbsence();
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
     } else {
       final body = jsonDecode(responses.body);
       _thxForAbsenceFailed();
       error = body['error'];
       print("Absence Failed");
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
     }
   }
 

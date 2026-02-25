@@ -251,6 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child: TextFormField(
+                                      style: TextStyle(color: Colors.white),
                                       controller: emailController,
                                       decoration: InputDecoration(
                                         hintText: t.translate("username"),
@@ -277,6 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: MediaQuery.sizeOf(context).width * 0.75,
                                     height: MediaQuery.sizeOf(context).height * 0.06,
                                     child: TextFormField(
+                                      style: TextStyle(color: Colors.white),
                                       controller: AccessCodeController,
                                       obscureText: !_isVisible,
                                       decoration: InputDecoration(

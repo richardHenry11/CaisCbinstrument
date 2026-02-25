@@ -16,10 +16,11 @@
   "outButton" : "Check Out",
   "whichOne" : "Which One",
   "absent" : "Tap to Absent",
+  "gpsFlex" : "GPS Validator - Field Duty",
 
 
   "titlePilihDinas" : "Absence",
-  "pilihDinas" : "Choose your Duty",
+  "pilihAbsen" : "Choose your Duty",
   "office" : "Office Absence",
   "field" : "Field Duty",
   "wfh" : "WFH",

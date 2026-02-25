@@ -120,7 +120,7 @@ class _WFHState extends State<WFH> {
     });
   }
 
-  void _masukShiftType() async {
+  Future<void> _masukShiftType() async {
     final masuk = "masuk";
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -133,7 +133,7 @@ class _WFHState extends State<WFH> {
     print('shift_type: $masuk');
   }
 
-  void _pulangShiftType() async {
+  Future<void> _pulangShiftType() async {
     final pulang = "pulang";
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -205,7 +205,7 @@ class _WFHState extends State<WFH> {
     super.dispose();
   }
 
-  bool get _isShiftSelected => _savedShiftType == "masuk" || _savedShiftType == "pulang";
+  // bool get _isShiftSelected => _savedShiftType == "masuk" || _savedShiftType == "pulang";
 
   @override
   Widget build(BuildContext context) {
@@ -389,10 +389,15 @@ class _WFHState extends State<WFH> {
                                   ),
                                   backgroundColor: _savedShiftType == "masuk" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
                                 ),
-                                onPressed: (){
-                                  // button Funct
-                                  _masukShiftType();
-                                }, 
+                                onPressed: 
+                                 () async {
+                                    await _masukShiftType();
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => Camera()),
+                                    );
+                                  },  
                                 child: Text(t.translate("inButton"), style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
                               )
                             ),
@@ -408,48 +413,53 @@ class _WFHState extends State<WFH> {
                                   ),
                                   backgroundColor: _savedShiftType == "pulang" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
                                 ),
-                                onPressed: (){
-                                  // button Funct
-                                  _pulangShiftType();
-                                }, 
+                                onPressed:
+                                   () async {
+                                      await _pulangShiftType();
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => CamPulang()),
+                                      );
+                                    }, 
                                 child: Text(t.translate("outButton"), style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
                               )
                             )
                           ],
                         ),
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.72,
-                          height: MediaQuery.sizeOf(context).height * 0.07,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                                if (states.contains(MaterialState.disabled)) {
-                                  return Colors.grey;
-                                }
-                                return Colors.lightBlueAccent;
-                              }),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            ),
-                            onPressed: _isShiftSelected
-                                ? () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: _savedShiftType == 'masuk' ? (_) => Camera() : (_) => CamPulang()),
-                                    );
-                                  }
-                                : null,
+                        // SizedBox(
+                        //   width: MediaQuery.sizeOf(context).width * 0.72,
+                        //   height: MediaQuery.sizeOf(context).height * 0.07,
+                        //   child: ElevatedButton(
+                        //     style: ButtonStyle(
+                        //       backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                        //         if (states.contains(MaterialState.disabled)) {
+                        //           return Colors.grey;
+                        //         }
+                        //         return Colors.lightBlueAccent;
+                        //       }),
+                        //       shape: MaterialStateProperty.all(
+                        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        //       ),
+                        //     ),
+                        //     onPressed: _isShiftSelected
+                        //         ? () {
+                        //             Navigator.push(
+                        //               context,
+                        //               MaterialPageRoute(builder: _savedShiftType == 'masuk' ? (_) => Camera() : (_) => CamPulang()),
+                        //             );
+                        //           }
+                        //         : null,
 
-                            child: Text(
-                              !_isShiftSelected
-                                  ? t.translate("whichOne")
-                                  : t.translate("absent"),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                        //     child: Text(
+                        //       !_isShiftSelected
+                        //           ? t.translate("whichOne")
+                        //           : t.translate("absent"),
+                        //       style: const TextStyle(color: Colors.white),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
                       ],
                     )

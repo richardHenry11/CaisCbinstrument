@@ -16,10 +16,11 @@
   "outButton" : "Pulang",
   "whichOne" : "Pilih dulu",
   "absent" : "Absen",
+  "gpsFlex" : "Validasi GPS - Lapangan",
 
 
   "titlePilihDinas" : "Absensi",
-  "pilihDinas" : "Pilih Jenis Dinas",
+  "pilihAbsen" : "Pilih Jenis Dinas",
   "office" : "Kantor",
   "field" : "Dinas Lapangan",
   "wfh" : "Kerja Dirumah",
