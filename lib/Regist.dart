@@ -437,6 +437,7 @@ class _RegistState extends State<Regist> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 22, 84, 134),
       body: 
       SingleChildScrollView(
         // child: SizedBox(
@@ -444,368 +445,407 @@ class _RegistState extends State<Regist> {
           child: 
           Center(
             child: 
-            Container(
-              width: MediaQuery.sizeOf(context).width * 1,
-              decoration: BoxDecoration(
-                color: Colors.blue
-              ),
-              child: Column(
+            Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width * 0.9,
-                    child: Card(
-                      color: const Color.fromARGB(255, 67, 57, 158),
-                      child: 
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Image.asset('assets/logoBiru.png', width: 220, height: 65),
+                    child: 
+                    Container(
+                      decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        // outside glowing
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.3),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.1),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                      child: Card(
+                        color: const Color.fromARGB(255, 5, 37, 93),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: Colors.blue, 
+                            width: 1,
                           ),
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.5,
-                            child: 
-                            Divider(
-                              thickness: 1, 
-                              color: Colors.grey,
+                        ),
+                        child: 
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Image.asset('assets/logoBiru.png', width: 220, height: 65),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
-                            child: Text("CBI Automation & Integrated System CAIS", 
-                                          style: TextStyle(color: const Color.fromARGB(255, 202, 202, 202), 
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w900
-                                          ),
-                                        ),
-                          ),
-                          Form(
-                            key: _formKey,
-                            child:
-                              Column(
-                                children: [
-        
-                                  // ====== employee's lists =======
-                                  _isLoadingNames ? const CircularProgressIndicator() :
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.75,
-                                    height: MediaQuery.sizeOf(context).height * 0.06,
-                                    child:  
-                                    DropdownButtonFormField(
-                                      decoration:InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          label: Text(t.translate("user")),
-                                      ),
-                                      value: _selectedEmployee,
-                                      items: _employeeNames.map((name){
-                                        return DropdownMenuItem<String>(
-                                          value: name,
-                                          child: Text(name)
-                                        );
-                                      }).toList(), 
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedEmployee = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-        
-                                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-        
-                                  // ====== Leader's lists =======
-                                  _loadingLeader ? const CircularProgressIndicator() :
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.75,
-                                    height: MediaQuery.sizeOf(context).height * 0.06,
-                                    child:  
-                                    DropdownButtonFormField(
-                                      decoration:InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          label: Text(t.translate("leader"))
-                                      ),
-                                      value: _selectedLeaders,
-                                      items: _leaderNames.map((name){
-                                        return DropdownMenuItem<String>(
-                                          value: name,
-                                          child: Text(name)
-                                        );
-                                      }).toList(), 
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedLeaders = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-        
-                                  // Office Email
-                                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.75,
-                                    height: MediaQuery.sizeOf(context).height * 0.06,
-                                    child: TextFormField(
-                                      controller: _email,
-                                      // obscureText: true,
-                                      decoration: InputDecoration(
-                                        hintText: t.translate("emailOffice"),
-                                        hintStyle: TextStyle(color: const Color.fromARGB(
-                                                                255, 195, 195, 195)),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white
-                                      ),
-                                    ),
-                                  ),
-        
-                                  // Password
-                                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.75,
-                                    height: MediaQuery.sizeOf(context).height * 0.06,
-                                    child: TextFormField(
-                                      controller: _password,
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        hintText: t.translate("pas"),
-                                        hintStyle: TextStyle(color: const Color.fromARGB(
-                                                                255, 195, 195, 195)),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white
-                                      ),
-                                    ),
-                                  ),
-        
-                                  // Re-Password
-                                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-                                  SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.75,
-                                    height: MediaQuery.sizeOf(context).height * 0.06,
-                                    child: TextFormField(
-                                      controller: _repassword,
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        hintText: t.translate("repas"),
-                                        hintStyle: TextStyle(color: const Color.fromARGB(
-                                                                255, 195, 195, 195)),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white
-                                      ),
-                                    ),
-                                  ),
-        
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Divider(thickness: 2, endIndent: MediaQuery.sizeOf(context).width * 0.05, indent: MediaQuery.sizeOf(context).width * 0.05,),
-                                  ),
-        
-                                  //====== PHOTO TAKING ========
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Container(
-                                      width: MediaQuery.sizeOf(context).width * 0.5,
-                                      height: MediaQuery.sizeOf(context).height * 0.25,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.blueAccent, style: BorderStyle.solid),
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.black12,
-                                      ),
-                                      child: Builder(
-                                        builder: (_) {
-                                          File? currentImage;
-                                          if (_currentStep == 0) currentImage = _frontFace;
-                                          if (_currentStep == 1) currentImage = _leftFace;
-                                          if (_currentStep == 2) currentImage = _rightFace;
-                                            
-                                          return currentImage == null
-                                              ? Icon(Icons.camera_alt, size: 60, color: Colors.white70)
-                                              : ClipRRect(
-                                                  borderRadius: BorderRadius.circular(12),
-                                                  child: Image.file(
-                                                    currentImage,
-                                                    fit: BoxFit.cover,
-                                                    width: double.infinity,
-                                                  ),
-                                                );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.005,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: List.generate(3, (index) {
-                                      return Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 4),
-                                        width: 8,
-                                        height: 8,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: index <= _currentStep
-                                              ? Colors.green
-                                              : Colors.grey,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-        
-                                  // cam Button
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // ========= Retry ===========
-                                      if ((_currentStep == 0 && _frontFace != null) ||
-                                        (_currentStep == 1 && _leftFace != null) ||
-                                        (_currentStep == 2 && _rightFace != null))
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 12.0),
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red.shade300,
-                                            padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10)
-                                            )
-                                          ),
-                                          onPressed: retryStep,
-                                          child: Text(t.translate('retake'), style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
-                                        ),
-                                      ),
-                                      // ========== take Photo ==========
-                                      if (!_isPhotoCompleted)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 12, left: 5),
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.camera_alt),
-                                          label: Text(t.translate("camreg"), style: TextStyle(color: Colors.white),),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blueAccent,
-                                            padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                            
+                            Padding(
+                              padding: const EdgeInsets.only(top:10),
+                              child: Text(t.translate("registss"), 
+                                            style: TextStyle(color: const Color.fromARGB(255, 202, 202, 202), 
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900
                                             ),
                                           ),
-                                          onPressed: _uploadingFace ? null : captureStep,
-                                        ),
+                            ),
+                      
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 15.0),
+                              child: SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.5,
+                                child: Container(
+                                  height: 3, 
+                                  decoration: BoxDecoration(
+                                    color: Colors.cyanAccent, // garis inti
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.cyanAccent.withOpacity(0.6),
+                                        blurRadius: 15,
+                                        spreadRadius: 2,
+                                      ),
+                                      BoxShadow(
+                                        color: Colors.cyanAccent.withOpacity(0.3),
+                                        blurRadius: 30,
+                                        spreadRadius: 6,
                                       ),
                                     ],
                                   ),
-        
-                                  // information Photo text
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 3),
-                                    child: 
+                                ),
+                              ),
+                            ),
+                            Form(
+                              key: _formKey,
+                              child:
+                                Column(
+                                  children: [
+                              
+                                    // ====== employee's lists =======
+                                    _isLoadingNames ? const CircularProgressIndicator() :
                                     SizedBox(
                                       width: MediaQuery.sizeOf(context).width * 0.75,
-                                      child: Card(
-                                        color: Colors.green.withOpacity(0.5),
-                                        child: 
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: 
-                                          Text(
-                                            t.translate(_currentStep == 0 ? 'photo1' : _currentStep == 1 ? 'photo2' : 'photo3'),
-                                            style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+                                      height: MediaQuery.sizeOf(context).height * 0.06,
+                                      child:  
+                                      DropdownButtonFormField(
+                                        decoration:InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            label: Text(t.translate("user")),
+                                        ),
+                                        value: _selectedEmployee,
+                                        items: _employeeNames.map((name){
+                                          return DropdownMenuItem<String>(
+                                            value: name,
+                                            child: Text(name)
+                                          );
+                                        }).toList(), 
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedEmployee = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                              
+                                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                              
+                                    // ====== Leader's lists =======
+                                    _loadingLeader ? const CircularProgressIndicator() :
+                                    SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.75,
+                                      height: MediaQuery.sizeOf(context).height * 0.06,
+                                      child:  
+                                      DropdownButtonFormField(
+                                        decoration:InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            label: Text(t.translate("leader"))
+                                        ),
+                                        value: _selectedLeaders,
+                                        items: _leaderNames.map((name){
+                                          return DropdownMenuItem<String>(
+                                            value: name,
+                                            child: Text(name)
+                                          );
+                                        }).toList(), 
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedLeaders = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                              
+                                    // Office Email
+                                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+                                    SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.75,
+                                      height: MediaQuery.sizeOf(context).height * 0.06,
+                                      child: TextFormField(
+                                        controller: _email,
+                                        // obscureText: true,
+                                        decoration: InputDecoration(
+                                          hintText: t.translate("emailOffice"),
+                                          hintStyle: TextStyle(color: const Color.fromARGB(
+                                                                  255, 195, 195, 195)),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none
                                           ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white
                                         ),
                                       ),
                                     ),
-                                  ),
-        
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-                                    child: 
+                              
+                                    // Password
+                                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+                                    SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.75,
+                                      height: MediaQuery.sizeOf(context).height * 0.06,
+                                      child: TextFormField(
+                                        controller: _password,
+                                        obscureText: true,
+                                        decoration: InputDecoration(
+                                          hintText: t.translate("pas"),
+                                          hintStyle: TextStyle(color: const Color.fromARGB(
+                                                                  255, 195, 195, 195)),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white
+                                        ),
+                                      ),
+                                    ),
+                              
+                                    // Re-Password
+                                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+                                    SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.75,
+                                      height: MediaQuery.sizeOf(context).height * 0.06,
+                                      child: TextFormField(
+                                        controller: _repassword,
+                                        obscureText: true,
+                                        decoration: InputDecoration(
+                                          hintText: t.translate("repas"),
+                                          hintStyle: TextStyle(color: const Color.fromARGB(
+                                                                  255, 195, 195, 195)),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white
+                                        ),
+                                      ),
+                                    ),
+                              
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Divider(thickness: 2, endIndent: MediaQuery.sizeOf(context).width * 0.05, indent: MediaQuery.sizeOf(context).width * 0.05,),
+                                    ),
+                              
+                                    //====== PHOTO TAKING ========
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Container(
+                                        width: MediaQuery.sizeOf(context).width * 0.5,
+                                        height: MediaQuery.sizeOf(context).height * 0.25,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.blueAccent, style: BorderStyle.solid),
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.black12,
+                                        ),
+                                        child: Builder(
+                                          builder: (_) {
+                                            File? currentImage;
+                                            if (_currentStep == 0) currentImage = _frontFace;
+                                            if (_currentStep == 1) currentImage = _leftFace;
+                                            if (_currentStep == 2) currentImage = _rightFace;
+                                              
+                                            return currentImage == null
+                                                ? Icon(Icons.camera_alt, size: 60, color: Colors.white70)
+                                                : ClipRRect(
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    child: Image.file(
+                                                      currentImage,
+                                                      fit: BoxFit.cover,
+                                                      width: double.infinity,
+                                                    ),
+                                                  );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.005,),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: List.generate(3, (index) {
+                                        return Container(
+                                          margin: EdgeInsets.symmetric(horizontal: 4),
+                                          width: 8,
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: index <= _currentStep
+                                                ? Colors.green
+                                                : Colors.grey,
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                              
+                                    // cam Button
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        // Back To Login
-                                        SizedBox(
-                                          width: MediaQuery.sizeOf(context).width * 0.3,
-                                          height: MediaQuery.sizeOf(context).height * 0.06,
+                                        // ========= Retry ===========
+                                        if ((_currentStep == 0 && _frontFace != null) ||
+                                          (_currentStep == 1 && _leftFace != null) ||
+                                          (_currentStep == 2 && _rightFace != null))
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 12.0),
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                              backgroundColor: Colors.red.shade300,
+                                              padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10)
                                               )
                                             ),
-                                            onPressed: 
-                                            // button submit funct
-                                            (){
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-                                            }, 
-                                            child: Text(t.translate("backLogin"), style: TextStyle(color: Colors.white),)
+                                            onPressed: retryStep,
+                                            child: Text(t.translate('retake'), style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
                                           ),
                                         ),
-        
-                                        // Register
-                                        SizedBox(
-                                          width: MediaQuery.sizeOf(context).width * 0.3,
-                                          height: MediaQuery.sizeOf(context).height * 0.06,
-                                          child: ElevatedButton(
+                                        // ========== take Photo ==========
+                                        if (!_isPhotoCompleted)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 12, left: 5),
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.camera_alt),
+                                            label: Text(t.translate("camreg"), style: TextStyle(color: Colors.white),),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: _isPhotoCompleted ? const Color.fromARGB(255, 73, 197, 254) : Colors.grey,
+                                              backgroundColor: Colors.blueAccent,
+                                              padding: EdgeInsets.symmetric(horizontal:24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10)
-                                              )
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
                                             ),
-                                            onPressed: (_uploadingFace || !_isPhotoCompleted) ? null : 
-                                            // button submit funct
-                                            () async {
-                                              await _regist();
-                                            }, 
-                                            child: Text(
-                                              t.translate("okReg"), 
-                                              style: TextStyle(color: Colors.white),
-                                            )
+                                            onPressed: _uploadingFace ? null : captureStep,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  )
-                                ],
+                              
+                                    // information Photo text
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 3),
+                                      child: 
+                                      SizedBox(
+                                        width: MediaQuery.sizeOf(context).width * 0.75,
+                                        child: Card(
+                                          color: Colors.green.withOpacity(0.5),
+                                          child: 
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: 
+                                            Text(
+                                              t.translate(_currentStep == 0 ? 'photo1' : _currentStep == 1 ? 'photo2' : 'photo3'),
+                                              style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                              
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                                      child: 
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          // Back To Login
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context).width * 0.3,
+                                            height: MediaQuery.sizeOf(context).height * 0.06,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10)
+                                                )
+                                              ),
+                                              onPressed: 
+                                              // button submit funct
+                                              (){
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+                                              }, 
+                                              child: Text(t.translate("backLogin"), style: TextStyle(color: Colors.white),)
+                                            ),
+                                          ),
+                              
+                                          // Register
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context).width * 0.3,
+                                            height: MediaQuery.sizeOf(context).height * 0.06,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: _isPhotoCompleted ? const Color.fromARGB(255, 73, 197, 254) : Colors.grey,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10)
+                                                )
+                                              ),
+                                              onPressed: (_uploadingFace || !_isPhotoCompleted) ? null : 
+                                              // button submit funct
+                                              () async {
+                                                await _regist();
+                                              }, 
+                                              child: Text(
+                                                t.translate("okReg"), 
+                                                style: TextStyle(color: Colors.white),
+                                              )
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          // Padding(padding: EdgeInsets.all(5.0)),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(t.translate("beta"), style: TextStyle(color: const Color.fromARGB(
-                                                                  255, 195, 195, 195), fontSize: 8, fontWeight: FontWeight.w800),
-                            ),
-                          )
-                        ],
+                            // Padding(padding: EdgeInsets.all(5.0)),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(t.translate("beta"), style: TextStyle(color: const Color.fromARGB(
+                                                                    255, 195, 195, 195), fontSize: 8, fontWeight: FontWeight.w800),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -814,7 +854,6 @@ class _RegistState extends State<Regist> {
             ),
           ),
         // ),
-      ),
     );
   }
 }

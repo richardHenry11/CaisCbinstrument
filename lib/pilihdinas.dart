@@ -223,7 +223,7 @@ class _PilihDinasState extends State<PilihDinas> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
-                            child: Text("CBI Automation & Integrated System CAIS", 
+                            child: Text(t.translate("pilihAbsen"), 
                                           style: TextStyle(color: const Color.fromARGB(255, 202, 202, 202), 
                                           fontSize: 14,
                                           fontWeight: FontWeight.w900

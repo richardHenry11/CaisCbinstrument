@@ -19,6 +19,7 @@
 
 
   "titlePilihDinas" : "Absensi",
+  "pilihDinas" : "Pilih Jenis Dinas",
   "office" : "Kantor",
   "field" : "Dinas Lapangan",
   "wfh" : "Kerja Dirumah",
@@ -54,6 +55,9 @@
   "reg" : "Daftar",
   "in" : "Masuk Ke sistem",
   "beta" : "Versi Beta - Dilindungi oleh protokol keamanan lanjut",
+  "username" : "Masukan Email Kantormu",
+  "password" : "Masukan Passwordnya",
+  "registss" : "Registrasi Pengguna CAIS",
 
 
   "user" : "Pilih User",
@@ -92,7 +96,7 @@
   "in" : "Masuk",
   "out" : "Pulang",
   "prove" : "Bukti",
-  "confirmOT" : "Konfirmasi Lembur",
+  "confirmOT" : "Input Lembur",
   "confirmation" : "konfirmasi",
   "deduction" : "Pemotongan (Rp.-)",
   "reason" : "Alasan",

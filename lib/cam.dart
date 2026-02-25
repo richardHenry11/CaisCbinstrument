@@ -98,6 +98,7 @@ class _CameraState extends State<Camera> {
     ${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}:${now.second}
     ${_lat!.toStringAsFixed(6)}, ${_lng!.toStringAsFixed(6)}
     $_address
+    $_savedAttType - MASUK
     """;
 
     img.drawString(

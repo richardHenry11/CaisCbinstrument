@@ -104,6 +104,7 @@ class _CamPulangState extends State<CamPulang> {
     ${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}:${now.second}
     ${_lat!.toStringAsFixed(6)}, ${_lng!.toStringAsFixed(6)}
     $_address
+    $_savedAttType - PULANG
     """;
 
     img.drawString(

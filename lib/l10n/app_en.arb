@@ -19,6 +19,7 @@
 
 
   "titlePilihDinas" : "Absence",
+  "pilihDinas" : "Choose your Duty",
   "office" : "Office Absence",
   "field" : "Field Duty",
   "wfh" : "WFH",
@@ -54,6 +55,9 @@
   "reg" : "Register",
   "in" : "Enter System",
   "beta" : "Beta Version - Protected by advanced security protocols",
+  "username" : "Input your Office mail",
+  "password" : "Input your password",
+  "registss" : "CAIS user Registration",
 
 
   "user" : "Select User",
@@ -92,7 +96,7 @@
   "in" : "In",
   "out" : "Out",
   "prove" : "Prove",
-  "confirmOT" : "Overtime Confirmation",
+  "confirmOT" : "Overtime Input",
   "confirmation" : "Confirmation",
   "deduction" : "Deduction (Rp.-)",
   "reason" : "Reasoning",
@@ -129,7 +133,7 @@
   "name" : "Nama",
   "date" : "Tanggal",
   "cekin" : "Masuk",
-  "location : "Lokasi",
+  "location" : "Lokasi",
   "urlatee" : "you're late over than 30 minutes!! :(",
   "urlate" : "You're late !!" ,
   "lateReason" : "Lateness Reason",

@@ -253,19 +253,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: TextFormField(
                                       controller: emailController,
                                       decoration: InputDecoration(
-                                        hintText: "email",
-                                        hintStyle: TextStyle(color: const Color.fromARGB(
-                                                                255, 195, 195, 195)),
+                                        hintText: t.translate("username"),
+                                        hintStyle: TextStyle(color: const Color.fromARGB(255, 145, 145, 145), fontSize: 14),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(20),
-                                          borderSide: BorderSide.none
+                                          borderSide: BorderSide(
+                                            color: Colors.blue
+                                          )
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(20),
-                                          borderSide: BorderSide.none
+                                          borderSide: BorderSide(
+                                            color: Colors.blue
+                                          )
                                         ),
                                         filled: true,
-                                        fillColor: Colors.white
+                                        fillColor: const Color.fromARGB(255, 6, 45, 111)
                                       ),
                                     ),
                                   ),
@@ -277,19 +280,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                       controller: AccessCodeController,
                                       obscureText: !_isVisible,
                                       decoration: InputDecoration(
-                                        hintText: "Access Code",
-                                        hintStyle: TextStyle(color: const Color.fromARGB(
-                                                                255, 195, 195, 195)),
+                                        hintText: t.translate("password"),
+                                        hintStyle: TextStyle(color: const Color.fromARGB(255, 145, 145, 145), fontSize: 14),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(20),
-                                          borderSide: BorderSide.none
+                                          borderSide: BorderSide(
+                                            color: Colors.blue
+                                          )
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(20),
-                                          borderSide: BorderSide.none
+                                          borderSide: BorderSide(
+                                            color: Colors.blue
+                                          )
                                         ),
                                         filled: true,
-                                        fillColor: Colors.white,
+                                        fillColor: const Color.fromARGB(255, 6, 45, 111),
                     
                                         suffixIcon: IconButton(
                                           onPressed: (){
@@ -307,28 +313,45 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20.0, left: 15.0, right: 3.0, bottom: 15),
+                                    padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 3.0, bottom: 15),
                                     child: 
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                                       children: [
                                         // Regist
                                         SizedBox(
-                                          width: MediaQuery.sizeOf(context).width * 0.38,
+                                          width: MediaQuery.sizeOf(context).width * 0.35,
                                           height: MediaQuery.sizeOf(context).height * 0.06,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color.fromARGB(255, 70, 188, 242),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(15)
-                                              )
+                                          child: 
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.cyanAccent.withOpacity(0.3),
+                                                    blurRadius: 15,
+                                                    spreadRadius: 2,
+                                                ),
+                                                BoxShadow(
+                                                  color: Colors.cyanAccent.withOpacity(0.1),
+                                                  blurRadius: 30,
+                                                  spreadRadius: 6,
+                                                )
+                                              ]
                                             ),
-                                            onPressed: 
-                                            // button regist funct
-                                            (){
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => Regist()));
-                                            }, 
-                                            child: Text(t.translate("reg"), style: TextStyle(color: Colors.white),)
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: const Color.fromARGB(255, 70, 188, 242),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(15)
+                                                )
+                                              ),
+                                              onPressed: 
+                                              // button regist funct
+                                              (){
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => Regist()));
+                                              }, 
+                                              child: Text(t.translate("reg"), style: TextStyle(color: Colors.white),)
+                                            ),
                                           ),
                                         ),
                     
