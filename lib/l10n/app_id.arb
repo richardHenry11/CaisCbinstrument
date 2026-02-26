@@ -20,13 +20,14 @@
 
 
   "titlePilihDinas" : "Absensi",
-  "pilihAbsen" : "Pilih Jenis Dinas",
+  "pilihAbsen" : "Tipe Kehadiran",
   "office" : "Kantor",
-  "field" : "Dinas Lapangan",
-  "wfh" : "Kerja Dirumah",
+  "field" : "Dinas Lap.",
+  "wfh" : "WFH",
   "cuti" : "Cuti",
-  "cutLap" : "Cuti Lapangan",
+  "cutLap" : "Cuti Lap.",
   "sick" : "Sakit",
+  "beranda" : "Beranda",
 
 
   "takePhoto" : "Ambil Foto",

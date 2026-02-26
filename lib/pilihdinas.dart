@@ -254,225 +254,294 @@ class _PilihDinasState extends State<PilihDinas> {
                                             ),
                                           ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                height: MediaQuery.sizeOf(context).width * 0.1,
-                                child: 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.3),
-                                        blurRadius: 15,
-                                        spreadRadius: 2,
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.6,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.28,
+                                      height: MediaQuery.sizeOf(context).width * 0.1,
+                                      child: 
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.cyanAccent.withOpacity(0.3),
+                                              blurRadius: 15,
+                                              spreadRadius: 2,
+                                            ),
+                                            BoxShadow(
+                                              color: Colors.cyanAccent.withOpacity(0.1),
+                                              blurRadius: 30,
+                                              spreadRadius: 6,
+                                            )
+                                          ]
+                                        ),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5)
+                                            )
+                                          ),
+                                          onPressed: (){
+                                            _dinasKantor();
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => OfficeAbsence()));
+                                          }, 
+                                          child: Text(t.translate("office"), style: TextStyle(color: Colors.white),)
+                                        ),
                                       ),
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.1),
-                                        blurRadius: 30,
-                                        spreadRadius: 6,
-                                      )
-                                    ]
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(255, 73, 197, 254),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                      )
                                     ),
-                                    onPressed: (){
-                                      _dinasKantor();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => OfficeAbsence()));
-                                    }, 
-                                    child: Text(t.translate("office"), style: TextStyle(color: Colors.white),)
+                                  ),
+                              
+                                  Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: SizedBox(
+                                  width: MediaQuery.sizeOf(context).width * 0.28,
+                                  child: 
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.cyanAccent.withOpacity(0.3),
+                                          blurRadius: 15,
+                                          spreadRadius: 2,
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.cyanAccent.withOpacity(0.1),
+                                          blurRadius: 30,
+                                          spreadRadius: 6,
+                                        )
+                                      ]
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5)
+                                        )
+                                      ),
+                                      onPressed: (){
+                                        _dinasLuar();
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => FieldDuty()));
+                                      }, 
+                                      child: Text(t.translate("field"), style: TextStyle(color: Colors.white))
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                child: 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.3),
-                                        blurRadius: 15,
-                                        spreadRadius: 2,
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.1),
-                                        blurRadius: 30,
-                                        spreadRadius: 6,
-                                      )
-                                    ]
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(255, 73, 197, 254),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                      )
-                                    ),
-                                    onPressed: (){
-                                      _dinasLuar();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => FieldDuty()));
-                                    }, 
-                                    child: Text(t.translate("field"), style: TextStyle(color: Colors.white))
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
+                          
 
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                child: 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.3),
-                                        blurRadius: 15,
-                                        spreadRadius: 2,
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.6,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                    child: SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.28,
+                                      child: 
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.cyanAccent.withOpacity(0.3),
+                                              blurRadius: 15,
+                                              spreadRadius: 2,
+                                            ),
+                                            BoxShadow(
+                                              color: Colors.cyanAccent.withOpacity(0.1),
+                                              blurRadius: 30,
+                                              spreadRadius: 6,
+                                            )
+                                          ]
+                                        ),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5)
+                                            )
+                                          ),
+                                          onPressed: (){
+                                            _WFH();
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => WFH()));
+                                          }, 
+                                          child: Text(t.translate("wfh"), style: TextStyle(color: Colors.white))
+                                        ),
                                       ),
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.1),
-                                        blurRadius: 30,
-                                        spreadRadius: 6,
-                                      )
-                                    ]
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(255, 73, 197, 254),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                      )
                                     ),
-                                    onPressed: (){
-                                      _WFH();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => WFH()));
-                                    }, 
-                                    child: Text(t.translate("wfh"), style: TextStyle(color: Colors.white))
                                   ),
-                                ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                    child: SizedBox(
+                                        width: MediaQuery.sizeOf(context).width * 0.28,
+                                        child: 
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.cyanAccent.withOpacity(0.3),
+                                                blurRadius: 15,
+                                                spreadRadius: 2,
+                                              ),
+                                              BoxShadow(
+                                                color: Colors.cyanAccent.withOpacity(0.1),
+                                                blurRadius: 30,
+                                                spreadRadius: 6,
+                                              )
+                                            ]
+                                          ),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5)
+                                              )
+                                            ),
+                                            onPressed: (){
+                                              _cuti();
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => Cuti()));
+                                            }, 
+                                            child: Text(t.translate("cuti"), style: TextStyle(color: Colors.white))
+                                          ),
+                                        ),
+                                      ),
+                                  ),
+                                ],
                               ),
                             ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                child: 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.3),
-                                        blurRadius: 15,
-                                        spreadRadius: 2,
+                          
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.6,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  child: SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.28,
+                                      child: 
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.cyanAccent.withOpacity(0.3),
+                                              blurRadius: 15,
+                                              spreadRadius: 2,
+                                            ),
+                                            BoxShadow(
+                                              color: Colors.cyanAccent.withOpacity(0.1),
+                                              blurRadius: 30,
+                                              spreadRadius: 6,
+                                            )
+                                          ]
+                                        ),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5)
+                                            )
+                                          ),
+                                          onPressed: (){
+                                            _cutiLapangan();
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => CutiLapangan()));
+                                          }, 
+                                          child: Text(t.translate("cutLap"), style: TextStyle(color: Colors.white))
+                                        ),
                                       ),
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.1),
-                                        blurRadius: 30,
-                                        spreadRadius: 6,
-                                      )
-                                    ]
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(255, 73, 197, 254),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                      )
                                     ),
-                                    onPressed: (){
-                                      _cuti();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Cuti()));
-                                    }, 
-                                    child: Text(t.translate("cuti"), style: TextStyle(color: Colors.white))
+                                  ),
+                                Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: SizedBox(
+                                    width: MediaQuery.sizeOf(context).width * 0.28,
+                                    child: 
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.cyanAccent.withOpacity(0.3),
+                                            blurRadius: 15,
+                                            spreadRadius: 2,
+                                          ),
+                                          BoxShadow(
+                                            color: Colors.cyanAccent.withOpacity(0.1),
+                                            blurRadius: 30,
+                                            spreadRadius: 6,
+                                          )
+                                        ]
+                                      ),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5)
+                                          )
+                                        ),
+                                        onPressed: (){
+                                          _sakit();
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Sick()));
+                                        }, 
+                                        child: Text(t.translate("sick"), style: TextStyle(color: Colors.white))
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
+                            ),
                           ),
+
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                child: 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.3),
-                                        blurRadius: 15,
-                                        spreadRadius: 2,
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: SizedBox(
+                                    width: MediaQuery.sizeOf(context).width * 0.6,
+                                    child: 
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.cyanAccent.withOpacity(0.3),
+                                            blurRadius: 15,
+                                            spreadRadius: 2,
+                                          ),
+                                          BoxShadow(
+                                            color: Colors.cyanAccent.withOpacity(0.1),
+                                            blurRadius: 30,
+                                            spreadRadius: 6,
+                                          )
+                                        ]
                                       ),
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.1),
-                                        blurRadius: 30,
-                                        spreadRadius: 6,
-                                      )
-                                    ]
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(255, 73, 197, 254),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                      )
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(255, 73, 197, 254),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5)
+                                          )
+                                        ),
+                                        onPressed: (){
+                                          // _logout();
+                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => Sick()));
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Dashboard())
+                                          );
+                                        }, 
+                                        child: Text(t.translate("beranda"), style: TextStyle(color: Colors.white))
+                                      ),
                                     ),
-                                    onPressed: (){
-                                      _cutiLapangan();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CutiLapangan()));
-                                    }, 
-                                    child: Text(t.translate("cutLap"), style: TextStyle(color: Colors.white))
                                   ),
                                 ),
-                              ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                child: 
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.3),
-                                        blurRadius: 15,
-                                        spreadRadius: 2,
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.cyanAccent.withOpacity(0.1),
-                                        blurRadius: 30,
-                                        spreadRadius: 6,
-                                      )
-                                    ]
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(255, 73, 197, 254),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                      )
-                                    ),
-                                    onPressed: (){
-                                      _sakit();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Sick()));
-                                    }, 
-                                    child: Text(t.translate("sick"), style: TextStyle(color: Colors.white))
-                                  ),
-                                ),
-                              ),
-                          ),
+                          
                           SizedBox(height: MediaQuery.sizeOf(context).height * 0.02)
                         ],
                       )

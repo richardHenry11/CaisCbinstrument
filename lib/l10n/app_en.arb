@@ -27,6 +27,7 @@
   "cuti" : "Annual Leave",
   "cutLap" : "Field Duty Leave",
   "sick" : "Sick",
+  "beranda" : "Dashboard", 
 
 
   "takePhoto" : "Take Photo",

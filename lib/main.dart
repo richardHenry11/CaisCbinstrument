@@ -367,7 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             Container(
                                               decoration: BoxDecoration(
                                                 boxShadow: [
-                                                    BoxShadow(
+                                                  BoxShadow(
                                                     color: Colors.cyanAccent.withOpacity(0.3),
                                                     blurRadius: 15,
                                                     spreadRadius: 2,

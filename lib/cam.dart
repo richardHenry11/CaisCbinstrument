@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:absence/l10n/app_localizations.dart';
 import 'package:absence/main.dart';
+import 'package:absence/pilihdinas.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -470,57 +471,57 @@ class _CameraState extends State<Camera> {
     
   // }
 
-  Future<void> _confirmSubmitAbsence() async {
-    final t = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      barrierDismissible: false, 
-      builder: (context) {
-        return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
-                    Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
-                  ],
-                ),
-                Divider()
-              ],
-            ),
-          content: 
-          Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
-          actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                backgroundColor: Colors.red
-              ),
-              onPressed: (){
-                // button Funct
-                 Navigator.of(context).pop();
-              }, 
-              child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                backgroundColor: Colors.green
-              ),
-              onPressed: (){
-                // button Funct
-                _submitAbsence();
-                Navigator.of(context).pop();
-              }, 
-              child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
-            )
-          ],
-        );
-      }
-    );
-  }
+  // Future<void> _confirmSubmitAbsence() async {
+  //   final t = AppLocalizations.of(context)!;
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false, 
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: 
+  //           Column(
+  //             children: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
+  //                   Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
+  //                 ],
+  //               ),
+  //               Divider()
+  //             ],
+  //           ),
+  //         content: 
+  //         Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
+  //         actions: [
+  //           ElevatedButton(
+  //             style: ElevatedButton.styleFrom(
+  //               shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+  //               backgroundColor: Colors.red
+  //             ),
+  //             onPressed: (){
+  //               // button Funct
+  //                Navigator.of(context).pop();
+  //             }, 
+  //             child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
+  //           ),
+  //           ElevatedButton(
+  //             style: ElevatedButton.styleFrom(
+  //               shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+  //               backgroundColor: Colors.green
+  //             ),
+  //             onPressed: (){
+  //               // button Funct
+  //               _submitAbsence();
+  //               Navigator.of(context).pop();
+  //             }, 
+  //             child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
+  //           )
+  //         ],
+  //       );
+  //     }
+  //   );
+  // }
 
   Future<void> _thxForAbsenceFailed() async {
     final t = AppLocalizations.of(context)!;
@@ -583,6 +584,11 @@ class _CameraState extends State<Camera> {
                 onPressed: (){
                   // button Funct
                   Navigator.of(context).pop();
+
+                  Navigator.pushReplacement(
+                    context, 
+                    MaterialPageRoute(builder: (context) => PilihDinas())
+                  );
                 }, 
                 child: Text("OK", style: TextStyle(color: Colors.white),)
               ),
@@ -616,6 +622,7 @@ class _CameraState extends State<Camera> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white)),
@@ -638,14 +645,31 @@ class _CameraState extends State<Camera> {
                   )
                 ),
               SizedBox(height: 5),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                    ),
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.1),
+                      blurRadius: 30,
+                      spreadRadius: 6,
+                    ),
+                  ]
                 ),
-                onPressed: _takePhoto,
-                icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
+                child: 
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                  ),
+                  onPressed: _takePhoto,
+                  icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                  label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
+                ),
               ),
               SizedBox(height: 8),
               if (_faceMessage.isNotEmpty)
@@ -712,18 +736,36 @@ class _CameraState extends State<Camera> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 height: MediaQuery.sizeOf(context).height * 0.08,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSubmitting ? const Color.fromARGB(255, 211, 211, 211) : const Color.fromARGB(255, 87, 201, 91),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                child: 
+                Container(
+                  decoration: 
+                   _photo != null && _faceValid && !_isSubmitting ? BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                    ),
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
+                      blurRadius: 30,
+                      spreadRadius: 6,
+                    ),
+                  ]
+                ) : null,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isSubmitting ? const Color.fromARGB(255, 211, 211, 211) : const Color.fromARGB(255, 87, 201, 91),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                    ),
+                    onPressed: _photo != null && _faceValid && !_isSubmitting
+                    ? _submitAbsence : null,
+                    child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
+                      style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
+                      fontSize: 15, 
+                      fontWeight: FontWeight.w900)
+                    )
                   ),
-                  onPressed: _photo != null && _faceValid && !_isSubmitting
-                  ? _confirmSubmitAbsence : null,
-                  child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
-                    style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
-                    fontSize: 15, 
-                    fontWeight: FontWeight.w900)
-                  )
                 ),
               )
             ],

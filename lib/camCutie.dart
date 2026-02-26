@@ -198,57 +198,57 @@ class _CamAndFileState extends State<CamAndFile> {
     }
   }
 
-  Future<void> _confirmSubmitAbsence() async {
-    final t = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      barrierDismissible: false, 
-      builder: (context) {
-        return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
-                    Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
-                  ],
-                ),
-                Divider()
-              ],
-            ),
-          content: 
-          Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
-          actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                backgroundColor: Colors.red
-              ),
-              onPressed: (){
-                // button Funct
-                 Navigator.of(context).pop();
-              }, 
-              child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                backgroundColor: Colors.green
-              ),
-              onPressed: (){
-                // button Funct
-                _submitAbsence();
-                Navigator.of(context).pop();
-              }, 
-              child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
-            )
-          ],
-        );
-      }
-    );
-  }
+  // Future<void> _confirmSubmitAbsence() async {
+  //   final t = AppLocalizations.of(context)!;
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false, 
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: 
+  //           Column(
+  //             children: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
+  //                   Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
+  //                 ],
+  //               ),
+  //               Divider()
+  //             ],
+  //           ),
+  //         content: 
+  //         Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
+  //         actions: [
+  //           ElevatedButton(
+  //             style: ElevatedButton.styleFrom(
+  //               shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+  //               backgroundColor: Colors.red
+  //             ),
+  //             onPressed: (){
+  //               // button Funct
+  //                Navigator.of(context).pop();
+  //             }, 
+  //             child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
+  //           ),
+  //           ElevatedButton(
+  //             style: ElevatedButton.styleFrom(
+  //               shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+  //               backgroundColor: Colors.green
+  //             ),
+  //             onPressed: (){
+  //               // button Funct
+  //               _submitAbsence();
+  //               Navigator.of(context).pop();
+  //             }, 
+  //             child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
+  //           )
+  //         ],
+  //       );
+  //     }
+  //   );
+  // }
 
   Future<void> _thxForAbsenceFailed() async {
     final t = AppLocalizations.of(context)!;
@@ -447,7 +447,7 @@ class _CamAndFileState extends State<CamAndFile> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
                   ),
                   onPressed: _photo != null && !_isSubmitting
-                  ? _confirmSubmitAbsence : null,
+                  ? _submitAbsence : null,
                   child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
                     style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
                     fontSize: 15, 
