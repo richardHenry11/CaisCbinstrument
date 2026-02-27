@@ -524,7 +524,7 @@ class _FieldDutyState extends State<FieldDuty> {
                           Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
                           Column(
                             children: [
-                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
+                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12)),
                               Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
                             ],
                           ),
