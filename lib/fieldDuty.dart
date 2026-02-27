@@ -212,12 +212,9 @@ class _FieldDutyState extends State<FieldDuty> {
     final t = AppLocalizations.of(context)!;
     return
     Scaffold(
+      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: 
-      SizedBox(
-        width: MediaQuery.sizeOf(context).width * 1,
-        child: Container(
-          color: Colors.blue,
-          child: Column(
+      Column(
             children: [
               Container(
                 color: const Color.fromARGB(255, 184, 184, 184),
@@ -254,261 +251,309 @@ class _FieldDutyState extends State<FieldDuty> {
                 SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.8,
-                  child: Card(
-                    color: const Color.fromARGB(255, 67, 57, 158),
-                    child:
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Text("testing wa atuh euy", style: TextStyle(color: Colors.white),),
-                        Card(
-                          color: const Color.fromARGB(255, 67, 57, 158),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: const Color.fromARGB(255, 89, 71, 252),
-                              width: 2,
+                  child: 
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: Colors.blue, 
+                          width: 1,
+                        ),
+                      ),
+                      color: const Color.fromARGB(255, 22, 84, 134),
+                      child:
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Text("testing wa atuh euy", style: TextStyle(color: Colors.white),),
+                          Card(
+                             color: const Color.fromARGB(255, 22, 84, 134),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: const Color.fromARGB(255, 89, 71, 252),
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          child:
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.location_on, color: Colors.white, size: 12,),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
-                                    child: Text(t.translate("gpsFlex"), style: TextStyle(color: Colors.white, fontSize: 12),
-                                    ),
-                                  ),
-                                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.check_circle,
-                                          size: 10,
-                                          color: Colors.white,
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                            t.translate("badgeAllowed"),
-                                          style: const TextStyle(color: Colors.white, fontSize: 8),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, top: MediaQuery.of(context).size.height * 0.01),
-                                child: Text("PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung", style: TextStyle(color: Colors.white, fontSize: 10),),
-                              ),
-                              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-                              Padding(
-                                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, right:MediaQuery.of(context).size.width * 0.04 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child:
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
-                                    Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
+                                    Icon(Icons.location_on, color: Colors.white, size: 12,),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
+                                      child: Text(t.translate("gpsFlex"), style: TextStyle(color: Colors.white, fontSize: 12),
+                                      ),
+                                    ),
+                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
+                                    SizedBox(
+                                      width: MediaQuery.sizeOf(context).width * 0.3,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.check_circle,
+                                              size: 10,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                                t.translate("badgeAllowed"),
+                                              style: const TextStyle(color: Colors.white, fontSize: 8),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                              height: MediaQuery.sizeOf(context). height * 0.4,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: FlutterMap(
-                                  options: MapOptions(
-                                    initialCenter: officeLocation,
-                                    initialZoom: 15,
-                                    interactionOptions: const InteractionOptions(
-                                      flags: InteractiveFlag.all,
-                                    ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, top: MediaQuery.of(context).size.height * 0.01),
+                                  child: Text("PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung", style: TextStyle(color: Colors.white, fontSize: 10),),
+                                ),
+                                SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+                                Padding(
+                                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, right:MediaQuery.of(context).size.width * 0.04 ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
+                                      Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
+                                    ],
                                   ),
-                                  children: [
-                                    // MAP TILE
-                                    TileLayer(
-                                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                      userAgentPackageName: 'com.example.absence',
+                                ),
+                                SizedBox(
+                                height: MediaQuery.sizeOf(context). height * 0.4,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: FlutterMap(
+                                    options: MapOptions(
+                                      initialCenter: officeLocation,
+                                      initialZoom: 15,
+                                      interactionOptions: const InteractionOptions(
+                                        flags: InteractiveFlag.all,
+                                      ),
                                     ),
-
-                                    // OFFICE MARKER
-                                    MarkerLayer(
-                                      markers: [
-                                        Marker(
-                                          point: officeLocation,
-                                          width: 40,
-                                          height: 40,
-                                          child: const Icon(
-                                            Icons.location_city,
-                                            color: Colors.blue,
-                                            size: 36,
-                                          ),
-                                        ),
-
-                                        // USER MARKER
-                                        if (currentLocation != null)
+                                    children: [
+                                      // MAP TILE
+                                      TileLayer(
+                                        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                        userAgentPackageName: 'com.example.absence',
+                                      ),
+                    
+                                      // OFFICE MARKER
+                                      MarkerLayer(
+                                        markers: [
                                           Marker(
-                                            point: currentLocation!,
+                                            point: officeLocation,
                                             width: 40,
                                             height: 40,
                                             child: const Icon(
-                                              Icons.my_location,
-                                              color: Colors.lightBlueAccent,
-                                              size: 28,
+                                              Icons.location_city,
+                                              color: Colors.blue,
+                                              size: 36,
                                             ),
                                           ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                            ],
-                          )
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.3,
-                              child:
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadiusGeometry.circular(10)
+                    
+                                          // USER MARKER
+                                          if (currentLocation != null)
+                                            Marker(
+                                              point: currentLocation!,
+                                              width: 40,
+                                              height: 40,
+                                              child: const Icon(
+                                                Icons.my_location,
+                                                color: Colors.lightBlueAccent,
+                                                size: 28,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  backgroundColor: _savedShiftType == "masuk" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
                                 ),
-                                onPressed: 
-                                 () async {
-                                    await _masukShiftType();
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => Camera()),
-                                    );
-                                  },  
-                                child: Text(t.translate("inButton"), style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
                               )
-                            ),
-
-                            // Pulang
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.3,
-                              child:
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadiusGeometry.circular(10)
+                              ],
+                            )
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.3,
+                                child:
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadiusGeometry.circular(10)
+                                    ),
+                                    backgroundColor: _savedShiftType == "masuk" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
                                   ),
-                                  backgroundColor: _savedShiftType == "pulang" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
-                                ),
-                                onPressed:
+                                  onPressed: 
                                    () async {
-                                      await _pulangShiftType();
-
+                                      await _masukShiftType();
+                    
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (_) => CamPulang()),
+                                        MaterialPageRoute(builder: (_) => Camera()),
                                       );
-                                    }, 
-                                child: Text(t.translate("outButton"), style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
+                                    },  
+                                  child: Text(t.translate("inButton"), style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
+                                )
+                              ),
+                    
+                              // Pulang
+                              SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.3,
+                                child:
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadiusGeometry.circular(10)
+                                    ),
+                                    backgroundColor: _savedShiftType == "pulang" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
+                                  ),
+                                  onPressed:
+                                     () async {
+                                        await _pulangShiftType();
+                    
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => CamPulang()),
+                                        );
+                                      }, 
+                                  child: Text(t.translate("outButton"), style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
+                                )
                               )
-                            )
-                          ],
-                        ),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                        // SizedBox(
-                        //   width: MediaQuery.sizeOf(context).width * 0.72,
-                        //   height: MediaQuery.sizeOf(context).height * 0.07,
-                        //   child: ElevatedButton(
-                        //     style: ButtonStyle(
-                        //       backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                        //         if (states.contains(MaterialState.disabled)) {
-                        //           return Colors.grey;
-                        //         }
-                        //         return Colors.lightBlueAccent;
-                        //       }),
-                        //       shape: MaterialStateProperty.all(
-                        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        //       ),
-                        //     ),
-                        //     onPressed: _isShiftSelected
-                        //         ? () {
-                        //             Navigator.push(
-                        //               context,
-                        //               MaterialPageRoute(builder: _savedShiftType == 'masuk' ? (_) => Camera() : (_) => CamPulang()),
-                        //             );
-                        //           }
-                        //         : null,
-
-                        //     child: Text(
-                        //       !_isShiftSelected
-                        //           ? t.translate("whichOne")
-                        //           : t.translate("absent"),
-                        //       style: const TextStyle(color: Colors.white),
-                        //     ),
-                        //   ),
-                        // ),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
-                      ],
-                    )
+                            ],
+                          ),
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                          // SizedBox(
+                          //   width: MediaQuery.sizeOf(context).width * 0.72,
+                          //   height: MediaQuery.sizeOf(context).height * 0.07,
+                          //   child: ElevatedButton(
+                          //     style: ButtonStyle(
+                          //       backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                          //         if (states.contains(MaterialState.disabled)) {
+                          //           return Colors.grey;
+                          //         }
+                          //         return Colors.lightBlueAccent;
+                          //       }),
+                          //       shape: MaterialStateProperty.all(
+                          //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          //       ),
+                          //     ),
+                          //     onPressed: _isShiftSelected
+                          //         ? () {
+                          //             Navigator.push(
+                          //               context,
+                          //               MaterialPageRoute(builder: _savedShiftType == 'masuk' ? (_) => Camera() : (_) => CamPulang()),
+                          //             );
+                          //           }
+                          //         : null,
+                    
+                          //     child: Text(
+                          //       !_isShiftSelected
+                          //           ? t.translate("whichOne")
+                          //           : t.translate("absent"),
+                          //       style: const TextStyle(color: Colors.white),
+                          //     ),
+                          //   ),
+                          // ),
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
+                        ],
+                      )
+                    ),
                   ),
                 ),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child:
-                Card(
-                  color: const Color.fromARGB(255, 67, 57, 158),
-                  child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
-                        Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
-                        Column(
-                          children: [
-                            Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
-                            Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
-                          ],
+                Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
-                                                    right: MediaQuery.sizeOf(context).width *0.01, 
-                                                    top: MediaQuery.sizeOf(context).width *0.01, 
-                                                    bottom: MediaQuery.sizeOf(context).width *0.01
-                                                  ),
-                          child: Container(
-                            width: 2,
-                            height: MediaQuery.sizeOf(context).height * 0.04,
-                            color: Colors.grey,
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                          color: Colors.lightBlue,
+                          width: 1,
+                        ),
+                      ),
+                    color: const Color.fromARGB(255, 22, 84, 134),
+                    child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
+                          Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
+                          Column(
+                            children: [
+                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
+                              Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
+                            ],
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
-                            // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
-                            dateTimePicker(),
-                          ],
-                        ),
-                      ],
-                    )
+                          Padding(
+                            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
+                                                      right: MediaQuery.sizeOf(context).width *0.01, 
+                                                      top: MediaQuery.sizeOf(context).width *0.01, 
+                                                      bottom: MediaQuery.sizeOf(context).width *0.01
+                                                    ),
+                            child: Container(
+                              width: 2,
+                              height: MediaQuery.sizeOf(context).height * 0.04,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
+                              // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
+                              dateTimePicker(),
+                            ],
+                          ),
+                        ],
+                      )
+                  ),
                 )
               )
             ],
           ),
-        ),
-      ),
     );
   }
 }

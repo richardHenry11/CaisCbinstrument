@@ -9,8 +9,8 @@
 
 
   "gpsValid": "Validasi GPS - Kantor",
-  "badgeAllowed" : "GPS Diverifikasi - Diizinkan",
-  "badgeNotAllowed" : "GPS Ditolak - Ditolak",
+  "badgeAllowed" : "Verified - Diizinkan",
+  "badgeNotAllowed" : "Denied - Ditolak",
   "distance" : "Jarak ke Kantor",
   "inButton" : "Masuk",
   "outButton" : "Pulang",

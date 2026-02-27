@@ -9,8 +9,8 @@
 
 
   "gpsValid": "GPS Validator - Office",
-  "badgeAllowed" : "GPS Verified - Allowed",
-  "badgeNotAllowed" : "GPS Unverified - Not Allowed",
+  "badgeAllowed" : "Verified - Allowed",
+  "badgeNotAllowed" : "Denied - Not Allowed",
   "distance" : "Distance to Office",
   "inButton" : "Check In",
   "outButton" : "Check Out",
