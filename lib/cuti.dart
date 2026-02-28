@@ -246,12 +246,9 @@ class _CutiState extends State<Cuti> {
     final t = AppLocalizations.of(context)!;
     return
     Scaffold(
+      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: 
-      SizedBox(
-        width: MediaQuery.sizeOf(context).width * 1,
-        child: Container(
-          color: Colors.blue,
-          child: Column(
+      Column(
             children: [
               Container(
                 color: const Color.fromARGB(255, 184, 184, 184),
@@ -407,8 +404,6 @@ class _CutiState extends State<Cuti> {
                 )
               )
             ],
-          ),
-        ),
       ),
     );
   }
