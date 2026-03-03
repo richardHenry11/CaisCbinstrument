@@ -279,13 +279,10 @@ class _SickState extends State<Sick> {
     final t = AppLocalizations.of(context)!;
     return
     Scaffold(
+      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: 
       SingleChildScrollView(
-        child: SizedBox(
-          width: MediaQuery.sizeOf(context).width * 1,
-          child: Container(
-            color: Colors.blue,
-            child: Column(
+        child: Column(
               children: [
                 Container(
                   color: const Color.fromARGB(255, 184, 184, 184),
@@ -322,244 +319,291 @@ class _SickState extends State<Sick> {
                   SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width * 0.8,
-                    child: Card(
-                      color: const Color.fromARGB(255, 67, 57, 158),
-                      child:
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
-                          Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-        
-                          // DateTime Picker
-                          TextField(
-                            controller: _startDate,
-                            readOnly: true,
-                            style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
-                            decoration: InputDecoration(
-                              labelText: t.translate("startDate"),
-                              labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
-                              prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
-                            ),
-                            onTap: () async {
-                              final picked = await _pickDate(context);
-                              if (picked != null){
-                                setState(() {
-                                  startDateTime = picked;
-                                  _startDate.text =formatter.format(picked);
-                                });
-                              }
-                            },
-                          ),
-                          TextField(
-                            controller: _endDate,
-                            readOnly: true,
-                            style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
-                            decoration: InputDecoration(
-                              labelText: t.translate("endDate"),
-                              labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
-                              prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
-                            ),
-                            onTap: () async {
-                              final picked = await _pickDate(context);
-                              if (picked != null){
-                                setState(() {
-                                  endDateTime = picked;
-                                  _endDate.text =formatter.format(picked);
-                                });
-                              }
-                            },
-                          ),
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                          Card(
-                            color: const Color.fromARGB(255, 67, 57, 158),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(
-                                color: const Color.fromARGB(255, 89, 71, 252),
-                                width: 2,
+                    child: 
+                    Container(
+                      decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: Colors.blue, 
+                          width: 1,
+                        ),
+                      ),
+                      color: const Color.fromARGB(255, 22, 84, 134),
+                        child:
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
+                            Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
+                            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                              
+                            // DateTime Picker
+                            TextField(
+                              controller: _startDate,
+                              readOnly: true,
+                              style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
+                              decoration: InputDecoration(
+                                labelText: t.translate("startDate"),
+                                labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
+                                prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                               ),
+                              onTap: () async {
+                                final picked = await _pickDate(context);
+                                if (picked != null){
+                                  setState(() {
+                                    startDateTime = picked;
+                                    _startDate.text =formatter.format(picked);
+                                  });
+                                }
+                              },
                             ),
-                            child:
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.location_on, color: Colors.white, size: 12,),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
-                                      child: Text(t.translate("gpsValid"), style: TextStyle(color: Colors.white, fontSize: 12),
-                                      ),
-                                    ),
-                                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.check_circle,
-                                            size: 10,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                              t.translate("badgeAllowed"),
-                                            style: const TextStyle(color: Colors.white, fontSize: 8),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, top: MediaQuery.of(context).size.height * 0.01),
-                                  child: Text("PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung", style: TextStyle(color: Colors.white, fontSize: 10),),
-                                ),
-                                SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-                                Padding(
-                                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, right:MediaQuery.of(context).size.width * 0.04 ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
-                                      Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                height: MediaQuery.sizeOf(context). height * 0.4,
-                                child: ClipRRect(
+                            TextField(
+                              controller: _endDate,
+                              readOnly: true,
+                              style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
+                              decoration: InputDecoration(
+                                labelText: t.translate("endDate"),
+                                labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
+                                prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
+                              ),
+                              onTap: () async {
+                                final picked = await _pickDate(context);
+                                if (picked != null){
+                                  setState(() {
+                                    endDateTime = picked;
+                                    _endDate.text =formatter.format(picked);
+                                  });
+                                }
+                              },
+                            ),
+                            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                            Container(
+                              child: Card(
+                                color: const Color.fromARGB(255, 22, 84, 134),
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: FlutterMap(
-                                    options: MapOptions(
-                                      initialCenter: officeLocation,
-                                      initialZoom: 15,
-                                      interactionOptions: const InteractionOptions(
-                                        flags: InteractiveFlag.all,
-                                      ),
-                                    ),
-                                    children: [
-                                      // MAP TILE
-                                      TileLayer(
-                                        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                        userAgentPackageName: 'com.example.absence',
-                                      ),
-        
-                                      // OFFICE MARKER
-                                      MarkerLayer(
-                                        markers: [
-                                          Marker(
-                                            point: officeLocation,
-                                            width: 40,
-                                            height: 40,
-                                            child: const Icon(
-                                              Icons.location_city,
-                                              color: Colors.blue,
-                                              size: 36,
-                                            ),
-                                          ),
-        
-                                          // USER MARKER
-                                          if (currentLocation != null)
-                                            Marker(
-                                              point: currentLocation!,
-                                              width: 40,
-                                              height: 40,
-                                              child: const Icon(
-                                                Icons.my_location,
-                                                color: Colors.lightBlueAccent,
-                                                size: 28,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ],
+                                  side: BorderSide(
+                                    color: const Color.fromARGB(255, 89, 71, 252),
+                                    width: 2,
                                   ),
                                 ),
-                              )
-                              ],
-                            )
-                          ),
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.72,
-                            height: MediaQuery.sizeOf(context).height * 0.07,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.lightBlueAccent,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20))
-                              ),
-                              onPressed: getValidRangeTime()
-                                ? () async {
-                                    await _setTimeToPrefs();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => CamAndFile()),
-                                    );
-                                  }
-                                : null,
-                              child: Text( getValidRangeTime() ? 
-                                t.translate("absent") : t.translate("fillDate"),
-                                style: const TextStyle(color: Colors.white),
+                                child:
+                                Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.location_on, color: Colors.white, size: 12,),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.005),
+                                          child: Text(t.translate("gpsValid"), style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                        ),
+                                        SizedBox(width: MediaQuery.sizeOf(context).width * 0.05,),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.check_circle,
+                                                size: 10,
+                                                color: Colors.white,
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                  t.translate("badgeAllowed"),
+                                                style: const TextStyle(color: Colors.white, fontSize: 8),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, top: MediaQuery.of(context).size.height * 0.01),
+                                      child: Text("PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung", style: TextStyle(color: Colors.white, fontSize: 10),),
+                                    ),
+                                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, right:MediaQuery.of(context).size.width * 0.04 ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(t.translate("distance"), style: TextStyle(color: Colors.white, fontSize: 12)),
+                                          Text(distance == null ? "calculating..." : "${distance!.toStringAsFixed(2)} Meter", style: TextStyle(color: Colors.white, fontSize: 12),)
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                    height: MediaQuery.sizeOf(context). height * 0.4,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: FlutterMap(
+                                        options: MapOptions(
+                                          initialCenter: officeLocation,
+                                          initialZoom: 15,
+                                          interactionOptions: const InteractionOptions(
+                                            flags: InteractiveFlag.all,
+                                          ),
+                                        ),
+                                        children: [
+                                          // MAP TILE
+                                          TileLayer(
+                                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                            userAgentPackageName: 'com.example.absence',
+                                          ),
+                                
+                                          // OFFICE MARKER
+                                          MarkerLayer(
+                                            markers: [
+                                              Marker(
+                                                point: officeLocation,
+                                                width: 40,
+                                                height: 40,
+                                                child: const Icon(
+                                                  Icons.location_city,
+                                                  color: Colors.blue,
+                                                  size: 36,
+                                                ),
+                                              ),
+                                
+                                              // USER MARKER
+                                              if (currentLocation != null)
+                                                Marker(
+                                                  point: currentLocation!,
+                                                  width: 40,
+                                                  height: 40,
+                                                  child: const Icon(
+                                                    Icons.my_location,
+                                                    color: Colors.lightBlueAccent,
+                                                    size: 28,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                  ],
+                                )
                               ),
                             ),
-                          ),
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
-                        ],
-                      )
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.72,
+                              height: MediaQuery.sizeOf(context).height * 0.07,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.lightBlueAccent,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20))
+                                ),
+                                onPressed: getValidRangeTime()
+                                  ? () async {
+                                      await _setTimeToPrefs();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => CamAndFile()),
+                                      );
+                                    }
+                                  : null,
+                                child: Text( getValidRangeTime() ? 
+                                  t.translate("absent") : t.translate("fillDate"),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
+                          ],
+                        )
+                      ),
                     ),
                   ),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.8,
                   child:
-                  Card(
-                    color: const Color.fromARGB(255, 67, 57, 158),
-                    child:
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
-                          Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
-                          Column(
-                            children: [
-                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
-                              Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
-                                                      right: MediaQuery.sizeOf(context).width *0.01, 
-                                                      top: MediaQuery.sizeOf(context).width *0.01, 
-                                                      bottom: MediaQuery.sizeOf(context).width *0.01
-                                                    ),
-                            child: Container(
-                              width: 2,
-                              height: MediaQuery.sizeOf(context).height * 0.04,
-                              color: Colors.grey,
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                          color: Colors.lightBlue,
+                          width: 1,
+                        ),
+                      ),
+                    color: const Color.fromARGB(255, 22, 84, 134),
+                      child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
+                            Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
+                            Column(
+                              children: [
+                                Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
+                                Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
+                              ],
                             ),
-                          ),
-                          Column(
-                            children: [
-                              Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
-                              // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
-                              dateTimePicker(),
-                            ],
-                          ),
-                        ],
-                      )
+                            Padding(
+                              padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
+                                                        right: MediaQuery.sizeOf(context).width *0.01, 
+                                                        top: MediaQuery.sizeOf(context).width *0.01, 
+                                                        bottom: MediaQuery.sizeOf(context).width *0.01
+                                                      ),
+                              child: Container(
+                                width: 2,
+                                height: MediaQuery.sizeOf(context).height * 0.04,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
+                                // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
+                                dateTimePicker(),
+                              ],
+                            ),
+                          ],
+                        )
+                    ),
                   )
                 )
               ],
             ),
-          ),
         ),
-      ),
     );
   }
 }
