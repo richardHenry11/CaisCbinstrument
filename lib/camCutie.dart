@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:absence/main.dart';
+import 'package:absence/pilihdinas.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -189,12 +190,20 @@ class _CamAndFileState extends State<CamAndFile> {
         print(resBody);
       print("Absence FUCKcessful");
       _thxForAbsence();
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
     } else {
       final bodi = jsonDecode(responses.body);
 
       error = bodi['error'];
       print("Absence Failed");
       _thxForAbsenceFailed();
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
     }
   }
 
@@ -311,6 +320,11 @@ class _CamAndFileState extends State<CamAndFile> {
                 onPressed: (){
                   // button Funct
                   Navigator.of(context).pop();
+
+                  Navigator.pushReplacement(
+                    context, 
+                    MaterialPageRoute(builder: (context) => PilihDinas())
+                  );
                 }, 
                 child: Text("OK", style: TextStyle(color: Colors.white),)
               ),
