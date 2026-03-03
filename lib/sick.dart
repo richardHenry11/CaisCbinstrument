@@ -573,7 +573,7 @@ class _SickState extends State<Sick> {
                             Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
                             Column(
                               children: [
-                                Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
+                                Text("HR Compliance Verifieds", style: TextStyle(color: Colors.white, fontSize: 12),),
                                 Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
                               ],
                             ),
