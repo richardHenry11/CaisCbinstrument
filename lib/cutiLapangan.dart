@@ -246,12 +246,9 @@ class _CutiLapanganState extends State<CutiLapangan> {
     final t = AppLocalizations.of(context)!;
     return
     Scaffold(
+      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: 
-      SizedBox(
-        width: MediaQuery.sizeOf(context).width * 1,
-        child: Container(
-          color: Colors.blue,
-          child: Column(
+        Column(
             children: [
               Container(
                 color: const Color.fromARGB(255, 184, 184, 184),
@@ -288,128 +285,174 @@ class _CutiLapanganState extends State<CutiLapangan> {
                 SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.8,
-                  child: Card(
-                    color: const Color.fromARGB(255, 67, 57, 158),
-                    child:
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
-                        Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-
-                        // DateTime Picker
-                        TextField(
-                          controller: _startDate,
-                          readOnly: true,
-                          style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
-                          decoration: InputDecoration(
-                            labelText: t.translate("startDate"),
-                            labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
-                            prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
-                          ),
-                          onTap: () async {
-                            final picked = await _pickDate(context);
-                            if (picked != null){
-                              setState(() {
-                                startDateTime = picked;
-                                _startDate.text =formatter.format(picked);
-                              });
-                            }
-                          },
+                  child: 
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
                         ),
-                        TextField(
-                          controller: _endDate,
-                          readOnly: true,
-                          style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
-                          decoration: InputDecoration(
-                            labelText: t.translate("endDate"),
-                            labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
-                            prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
-                          ),
-                          onTap: () async {
-                            final picked = await _pickDate(context);
-                            if (picked != null){
-                              setState(() {
-                                endDateTime = picked;
-                                _endDate.text =formatter.format(picked);
-                              });
-                            }
-                          },
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
                         ),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.72,
-                          height: MediaQuery.sizeOf(context).height * 0.07,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lightBlueAccent,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20))
+                      ]
+                    ),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: Colors.blue, 
+                          width: 1,
+                        ),
+                      ),
+                      color: const Color.fromARGB(255, 22, 84, 134),
+                      child:
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
+                          Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                    
+                          // DateTime Picker
+                          TextField(
+                            controller: _startDate,
+                            readOnly: true,
+                            style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
+                            decoration: InputDecoration(
+                              labelText: t.translate("startDate"),
+                              labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
+                              prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
                             ),
-                            onPressed: getValidRangeTime()
-                              ? () async {
-                                  await _setTimeToPrefs();
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => CamAndFile()),
-                                  );
-                                }
-                              : null,
-                            child: Text( getValidRangeTime() ? 
-                              t.translate("absent") : t.translate("fillDate"),
-                              style: const TextStyle(color: Colors.white),
+                            onTap: () async {
+                              final picked = await _pickDate(context);
+                              if (picked != null){
+                                setState(() {
+                                  startDateTime = picked;
+                                  _startDate.text =formatter.format(picked);
+                                });
+                              }
+                            },
+                          ),
+                          TextField(
+                            controller: _endDate,
+                            readOnly: true,
+                            style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
+                            decoration: InputDecoration(
+                              labelText: t.translate("endDate"),
+                              labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
+                              prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
+                            ),
+                            onTap: () async {
+                              final picked = await _pickDate(context);
+                              if (picked != null){
+                                setState(() {
+                                  endDateTime = picked;
+                                  _endDate.text =formatter.format(picked);
+                                });
+                              }
+                            },
+                          ),
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.72,
+                            height: MediaQuery.sizeOf(context).height * 0.07,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.lightBlueAccent,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20))
+                              ),
+                              onPressed: getValidRangeTime()
+                                ? () async {
+                                    await _setTimeToPrefs();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => CamAndFile()),
+                                    );
+                                  }
+                                : null,
+                              child: Text( getValidRangeTime() ? 
+                                t.translate("absent") : t.translate("fillDate"),
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
-                      ],
-                    )
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
+                        ],
+                      )
+                    ),
                   ),
                 ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child:
-                Card(
-                  color: const Color.fromARGB(255, 67, 57, 158),
-                  child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
-                        Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
-                        Column(
-                          children: [
-                            Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
-                            Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
-                          ],
+                Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
-                                                    right: MediaQuery.sizeOf(context).width *0.01, 
-                                                    top: MediaQuery.sizeOf(context).width *0.01, 
-                                                    bottom: MediaQuery.sizeOf(context).width *0.01
-                                                  ),
-                          child: Container(
-                            width: 2,
-                            height: MediaQuery.sizeOf(context).height * 0.04,
-                            color: Colors.grey,
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                          color: Colors.lightBlue,
+                          width: 1,
+                        ),
+                      ),
+                    color: const Color.fromARGB(255, 22, 84, 134),
+                    child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
+                          Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
+                          Column(
+                            children: [
+                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
+                              Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
+                            ],
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
-                            // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
-                            dateTimePicker(),
-                          ],
-                        ),
-                      ],
-                    )
+                          Padding(
+                            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
+                                                      right: MediaQuery.sizeOf(context).width *0.01, 
+                                                      top: MediaQuery.sizeOf(context).width *0.01, 
+                                                      bottom: MediaQuery.sizeOf(context).width *0.01
+                                                    ),
+                            child: Container(
+                              width: 2,
+                              height: MediaQuery.sizeOf(context).height * 0.04,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
+                              // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
+                              dateTimePicker(),
+                            ],
+                          ),
+                        ],
+                      )
+                  ),
                 )
               )
             ],
-          ),
         ),
-      ),
     );
   }
 }

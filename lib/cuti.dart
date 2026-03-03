@@ -387,44 +387,68 @@ class _CutiState extends State<Cuti> {
                     ),
                   ),
                 ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child:
-                Card(
-                  color: const Color.fromARGB(255, 67, 57, 158),
-                  child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
-                        Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
-                        Column(
-                          children: [
-                            Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
-                            Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
-                          ],
+                Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
-                                                    right: MediaQuery.sizeOf(context).width *0.01, 
-                                                    top: MediaQuery.sizeOf(context).width *0.01, 
-                                                    bottom: MediaQuery.sizeOf(context).width *0.01
-                                                  ),
-                          child: Container(
-                            width: 2,
-                            height: MediaQuery.sizeOf(context).height * 0.04,
-                            color: Colors.grey,
+                        BoxShadow(
+                          color: Colors.cyanAccent.withOpacity(0.2),
+                          blurRadius: 30,
+                          spreadRadius: 6,
+                        ),
+                      ]
+                    ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                          color: Colors.lightBlue,
+                          width: 1,
+                        ),
+                      ),
+                    color: const Color.fromARGB(255, 22, 84, 134),
+                    child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
+                          Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
+                          Column(
+                            children: [
+                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
+                              Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
+                            ],
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
-                            // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
-                            dateTimePicker(),
-                          ],
-                        ),
-                      ],
-                    )
+                          Padding(
+                            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
+                                                      right: MediaQuery.sizeOf(context).width *0.01, 
+                                                      top: MediaQuery.sizeOf(context).width *0.01, 
+                                                      bottom: MediaQuery.sizeOf(context).width *0.01
+                                                    ),
+                            child: Container(
+                              width: 2,
+                              height: MediaQuery.sizeOf(context).height * 0.04,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
+                              // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
+                              dateTimePicker(),
+                            ],
+                          ),
+                        ],
+                      )
+                  ),
                 )
               )
             ],

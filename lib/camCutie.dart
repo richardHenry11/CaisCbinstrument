@@ -344,6 +344,7 @@ class _CamAndFileState extends State<CamAndFile> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white)),
@@ -369,31 +370,63 @@ class _CamAndFileState extends State<CamAndFile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                  Container(
+                    decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
                     ),
-                    onPressed: _takePhoto,
-                    icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                    label: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white),),
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.1),
+                      blurRadius: 30,
+                      spreadRadius: 6,
+                    ),
+                  ]
+                ),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                      ),
+                      onPressed: _takePhoto,
+                      icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
+                      label: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white),),
+                    ),
                   ),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                  Container(
+                    decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
                     ),
-                    onPressed: () async {
-                      final file = await _takePhotoFromGallery();
-
-                      if (file != null || file == null) {
-                        setState(() {
-                          _photo = file;
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.folder, color: Colors.white,),
-                    label: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.1),
+                      blurRadius: 30,
+                      spreadRadius: 6,
+                    ),
+                  ]
+                ),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                      ),
+                      onPressed: () async {
+                        final file = await _takePhotoFromGallery();
+                    
+                        if (file != null || file == null) {
+                          setState(() {
+                            _photo = file;
+                          });
+                        }
+                      },
+                      icon: const Icon(Icons.folder, color: Colors.white,),
+                      label: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
+                    ),
                   ),
                   // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("test"))
                 ],
@@ -441,18 +474,36 @@ class _CamAndFileState extends State<CamAndFile> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 height: MediaQuery.sizeOf(context).height * 0.08,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSubmitting ? const Color.fromARGB(255, 211, 211, 211) : const Color.fromARGB(255, 87, 201, 91),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                child: 
+                Container(
+                  decoration: 
+                   _photo != null && !_isSubmitting ? BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                    ),
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
+                      blurRadius: 30,
+                      spreadRadius: 6,
+                    ),
+                  ]
+                ) : null,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isSubmitting ? const Color.fromARGB(255, 211, 211, 211) : const Color.fromARGB(255, 87, 201, 91),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                    ),
+                    onPressed: _photo != null && !_isSubmitting
+                    ? _submitAbsence : null,
+                    child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
+                      style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
+                      fontSize: 15, 
+                      fontWeight: FontWeight.w900)
+                    )
                   ),
-                  onPressed: _photo != null && !_isSubmitting
-                  ? _submitAbsence : null,
-                  child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
-                    style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
-                    fontSize: 15, 
-                    fontWeight: FontWeight.w900)
-                  )
                 ),
               )
             ],
