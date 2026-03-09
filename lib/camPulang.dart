@@ -59,16 +59,16 @@ class _CamPulangState extends State<CamPulang> {
   bool _isSubmitting = false;
 
   Future<bool> requestCameraPermission() async {
-  final status = await Permission.camera.request();
-  return status.isGranted;
-}
+    final status = await Permission.camera.request();
+    return status.isGranted;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
-    WidgetsBinding.instance.addPostFrameCallback((_){
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initPage();
     });
   }
@@ -85,9 +85,9 @@ class _CamPulangState extends State<CamPulang> {
       // throw Exception("Location Permission denied");
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Location permission denied")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Location permission denied")));
       return;
     }
 
@@ -98,16 +98,13 @@ class _CamPulangState extends State<CamPulang> {
     _lat = pos.latitude;
     _lng = pos.longitude;
 
-    final placemarks = await placemarkFromCoordinates(
-      _lat!,
-      _lng!,
-    );
+    final placemarks = await placemarkFromCoordinates(_lat!, _lng!);
 
     final mark = placemarks.first;
 
     _address =
         "${mark.subLocality ?? ''}, ${mark.locality ?? ''}, ${mark.administrativeArea ?? ''}";
-}
+  }
 
   Future<File> _drawGpsOverlay(File file) async {
     final bytes = await file.readAsBytes();
@@ -115,7 +112,8 @@ class _CamPulangState extends State<CamPulang> {
 
     final now = DateTime.now();
 
-    final text = """
+    final text =
+        """
     ${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}:${now.second}
     ${_lat!.toStringAsFixed(6)}, ${_lng!.toStringAsFixed(6)}
     $_address
@@ -172,17 +170,17 @@ class _CamPulangState extends State<CamPulang> {
 
   Future<void> _takePhoto() async {
     final granted = await requestCameraPermission();
-    if(!granted){
-        ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Camera permission denied")),
-      );
+    if (!granted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
       return;
     }
     final XFile? image = await _picker.pickImage(
-                                                source:ImageSource.camera,
-                                                preferredCameraDevice: CameraDevice.front,
-                                                imageQuality: 75
-                                                );
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+      imageQuality: 75,
+    );
     if (image != null) {
       await _getLocation();
       if (!mounted) return;
@@ -218,8 +216,10 @@ class _CamPulangState extends State<CamPulang> {
       _savedToken = prefs.getString('token') ?? "this is token";
       _savedName = prefs.getString('name') ?? "who is this?";
       _savedStatus = prefs.getString('status') ?? "which type r u?";
-      _savedAttType = prefs.getString('attendance_type') ?? "what att type r u?";
-      _savedShiftType = prefs.getString('shift_type') ?? "what ShiftType is this?";
+      _savedAttType =
+          prefs.getString('attendance_type') ?? "what att type r u?";
+      _savedShiftType =
+          prefs.getString('shift_type') ?? "what ShiftType is this?";
 
       // _isLoggedIn = prefs.getBool('isLoggedIn');
       print("savedUser: $_savedUser");
@@ -232,60 +232,69 @@ class _CamPulangState extends State<CamPulang> {
   }
 
   Future<void> recognizeFace(File imageFile) async {
-  if (!mounted) return;
-  setState(() {
-    final t = AppLocalizations.of(context)!;
-    _faceValid = false;
-    _similarity = null;
-    _faceMessage = t.translate("checking");
-  });
-
-  final request = http.MultipartRequest(
-    'POST',
-    Uri.parse("https://cais-ai.cbinstrument.com/api/v1/recognition/recognize"),
-  )
-    ..headers['x-api-key'] = '23e225bf-8f28-4493-a870-39019954fdae'
-    ..files.add(await http.MultipartFile.fromPath('file', imageFile.path, contentType: MediaType('image', 'jpeg')));
-
-  final response = await request.send();
-  final body = await response.stream.bytesToString();
-
-  if (response.statusCode != 200) {
-    final t = AppLocalizations.of(context)!;
-    if (!mounted) return;
-    setState(() {
-      _faceMessage = t.translate("nor");
-      _faceValid = false;
-    });
-    return;
-  }
-
-  final data = jsonDecode(body);
-  final faces = data['result'];
-
-  if (faces == null || faces.isEmpty) {
     if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
-      _faceMessage = t.translate("noFace");
       _faceValid = false;
+      _similarity = null;
+      _faceMessage = t.translate("checking");
     });
-    return;
-  }
 
-  if (faces.length != 1) {
-    if (!mounted) return;
-    setState(() {
+    final request =
+        http.MultipartRequest(
+            'POST',
+            Uri.parse(
+              "https://cais-ai.cbinstrument.com/api/v1/recognition/recognize",
+            ),
+          )
+          ..headers['x-api-key'] = '23e225bf-8f28-4493-a870-39019954fdae'
+          ..files.add(
+            await http.MultipartFile.fromPath(
+              'file',
+              imageFile.path,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          );
+
+    final response = await request.send();
+    final body = await response.stream.bytesToString();
+
+    if (response.statusCode != 200) {
       final t = AppLocalizations.of(context)!;
-      _faceMessage = t.translate("oneFace");
-      _faceValid = false;
-    });
-    return;
-  }
+      if (!mounted) return;
+      setState(() {
+        _faceMessage = t.translate("nor");
+        _faceValid = false;
+      });
+      return;
+    }
 
-  final result = data['result'][0];
-  // final subjects = result['subjects'] as List?;
-  final subjects = result['subjects'];
+    final data = jsonDecode(body);
+    final faces = data['result'];
+
+    if (faces == null || faces.isEmpty) {
+      if (!mounted) return;
+      setState(() {
+        final t = AppLocalizations.of(context)!;
+        _faceMessage = t.translate("noFace");
+        _faceValid = false;
+      });
+      return;
+    }
+
+    if (faces.length != 1) {
+      if (!mounted) return;
+      setState(() {
+        final t = AppLocalizations.of(context)!;
+        _faceMessage = t.translate("oneFace");
+        _faceValid = false;
+      });
+      return;
+    }
+
+    final result = data['result'][0];
+    // final subjects = result['subjects'] as List?;
+    final subjects = result['subjects'];
 
     if (subjects == null || subjects.isEmpty) {
       if (!mounted) return;
@@ -305,45 +314,45 @@ class _CamPulangState extends State<CamPulang> {
       }
     }
 
-  // if (subjects == null || subjects.isEmpty) {
-  //   setState(() {
-  //     _faceMessage = "Face Unknown";
-  //     _faceValid = false;
-  //   });
-  //   return;
-  // }
+    // if (subjects == null || subjects.isEmpty) {
+    //   setState(() {
+    //     _faceMessage = "Face Unknown";
+    //     _faceValid = false;
+    //   });
+    //   return;
+    // }
 
-  // final matched = subjects.firstWhere(
-  //   (s) => s['subject'] == _savedName,
-  //   orElse: () => null,
-  // );
+    // final matched = subjects.firstWhere(
+    //   (s) => s['subject'] == _savedName,
+    //   orElse: () => null,
+    // );
 
-  if (matched == null) {
+    if (matched == null) {
+      if (!mounted) return;
+      setState(() {
+        final t = AppLocalizations.of(context)!;
+        _faceMessage = t.translate("unrecog");
+        _faceValid = false;
+      });
+      return;
+    }
+
+    final sim = matched['similarity'];
+
     if (!mounted) return;
     setState(() {
       final t = AppLocalizations.of(context)!;
-      _faceMessage = t.translate("unrecog");
-      _faceValid = false;
+      _similarity = sim;
+      _faceValid = sim >= 0.95;
+      _faceMessage = _faceValid
+          ? t.translate("recoged")
+          : t.translate("unfaced");
     });
-    return;
+
+    print("similarities : $_similarity");
+    print("face valid : $_faceValid");
+    print("face Message : $_faceMessage");
   }
-
-  final sim = matched['similarity'];
-
-  if (!mounted) return;
-  setState(() {
-    final t = AppLocalizations.of(context)!;
-    _similarity = sim;
-    _faceValid = sim >= 0.95;
-    _faceMessage = _faceValid
-        ? t.translate("recoged")
-        : t.translate("unfaced");
-  });
-
-  print("similarities : $_similarity");
-  print("face valid : $_faceValid");
-  print("face Message : $_faceMessage");
-}
 
   Future<void> _submitAbsence() async {
     // if (_nameController.text.isEmpty || _photo == null) {
@@ -366,21 +375,17 @@ class _CamPulangState extends State<CamPulang> {
     debugPrint("full photo: ${photoData}");
 
     String utcNow() {
-      return DateTime.now()
-          .toUtc()
-          .toIso8601String()
-          .split('.')
-          .first + 'Z';
+      return DateTime.now().toUtc().toIso8601String().split('.').first + 'Z';
     }
 
     String localDateTime() {
       final now = DateTime.now();
       return "${now.year.toString().padLeft(4, '0')}-"
-            "${now.month.toString().padLeft(2, '0')}-"
-            "${now.day.toString().padLeft(2, '0')} "
-            "${now.hour.toString().padLeft(2, '0')}:"
-            "${now.minute.toString().padLeft(2, '0')}:"
-            "${now.second.toString().padLeft(2, '0')}";
+          "${now.month.toString().padLeft(2, '0')}-"
+          "${now.day.toString().padLeft(2, '0')} "
+          "${now.hour.toString().padLeft(2, '0')}:"
+          "${now.minute.toString().padLeft(2, '0')}:"
+          "${now.second.toString().padLeft(2, '0')}";
     }
 
     final header = "Bearer $_savedToken";
@@ -402,15 +407,13 @@ class _CamPulangState extends State<CamPulang> {
 
     final responses = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/input/absensi"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": header},
-      body: jsonEncode(body)
+      headers: {"Content-Type": "application/json", "Authorization": header},
+      body: jsonEncode(body),
     );
 
-    if(responses.statusCode == 200) {
-        final resBody = jsonDecode(responses.body);
-        print(resBody);
+    if (responses.statusCode == 200) {
+      final resBody = jsonDecode(responses.body);
+      print(resBody);
       print("Absence Fuccessful");
       _thxForAbsence();
       if (!mounted) return;
@@ -430,17 +433,17 @@ class _CamPulangState extends State<CamPulang> {
   }
 
   // Future<bool> _recognitionWithHombre(File imageFile) async {
-    
+
   // }
 
   // Future<void> _confirmSubmitAbsence() async {
   //   final t = AppLocalizations.of(context)!;
   //   showDialog(
   //     context: context,
-  //     barrierDismissible: false, 
+  //     barrierDismissible: false,
   //     builder: (context) {
   //       return AlertDialog(
-  //         title: 
+  //         title:
   //           Column(
   //             children: [
   //               Row(
@@ -453,7 +456,7 @@ class _CamPulangState extends State<CamPulang> {
   //               Divider()
   //             ],
   //           ),
-  //         content: 
+  //         content:
   //         Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
   //         actions: [
   //           ElevatedButton(
@@ -464,7 +467,7 @@ class _CamPulangState extends State<CamPulang> {
   //             onPressed: (){
   //               // button Funct
   //                Navigator.of(context).pop();
-  //             }, 
+  //             },
   //             child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
   //           ),
   //           ElevatedButton(
@@ -476,7 +479,7 @@ class _CamPulangState extends State<CamPulang> {
   //               // button Funct
   //               _submitAbsence();
   //               Navigator.of(context).pop();
-  //             }, 
+  //             },
   //             child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
   //           )
   //         ],
@@ -489,35 +492,39 @@ class _CamPulangState extends State<CamPulang> {
     final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
-                Divider()
-              ],
-            ),
-          content: Text("$error", style: TextStyle(color: Colors.black),),
+          title: Column(
+            children: [
+              Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
+              Divider(),
+            ],
+          ),
+          content: Text("$error", style: TextStyle(color: Colors.black)),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                  backgroundColor: Colors.green
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
                 ),
-                onPressed: (){ error == 'Token tidak valid' ?
-                  // button Funct
-                   _logout() : Navigator.of(context).pop();
+                onPressed: () {
+                  error == 'Token tidak valid'
+                      ?
+                        // button Funct
+                        _logout()
+                      : Navigator.of(context).pop();
                 },
-                child: Text("OK", style: TextStyle(color: Colors.white),)
+                child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -525,39 +532,40 @@ class _CamPulangState extends State<CamPulang> {
     final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Text(t. translate("thx"), style: TextStyle(color: Colors.green)),
-                Divider()
-              ],
-            ),
+          title: Column(
+            children: [
+              Text(t.translate("thx"), style: TextStyle(color: Colors.green)),
+              Divider(),
+            ],
+          ),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                  backgroundColor: Colors.green
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
                 ),
-                onPressed: (){
+                onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
 
                   Navigator.pushReplacement(
-                    context, 
-                    MaterialPageRoute(builder: (context) => PilihDinas())
+                    context,
+                    MaterialPageRoute(builder: (context) => PilihDinas()),
                   );
-                }, 
-                child: Text("OK", style: TextStyle(color: Colors.white),)
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -567,15 +575,17 @@ class _CamPulangState extends State<CamPulang> {
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
-      context, 
+      context,
       MaterialPageRoute(builder: (_) => MyHomePage()),
-      (route) => false, 
+      (route) => false,
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: 
-        Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
+        content: Text(
+          t.translate("dadah"),
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
@@ -587,150 +597,184 @@ class _CamPulangState extends State<CamPulang> {
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white)),
+        title: Text(
+          t.translate("takePicture"),
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body:
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child:
-          Column(
-            children: [
-                Expanded(
-                  child: _photo == null 
-                  ? Center(child: Text(t.translate("photoDeskPulang"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
-                  : 
-                  ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(20),
-                    child: 
-                      Image.file(_photo!, fit: BoxFit.cover,
-                    )
-                  )
-                ),
-              SizedBox(height: 5),
-              Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                    ),
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.1),
-                      blurRadius: 30,
-                      spreadRadius: 6,
-                    ),
-                  ]
-                ),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
-                  ),
-                  onPressed: _takePhoto,
-                  icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                  label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
-                ),
-              ),
-              SizedBox(height: 8),
-              if (_faceMessage.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        _faceValid ? Icons.verified : Icons.error,
-                        color: _faceValid ? Colors.green : Colors.red,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        _faceMessage,
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Expanded(
+              child: _photo == null
+                  ? Center(
+                      child: Text(
+                        t.translate("photoDeskPulang"),
                         style: TextStyle(
-                          color: _faceValid ? Colors.green : Colors.red,
-                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     if (_photo == null) {
-              //       debugPrint("Belum ada foto");
-              //       return;
-              //     }
-
-              //     final fileName = p.basename(_photo!.path);
-              //     final extension = p.extension(_photo!.path);
-              //     final fileSize = _photo!.lengthSync();
-
-              //     debugPrint("📸 File name : $fileName");
-              //     debugPrint("📂 Extension : $extension");
-              //     debugPrint("📦 Size      : ${fileSize ~/ 1024} KB");
-              //     debugPrint("📍 Full path : ${_photo!.path}");
-              //   },
-              //   child: const Text("check file Photo"),
-              // ),
-              // SizedBox(height: 8),
-              // TextField(
-              //   controller: _nameController,
-              //   decoration: const InputDecoration(
-              //     labelText: "Name",
-              //     border: OutlineInputBorder()
-              //   ),
-              // ),
-              // SizedBox(height: 8),
-              // DropdownButtonFormField(
-              //   value: _status,
-              //   items: const [
-              //     DropdownMenuItem(value: "Masuk", child: Text("Masuk")),
-              //     DropdownMenuItem(value: "Tidak Masuk", child: Text("Tidak Masuk")),
-              //   ], 
-              //   onChanged: (val) => setState(() => _status = val!),
-              //   decoration: const InputDecoration(
-              //     border: OutlineInputBorder(),
-              //   labelText: "Status",
-              //   ),
-              // ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 1,
-                height: MediaQuery.sizeOf(context).height * 0.08,
-                child: 
-                Container(
-                  decoration: 
-                   _photo != null && _faceValid && !_isSubmitting ? BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                    ),
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
-                      blurRadius: 30,
-                      spreadRadius: 6,
-                    ),
-                  ]
-                ) : null,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isSubmitting ? const Color.fromARGB(255, 211, 211, 211) : const Color.fromARGB(255, 87, 201, 91),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
-                    ),
-                    onPressed: _photo != null && _faceValid && !_isSubmitting
-                    ? _submitAbsence : null,
-                    child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"),
-                      style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
-                      fontSize: 15, 
-                      fontWeight: FontWeight.w900)
                     )
+                  : ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(20),
+                      child: Image.file(_photo!, fit: BoxFit.cover),
+                    ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.cyanAccent.withOpacity(0.3),
+                    blurRadius: 15,
+                    spreadRadius: 2,
+                  ),
+                  BoxShadow(
+                    color: Colors.cyanAccent.withOpacity(0.1),
+                    blurRadius: 30,
+                    spreadRadius: 6,
+                  ),
+                ],
+              ),
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
                   ),
                 ),
-              )
-            ],
-          )
-        )
+                onPressed: _takePhoto,
+                icon: const Icon(Icons.camera_alt_rounded, color: Colors.white),
+                label: Text(
+                  t.translate("takePhoto"),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            if (_faceMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      _faceValid ? Icons.verified : Icons.error,
+                      color: _faceValid ? Colors.green : Colors.red,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _faceMessage,
+                      style: TextStyle(
+                        color: _faceValid ? Colors.green : Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     if (_photo == null) {
+            //       debugPrint("Belum ada foto");
+            //       return;
+            //     }
+
+            //     final fileName = p.basename(_photo!.path);
+            //     final extension = p.extension(_photo!.path);
+            //     final fileSize = _photo!.lengthSync();
+
+            //     debugPrint("📸 File name : $fileName");
+            //     debugPrint("📂 Extension : $extension");
+            //     debugPrint("📦 Size      : ${fileSize ~/ 1024} KB");
+            //     debugPrint("📍 Full path : ${_photo!.path}");
+            //   },
+            //   child: const Text("check file Photo"),
+            // ),
+            // SizedBox(height: 8),
+            // TextField(
+            //   controller: _nameController,
+            //   decoration: const InputDecoration(
+            //     labelText: "Name",
+            //     border: OutlineInputBorder()
+            //   ),
+            // ),
+            // SizedBox(height: 8),
+            // DropdownButtonFormField(
+            //   value: _status,
+            //   items: const [
+            //     DropdownMenuItem(value: "Masuk", child: Text("Masuk")),
+            //     DropdownMenuItem(value: "Tidak Masuk", child: Text("Tidak Masuk")),
+            //   ],
+            //   onChanged: (val) => setState(() => _status = val!),
+            //   decoration: const InputDecoration(
+            //     border: OutlineInputBorder(),
+            //   labelText: "Status",
+            //   ),
+            // ),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              height: MediaQuery.sizeOf(context).height * 0.08,
+              child: Container(
+                decoration: _photo != null && _faceValid && !_isSubmitting
+                    ? BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(
+                              255,
+                              34,
+                              249,
+                              92,
+                            ).withOpacity(0.3),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                          ),
+                          BoxShadow(
+                            color: const Color.fromARGB(
+                              255,
+                              34,
+                              249,
+                              92,
+                            ).withOpacity(0.3),
+                            blurRadius: 30,
+                            spreadRadius: 6,
+                          ),
+                        ],
+                      )
+                    : null,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isSubmitting
+                        ? const Color.fromARGB(255, 211, 211, 211)
+                        : const Color.fromARGB(255, 87, 201, 91),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(10),
+                    ),
+                  ),
+                  onPressed: _photo != null && _faceValid && !_isSubmitting
+                      ? _submitAbsence
+                      : null,
+                  child: Text(
+                    _isSubmitting
+                        ? t.translate("isSubmit")
+                        : t.translate("Submit"),
+                    style: TextStyle(
+                      color: _isSubmitting
+                          ? const Color.fromARGB(255, 74, 74, 74)
+                          : Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

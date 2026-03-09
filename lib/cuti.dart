@@ -1,6 +1,4 @@
-
 import 'dart:async';
-
 
 import 'package:absence/camCutie.dart';
 import 'package:absence/main.dart';
@@ -11,7 +9,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:intl/intl.dart';
 import 'package:absence/l10n/app_localizations.dart';
 
-
 class dateTimePicker extends StatelessWidget {
   const dateTimePicker({super.key});
 
@@ -20,7 +17,7 @@ class dateTimePicker extends StatelessWidget {
     return StreamBuilder<DateTime>(
       stream: Stream.periodic(
         const Duration(seconds: 1),
-        (_) =>DateTime.now(),
+        (_) => DateTime.now(),
       ),
 
       builder: (context, snapshot) {
@@ -33,24 +30,35 @@ class dateTimePicker extends StatelessWidget {
           style: const TextStyle(
             color: Color.fromARGB(255, 111, 255, 116),
             fontSize: 10,
-          )
+          ),
         );
       },
     );
   }
-  String _formatDateTime(DateTime time){
+
+  String _formatDateTime(DateTime time) {
     return "${time.day.toString().padLeft(2, '0')} "
-           "${_monthName(time.month)} "
-           "${time.year} ";
-          //  "${time.hour.toString().padLeft(2, '0')}."
-          //  "${time.minute.toString().padLeft(2, '0')}."
-          //  "${time.second.toString().padLeft(2, '0')}";
+        "${_monthName(time.month)} "
+        "${time.year} ";
+    //  "${time.hour.toString().padLeft(2, '0')}."
+    //  "${time.minute.toString().padLeft(2, '0')}."
+    //  "${time.second.toString().padLeft(2, '0')}";
   }
 
   String _monthName(int month) {
     const months = [
-      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-      "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
     ];
     return months[month - 1];
   }
@@ -79,7 +87,7 @@ class _CutiState extends State<Cuti> {
 
   // stream location
   StreamSubscription<Position>? positionStream;
-  
+
   // Text Editing Controller
   final TextEditingController _startDate = TextEditingController();
   final TextEditingController _endDate = TextEditingController();
@@ -111,7 +119,8 @@ class _CutiState extends State<Cuti> {
       _savedToken = prefs.getString('token') ?? "this is token";
       _savedName = prefs.getString('name') ?? "who is this?";
       _savedStatus = prefs.getString('status') ?? "which type r u?";
-      _savedAttType = prefs.getString('attendance_type') ?? "what att type r u?";
+      _savedAttType =
+          prefs.getString('attendance_type') ?? "what att type r u?";
       _savedShiftType = prefs.getString('shift_type');
       _startDatepref = prefs.getString('start_date');
       _endDatePref = prefs.getString('end_date');
@@ -133,29 +142,18 @@ class _CutiState extends State<Cuti> {
 
     final prefs = await SharedPreferences.getInstance();
 
-    final int durationDays =
-      calculateDurationDays(startDateTime!, endDateTime!);
-
-    await prefs.setString(
-      'start_date',
-      formatter.format(startDateTime!),
-    );
-    await prefs.setString(
-      'end_date',
-      formatter.format(endDateTime!),
+    final int durationDays = calculateDurationDays(
+      startDateTime!,
+      endDateTime!,
     );
 
-    await prefs.setInt(
-      'duration_days',
-      durationDays,
-    );
+    await prefs.setString('start_date', formatter.format(startDateTime!));
+    await prefs.setString('end_date', formatter.format(endDateTime!));
 
-    debugPrint(
-      "Start Date: $startDateTime"
-    );
-    debugPrint(
-      "End Date: $endDateTime"
-    );
+    await prefs.setInt('duration_days', durationDays);
+
+    debugPrint("Start Date: $startDateTime");
+    debugPrint("End Date: $endDateTime");
   }
 
   int calculateDurationDays(DateTime start, DateTime end) {
@@ -186,7 +184,7 @@ class _CutiState extends State<Cuti> {
 
   //   // Pick Time
   //   final TimeOfDay? time = await showTimePicker(
-  //     context: context, 
+  //     context: context,
   //     initialTime: TimeOfDay.now());
 
   //   if (time == null) {
@@ -209,8 +207,7 @@ class _CutiState extends State<Cuti> {
     if (endDateTime!.isBefore(startDateTime!)) return false;
 
     // count diff days
-    final int diffDays =
-        endDateTime!.difference(startDateTime!).inDays;
+    final int diffDays = endDateTime!.difference(startDateTime!).inDays;
 
     // max up to 30 days only!
     return diffDays <= 30;
@@ -222,20 +219,23 @@ class _CutiState extends State<Cuti> {
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
-      context, 
+      context,
       MaterialPageRoute(builder: (_) => MyHomePage()),
-      (route) => false, 
+      (route) => false,
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
+        content: Text(
+          t.translate("dadah"),
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
 
   @override
-  void dispose(){
+  void dispose() {
     positionStream?.cancel();
     positionStream = null;
     super.dispose();
@@ -244,214 +244,267 @@ class _CutiState extends State<Cuti> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
-    return
-    Scaffold(
-      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
-      body: 
-      Column(
-            children: [
-              Container(
-                color: const Color.fromARGB(255, 184, 184, 184),
-                child: 
-                Column(
-                  children: [
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        // ElevatedButton(
-                        //   onPressed: (){
-                        //     _prefsCatcher();
-                        //   }, 
-                        //   child: Text("Test SharedPrefs")
-                        // ),
-                        Image.asset('assets/logoBiru.png', width: 220, height: 65),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            backgroundColor: const Color.fromARGB(255, 67, 57, 158),
+    return Scaffold(
+      backgroundColor: Color(0xFF182234),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              color: const Color.fromRGBO(2, 6, 23, 1),
+              child: Column(
+                children: [
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // ElevatedButton(
+                      //   onPressed: (){
+                      //     _prefsCatcher();
+                      //   },
+                      //   child: Text("Test SharedPrefs")
+                      // ),
+                      Image.asset(
+                        'assets/logoBiru.png',
+                        width: 220,
+                        height: 65,
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          side: BorderSide(width: 1, color: Colors.lightBlue),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed:
-                          (){
-                            // button funct
-                            _logout();
-                          }, 
-                          child: Icon(Icons.logout_rounded, color: Colors.white,)),
-                      ],
-                    ),
-                  ],
-                )
+                          backgroundColor: Color(0xFF334155),
+                        ),
+                        onPressed: () {
+                          // button funct
+                          _logout();
+                        },
+                        child: Icon(Icons.logout_rounded, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-                SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.8,
-                  child: 
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.4),
-                          blurRadius: 15,
-                          spreadRadius: 2,
-                        ),
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.2),
-                          blurRadius: 30,
-                          spreadRadius: 6,
-                        ),
-                      ]
+            ),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.8,
+              child: Container(
+                // decoration: BoxDecoration(
+                //   boxShadow: [
+                //     BoxShadow(
+                //       color: Colors.cyanAccent.withOpacity(0.4),
+                //       blurRadius: 15,
+                //       spreadRadius: 2,
+                //     ),
+                //     BoxShadow(
+                //       color: Colors.cyanAccent.withOpacity(0.2),
+                //       blurRadius: 30,
+                //       spreadRadius: 6,
+                //     ),
+                //   ]
+                // ),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: const Color.fromARGB(255, 67, 150, 217),
+                      width: 1,
                     ),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
-                          color: Colors.blue, 
-                          width: 1,
+                  ),
+                  color: Color(0xFF334155),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.008,
+                      ),
+                      Text(
+                        t.translate("period"),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      color: const Color.fromARGB(255, 22, 84, 134),
-                      child:
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.008,),
-                          Text(t.translate("period"), style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),),
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                    
-                          // DateTime Picker
-                          TextField(
-                            controller: _startDate,
-                            readOnly: true,
-                            style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
-                            decoration: InputDecoration(
-                              labelText: t.translate("startDate"),
-                              labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
-                              prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
-                            ),
-                            onTap: () async {
-                              final picked = await _pickDate(context);
-                              if (picked != null){
-                                setState(() {
-                                  startDateTime = picked;
-                                  _startDate.text =formatter.format(picked);
-                                });
-                              }
-                            },
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.01,
+                      ),
+
+                      // DateTime Picker
+                      TextField(
+                        controller: _startDate,
+                        readOnly: true,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 207, 207, 207),
+                        ),
+                        decoration: InputDecoration(
+                          labelText: t.translate("startDate"),
+                          labelStyle: TextStyle(
+                            color: const Color.fromARGB(255, 154, 154, 154),
                           ),
-                          TextField(
-                            controller: _endDate,
-                            readOnly: true,
-                            style: TextStyle(color: const Color.fromARGB(255, 207, 207, 207)),
-                            decoration: InputDecoration(
-                              labelText: t.translate("endDate"),
-                              labelStyle: TextStyle(color: const Color.fromARGB(255, 154, 154, 154)),
-                              prefixIcon: Icon(Icons.calendar_today_rounded, color: const Color.fromARGB(255, 180, 180, 180),)
-                            ),
-                            onTap: () async {
-                              final picked = await _pickDate(context);
-                              if (picked != null){
-                                setState(() {
-                                  endDateTime = picked;
-                                  _endDate.text =formatter.format(picked);
-                                });
-                              }
-                            },
+                          prefixIcon: Icon(
+                            Icons.calendar_today_rounded,
+                            color: const Color.fromARGB(255, 180, 180, 180),
                           ),
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.72,
-                            height: MediaQuery.sizeOf(context).height * 0.07,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.lightBlueAccent,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(20))
-                              ),
-                              onPressed: getValidRangeTime()
-                                ? () async {
-                                    await _setTimeToPrefs();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => CamAndFile()),
-                                    );
-                                  }
-                                : null,
-                              child: Text( getValidRangeTime() ? 
-                                t.translate("absent") : t.translate("fillDate"),
-                                style: const TextStyle(color: Colors.white),
-                              ),
+                        ),
+                        onTap: () async {
+                          final picked = await _pickDate(context);
+                          if (picked != null) {
+                            setState(() {
+                              startDateTime = picked;
+                              _startDate.text = formatter.format(picked);
+                            });
+                          }
+                        },
+                      ),
+                      TextField(
+                        controller: _endDate,
+                        readOnly: true,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 207, 207, 207),
+                        ),
+                        decoration: InputDecoration(
+                          labelText: t.translate("endDate"),
+                          labelStyle: TextStyle(
+                            color: const Color.fromARGB(255, 154, 154, 154),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.calendar_today_rounded,
+                            color: const Color.fromARGB(255, 180, 180, 180),
+                          ),
+                        ),
+                        onTap: () async {
+                          final picked = await _pickDate(context);
+                          if (picked != null) {
+                            setState(() {
+                              endDateTime = picked;
+                              _endDate.text = formatter.format(picked);
+                            });
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.01,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width * 0.72,
+                        height: MediaQuery.sizeOf(context).height * 0.07,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.lightBlueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(20),
                             ),
                           ),
-                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,)
-                        ],
-                      )
-                    ),
+                          onPressed: getValidRangeTime()
+                              ? () async {
+                                  await _setTimeToPrefs();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => CamAndFile(),
+                                    ),
+                                  );
+                                }
+                              : null,
+                          child: Text(
+                            getValidRangeTime()
+                                ? t.translate("absent")
+                                : t.translate("fillDate"),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.01,
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.8,
-                child:
-                Container(
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.4),
-                          blurRadius: 15,
-                          spreadRadius: 2,
-                        ),
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.2),
-                          blurRadius: 30,
-                          spreadRadius: 6,
-                        ),
-                      ]
+              ),
+            ),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.8,
+              child: Container(
+                // decoration: BoxDecoration(
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.cyanAccent.withOpacity(0.4),
+                //         blurRadius: 15,
+                //         spreadRadius: 2,
+                //       ),
+                //       BoxShadow(
+                //         color: Colors.cyanAccent.withOpacity(0.2),
+                //         blurRadius: 30,
+                //         spreadRadius: 6,
+                //       ),
+                //     ]
+                //   ),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                      color: const Color.fromARGB(255, 67, 150, 217),
+                      width: 1,
                     ),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(
-                          color: Colors.lightBlue,
-                          width: 1,
-                        ),
+                  ),
+                  color: Color(0xFF334155),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.01),
+                      Icon(
+                        Icons.shield_outlined,
+                        color: Colors.lightBlueAccent,
                       ),
-                    color: const Color.fromARGB(255, 22, 84, 134),
-                    child:
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Column(
                         children: [
-                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.01,),
-                          Icon(Icons.shield_outlined, color: Colors.lightBlueAccent,),
-                          Column(
-                            children: [
-                              Text("HR Compliance Verified", style: TextStyle(color: Colors.white, fontSize: 12),),
-                              Text("Sistem terintegrasi dengan audit trail", style: TextStyle(color: Colors.white, fontSize: 8))
-                            ],
+                          Text(
+                            "HR Compliance Verified",
+                            style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
-                                                      right: MediaQuery.sizeOf(context).width *0.01, 
-                                                      top: MediaQuery.sizeOf(context).width *0.01, 
-                                                      bottom: MediaQuery.sizeOf(context).width *0.01
-                                                    ),
-                            child: Container(
-                              width: 2,
-                              height: MediaQuery.sizeOf(context).height * 0.04,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Text("Server Time", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10),),
-                              // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
-                              dateTimePicker(),
-                            ],
+                          Text(
+                            "Sistem terintegrasi dengan audit trail",
+                            style: TextStyle(color: Colors.white, fontSize: 8),
                           ),
                         ],
-                      )
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).width * 0.01,
+                          right: MediaQuery.sizeOf(context).width * 0.01,
+                          top: MediaQuery.sizeOf(context).width * 0.01,
+                          bottom: MediaQuery.sizeOf(context).width * 0.01,
+                        ),
+                        child: Container(
+                          width: 2,
+                          height: MediaQuery.sizeOf(context).height * 0.04,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "Server Time",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 111, 255, 116),
+                              fontSize: 10,
+                            ),
+                          ),
+                          // Text("18 Des 2025, 14.16.18", style: TextStyle(color: Color.fromARGB(255, 111, 255, 116), fontSize: 10))
+                          dateTimePicker(),
+                        ],
+                      ),
+                    ],
                   ),
-                )
-              )
-            ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

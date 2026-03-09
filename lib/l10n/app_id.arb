@@ -28,6 +28,16 @@
   "cutLap" : "Cuti Lap.",
   "sick" : "Sakit",
   "beranda" : "Beranda",
+  "keamanandanverif" : "Keamanan & Verifikasi",
+  "gpsharusoffice" : "GPS Wajib Dalam Radius",
+  "fromoffice" : "dari kantor",
+  "fotowajib" : "* Foto Wajib",
+  "gpsharusflex" : "GPS Wajib ",
+  "flexduty" : "(area fleksibel)",
+  "gpsinfo" : " Informasional",
+  "noneedgps" : "Tidak perlu GPS ",
+  "norphoto" : "Atau Foto",
+  "dokumenwajib" : "Foto Dokumen atau Cuti",
 
 
   "takePhoto" : "Ambil Foto",
@@ -90,6 +100,7 @@
   "inputGoods" : "Input Barang Masuk",
   "lateness" : "Konfirmasi\nKeterlambatan",
   "rackupAbsent" : "Absensi Saya",
+  "dabor" : "Beranda",
   "logout" : "Logout",
 
 

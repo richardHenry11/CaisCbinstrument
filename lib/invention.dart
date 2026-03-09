@@ -1,0 +1,466 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+// import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+
+class Invention extends StatefulWidget {
+  const Invention({super.key});
+
+  @override
+  State<Invention> createState() => _InventionState();
+}
+
+class _InventionState extends State<Invention> {
+  // dropdown Items
+  List<String> _kategoriBarang = [
+    "Siap Jual",
+    "Consumable",
+    "Aset Tetap",
+    "Barang Tersedia (Backstock)",
+    "Barang dalam Proses (WIP)",
+    "Barang Pengembalian / Retur",
+    "Spare Parts",
+    "Barang Obsolete",
+    "Barang Pameran / Demonstrasi",
+    "Barang Berteknologi Tinggi",
+    "Dokumen",
+  ];
+
+  String? _selectedKategori;
+
+  TextEditingController _startDate = TextEditingController();
+  TextEditingController _endDate = TextEditingController();
+
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+  // saved datetime
+  DateTime? startDateTime;
+  DateTime? endDateTime;
+
+  // pages
+  final _page = 1;
+  final _perPage = 20;
+
+  // list map API result tresholder
+  List<Map<String, dynamic>> _apiTresholder  = [];
+
+
+
+
+  //===================================== Functions and logics =================================
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadAPI();
+  }
+
+  Future<DateTime?> _pickDate(BuildContext context) async {
+    return await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+  }
+
+  Future<void> _loadAPI() async {
+    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzQ5NzE2NSwiaWF0IjoxNzcyNjc0NzY1fQ.4K5Q8gdsq1r5qZp_p5s6rir-LKWtPoU_umM-sV-c998";
+    final url = "https://cais.cbinstrument.com/auth/inventory/barang?page=$_page&per_page=$_perPage";
+    final headers = {
+      "Authorization" : "Bearer $token"
+    };
+
+    final responseAPI = await http.get(
+      Uri.parse(url),
+      headers: headers
+    );
+
+    if(responseAPI.statusCode == 200) {
+      final bodi= jsonDecode(responseAPI.body);
+
+      setState(() {
+        _apiTresholder = List<Map<String, dynamic>>.from(bodi["data"]);
+      });
+      print("hasil API: $_apiTresholder");
+    }
+  }
+
+
+
+  // Scaffold body / context builder
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF182234),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.1,
+              child: Image.asset(
+                "assets/gedeBox.png",
+                width: MediaQuery.sizeOf(context).width * 0.04,
+                height: MediaQuery.sizeOf(context).height * 0.04,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                children: [
+                  Text(
+                    "Inventory Barang",
+                    style: TextStyle(color: Color(0xFF4a9eff)),
+                  ),
+                  Text(
+                    "Management Stok & peminjaman",
+                    style: TextStyle(fontSize: 10, color: Color(0xFF8b9cb6)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF182234),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Color(0xFF2d4a7c), // warna border
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 219, 219, 219), // warna icon burger
+        ),
+      ),
+
+      body: SingleChildScrollView(
+        child: 
+        // Container(
+        //   decoration: BoxDecoration(
+        //     border: Border.all(
+        //       width: 1,
+        //       color: Colors.white
+        //     )
+        //   ),
+        //   child: 
+    
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF131927),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Color(0xff1f2937),
+                        width: 1
+                      )
+                    )
+                  ),
+                  child: 
+                  Container(
+                    child: 
+                    Padding(
+                      padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width * 0.05, right: MediaQuery.sizeOf(context).width * 0.05, bottom: MediaQuery.sizeOf(context).height * 0.03),
+                      child: Column(
+                        children: [
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width * 0.9,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hint: Row(
+                              children: [
+                                Text("🔍"),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    "Cari Nama Barang / QR Code",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 157, 157, 157),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFF1f2937),
+                          ),
+                        ),
+                      ),
+                                  
+                                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+                                  
+                                      // Dropdown input
+                                      SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.9,
+                      // height: MediaQuery.sizeOf(context).height * 0.06,
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          fillColor: Color(0xFF1f2937),
+                          filled: true,
+                          labelText: "Pilih Kategori",
+                          labelStyle: TextStyle(
+                            color: Color.fromARGB(255, 157, 157, 157),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                          ),
+                        ),
+                        style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                        value: _selectedKategori,
+                        items: _kategoriBarang.map((kategori) {
+                          return DropdownMenuItem<String>(
+                            value: kategori,
+                            child: Text(kategori),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedKategori = value;
+                          });
+                        },
+                      ),
+                                      ),
+                                  
+                                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+                                  
+                                      //=================== date filters =======================
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     border: Border.all(
+                                      //       width: 1,
+                                      //       color: Colors.white
+                                      //     )
+                                      //   ),
+                                      //   child: 
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // =============== Start Date =========================
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.44,
+                            child: TextField(
+                              controller: _startDate,
+                              readOnly: true,
+                              style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                              decoration: InputDecoration(
+                                fillColor: Color(0xFF1f2937),
+                                filled: true,
+                                label: Text("Start Date"),
+                                labelStyle: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                                ),
+                                suffixIcon: Icon(
+                                  Icons.calendar_today_rounded,
+                                  color: const Color.fromARGB(255, 180, 180, 180),
+                                ), 
+                              ),
+                              onTap: () async {
+                                final _datePicked = await _pickDate(context);
+                                if(_datePicked != null) {
+                                  setState(() {
+                                    startDateTime = _datePicked;
+                                    _startDate.text = formatter.format(_datePicked);
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                      
+                          //==================== End Date ===================
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.44,
+                            child: TextField(
+                              controller: _endDate,
+                              readOnly: true,
+                              style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                              decoration: InputDecoration(
+                                fillColor: Color(0xFF1f2937),
+                                filled: true,
+                                label: Text("End Date"),
+                                labelStyle: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Color(0xFF2d4a7c)),
+                                ),
+                                suffixIcon: Icon(
+                                  Icons.calendar_today_rounded,
+                                  color: const Color.fromARGB(255, 180, 180, 180),
+                                ), 
+                              ),
+                              onTap: () async {
+                                final _datePicked = await _pickDate(context);
+                                if(_datePicked != null) {
+                                  setState(() {
+                                    startDateTime = _datePicked;
+                                    _startDate.text = formatter.format(_datePicked);
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                                      // ),
+                      
+                                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                                      // Button Tambah Barang
+                                      SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.9,
+                      height: MediaQuery.sizeOf(context).height * 0.08,
+                      child:
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF2563eb),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        ),
+                        onPressed: (){
+                      
+                        }, 
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MaterialCommunityIcons.plus_circle, color: Colors.green, size: MediaQuery.sizeOf(context).height * 0.03,),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text("Tambah Barang", style: TextStyle(color: Colors.white),),
+                            ),
+                      
+                          ],
+                        )
+                      ),
+                                      ),
+                      
+                                      //================== goods input and output ==============
+                                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                                      SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.9,
+                      child: Container(
+                        // decoration: BoxDecoration(
+                        //   border: Border.all(
+                        //     width: 1,
+                        //     color: Colors.white
+                        //   )
+                        // ),
+                        child: 
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //================ good's input ===================
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.43,
+                              height: MediaQuery.sizeOf(context).height * 0.06,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: Color(0xFF065f46)
+                                ),
+                                onPressed: (){
+                              
+                                }, 
+                                child: 
+                                Row(
+                                  children: [
+                                    Text("📥"),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10.0),
+                                      child: Text("List Barang Masuk", style: TextStyle(color: Colors.white, fontSize: 10),),
+                                    )
+                                  ],
+                                )
+                              ),
+                            ),
+                      
+                            //================ good's output ===================
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.43,
+                              height: MediaQuery.sizeOf(context).height * 0.06,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: Color(0xFF7f1d1d)
+                                ),
+                                onPressed: (){
+                              
+                                }, 
+                                child: 
+                                Row(
+                                  children: [
+                                    Text("📥"),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10.0),
+                                      child: Text("List Barang Keluar", style: TextStyle(color: Colors.white, fontSize: 10),),
+                                    )
+                                  ],
+                                )
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                                      ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ),
+
+                //=============================== Content Inventory ==================================
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.red
+                    ),
+                    child: 
+                    _apiTresholder.isEmpty ?
+                    Center(child: Text("No Data", style: TextStyle(color: Colors.white),)) :
+                    Text("ada isian", style: TextStyle(color: Colors.green),) 
+                  ),
+                )
+              ],
+            ),
+          ),
+      // ),
+    );
+  }
+}

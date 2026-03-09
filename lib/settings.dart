@@ -45,25 +45,26 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.translate("Settings"), style: TextStyle(color: Colors.white),),
+        title: Text(
+          t.translate("Settings"),
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            Text(t.translate('chooseLang'),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              t.translate('chooseLang'),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 16),
 
             RadioListTile<String>(
-              value: 'id', 
-              groupValue: _selectedLang, 
+              value: 'id',
+              groupValue: _selectedLang,
               onChanged: (value) => _changeLang(value!),
               title: Text(t.translate('indonesia')),
             ),

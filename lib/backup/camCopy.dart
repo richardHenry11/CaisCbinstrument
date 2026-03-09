@@ -168,10 +168,10 @@
 //   Future<void> _confirmSubmitAbsence() async {
 //     showDialog(
 //       context: context,
-//       barrierDismissible: false, 
+//       barrierDismissible: false,
 //       builder: (context) {
 //         return AlertDialog(
-//           title: 
+//           title:
 //             Column(
 //               children: [
 //                 Row(
@@ -184,7 +184,7 @@
 //                 Divider()
 //               ],
 //             ),
-//           content: 
+//           content:
 //           Text("R U Sureee????!!!!???", style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
 //           actions: [
 //             ElevatedButton(
@@ -195,7 +195,7 @@
 //               onPressed: (){
 //                 // button Funct
 //                  Navigator.of(context).pop();
-//               }, 
+//               },
 //               child: Text("Cancel", style: TextStyle(color: Colors.white),)
 //             ),
 //             ElevatedButton(
@@ -208,7 +208,7 @@
 //                 _submitAbsence();
 //                 Navigator.of(context).pop();
 //                 _thxForAbsence();
-//               }, 
+//               },
 //               child: Text("Sure", style: TextStyle(color: Colors.white),)
 //             )
 //           ],
@@ -220,10 +220,10 @@
 //   Future<void> _thxForAbsence() async {
 //     showDialog(
 //       context: context,
-//       barrierDismissible: false, 
+//       barrierDismissible: false,
 //       builder: (context) {
 //         return AlertDialog(
-//           title: 
+//           title:
 //             Column(
 //               children: [
 //                 Text("Thank You.. ^_^", style: TextStyle(color: Colors.green)),
@@ -241,7 +241,7 @@
 //                 onPressed: (){
 //                   // button Funct
 //                   Navigator.of(context).pop();
-//                 }, 
+//                 },
 //                 child: Text("OK", style: TextStyle(color: Colors.white),)
 //               ),
 //             )
@@ -265,12 +265,12 @@
 //           Column(
 //             children: [
 //                 Expanded(
-//                   child: _photo == null 
+//                   child: _photo == null
 //                   ? Center(child: Text("No Photo yet...", style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
-//                   : 
+//                   :
 //                   ClipRRect(
 //                     borderRadius: BorderRadiusGeometry.circular(20),
-//                     child: 
+//                     child:
 //                       Image.file(_photo!, fit: BoxFit.cover,
 //                     )
 //                   )
@@ -318,7 +318,7 @@
 //               //   items: const [
 //               //     DropdownMenuItem(value: "Masuk", child: Text("Masuk")),
 //               //     DropdownMenuItem(value: "Tidak Masuk", child: Text("Tidak Masuk")),
-//               //   ], 
+//               //   ],
 //               //   onChanged: (val) => setState(() => _status = val!),
 //               //   decoration: const InputDecoration(
 //               //     border: OutlineInputBorder(),
@@ -335,9 +335,9 @@
 //                   ),
 //                   onPressed: _photo != null && !_isSubmitting
 //                   ? _confirmSubmitAbsence : null,
-//                   child: Text(_isSubmitting ? "Submitting..." : "Submit Absent", 
-//                     style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
-//                     fontSize: 15, 
+//                   child: Text(_isSubmitting ? "Submitting..." : "Submit Absent",
+//                     style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white,
+//                     fontSize: 15,
 //                     fontWeight: FontWeight.w900)
 //                   )
 //                 ),

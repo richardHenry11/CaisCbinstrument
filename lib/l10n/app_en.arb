@@ -21,13 +21,23 @@
 
   "titlePilihDinas" : "Absence",
   "pilihAbsen" : "Choose your Duty",
-  "office" : "Office Absence",
+  "office" : "Office",
   "field" : "Field Duty",
   "wfh" : "WFH",
-  "cuti" : "Annual Leave",
-  "cutLap" : "Field Duty Leave",
+  "cuti" : "Cuti",
+  "cutLap" : "Cutlap",
   "sick" : "Sick",
-  "beranda" : "Dashboard", 
+  "beranda" : "Dashboard",
+  "keamanandanverif" : "Secure & Verify",
+  "gpsharusoffice" : "GPS Must be in Radius",
+  "fromoffice" : "From Office",
+  "fotowajib" : "* Photo is a must",
+  "gpsharusflex" : "GPS must be on ",
+  "flexduty" : "(Flexible Area)",
+  "gpsinfo" : " Informational",
+  "noneedgps" : "No GPS needed ",
+  "norphoto" : "nor Photo",
+  "dokumenwajib" : "* Document Photo or annual leave",
 
 
   "takePhoto" : "Take Photo",
@@ -90,6 +100,7 @@
   "inputGoods" : "Goods Input",
   "lateness" : "Confirmation \n Lateness",
   "rackupAbsent" : "My Absent",
+  "dabor" : "Dashboard",
   "logout" : "Logout",
 
 

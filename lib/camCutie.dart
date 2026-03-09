@@ -46,9 +46,9 @@ class _CamAndFileState extends State<CamAndFile> {
   String? error;
 
   Future<bool> requestCameraPermission() async {
-  final status = await Permission.camera.request();
-  return status.isGranted;
-}
+    final status = await Permission.camera.request();
+    return status.isGranted;
+  }
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _CamAndFileState extends State<CamAndFile> {
   Future<File?> _takePhotoFromGallery() async {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 75
+      imageQuality: 75,
     );
 
     if (image == null) {
@@ -71,17 +71,17 @@ class _CamAndFileState extends State<CamAndFile> {
 
   Future<void> _takePhoto() async {
     final granted = await requestCameraPermission();
-    if(!granted){
-        ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Camera permission denied")),
-      );
+    if (!granted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
       return;
     }
     final XFile? image = await _picker.pickImage(
-                                                source:ImageSource.camera,
-                                                preferredCameraDevice: CameraDevice.front,
-                                                imageQuality: 75
-                                                );
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+      imageQuality: 75,
+    );
     if (image != null) {
       setState(() {
         _photo = File(image.path);
@@ -101,8 +101,10 @@ class _CamAndFileState extends State<CamAndFile> {
       _savedToken = prefs.getString('token') ?? "this is token";
       _savedName = prefs.getString('name') ?? "who is this?";
       _savedStatus = prefs.getString('status') ?? "which type r u?";
-      _savedAttType = prefs.getString('attendance_type') ?? "what att type r u?";
-      _savedShiftType = prefs.getString('shift_type') ?? "what ShiftType is this?";
+      _savedAttType =
+          prefs.getString('attendance_type') ?? "what att type r u?";
+      _savedShiftType =
+          prefs.getString('shift_type') ?? "what ShiftType is this?";
       _savedStartTime = prefs.getString('start_date') ?? "what date?";
       _savedEndTime = prefs.getString('end_date') ?? "what time?";
       _savedDayDuration = prefs.getInt('duration_days') ?? 0;
@@ -141,11 +143,7 @@ class _CamAndFileState extends State<CamAndFile> {
     debugPrint("full photo: ${photoData}");
 
     String utcNow() {
-      return DateTime.now()
-          .toUtc()
-          .toIso8601String()
-          .split('.')
-          .first + 'Z';
+      return DateTime.now().toUtc().toIso8601String().split('.').first + 'Z';
     }
 
     // String localDateTime() {
@@ -179,15 +177,13 @@ class _CamAndFileState extends State<CamAndFile> {
 
     final responses = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/input/absensi"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": header},
-      body: jsonEncode(body)
+      headers: {"Content-Type": "application/json", "Authorization": header},
+      body: jsonEncode(body),
     );
 
-    if(responses.statusCode == 200) {
-        final resBody = jsonDecode(responses.body);
-        print(resBody);
+    if (responses.statusCode == 200) {
+      final resBody = jsonDecode(responses.body);
+      print(resBody);
       print("Absence FUCKcessful");
       _thxForAbsence();
       if (!mounted) return;
@@ -211,10 +207,10 @@ class _CamAndFileState extends State<CamAndFile> {
   //   final t = AppLocalizations.of(context)!;
   //   showDialog(
   //     context: context,
-  //     barrierDismissible: false, 
+  //     barrierDismissible: false,
   //     builder: (context) {
   //       return AlertDialog(
-  //         title: 
+  //         title:
   //           Column(
   //             children: [
   //               Row(
@@ -227,7 +223,7 @@ class _CamAndFileState extends State<CamAndFile> {
   //               Divider()
   //             ],
   //           ),
-  //         content: 
+  //         content:
   //         Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
   //         actions: [
   //           ElevatedButton(
@@ -238,7 +234,7 @@ class _CamAndFileState extends State<CamAndFile> {
   //             onPressed: (){
   //               // button Funct
   //                Navigator.of(context).pop();
-  //             }, 
+  //             },
   //             child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
   //           ),
   //           ElevatedButton(
@@ -250,7 +246,7 @@ class _CamAndFileState extends State<CamAndFile> {
   //               // button Funct
   //               _submitAbsence();
   //               Navigator.of(context).pop();
-  //             }, 
+  //             },
   //             child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
   //           )
   //         ],
@@ -263,35 +259,39 @@ class _CamAndFileState extends State<CamAndFile> {
     final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
-                Divider()
-              ],
-            ),
-          content: Text("$error", style: TextStyle(color: Colors.black),),
+          title: Column(
+            children: [
+              Text(t.translate("failed"), style: TextStyle(color: Colors.red)),
+              Divider(),
+            ],
+          ),
+          content: Text("$error", style: TextStyle(color: Colors.black)),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                  backgroundColor: Colors.green
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
                 ),
-                onPressed: (){ error == 'Token tidak valid' ?
-                  // button Funct
-                   _logout() : Navigator.of(context).pop();
-                }, 
-                child: Text("OK", style: TextStyle(color: Colors.white),)
+                onPressed: () {
+                  error == 'Token tidak valid'
+                      ?
+                        // button Funct
+                        _logout()
+                      : Navigator.of(context).pop();
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -299,39 +299,40 @@ class _CamAndFileState extends State<CamAndFile> {
     final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Text(t.translate("thx"), style: TextStyle(color: Colors.green)),
-                Divider()
-              ],
-            ),
+          title: Column(
+            children: [
+              Text(t.translate("thx"), style: TextStyle(color: Colors.green)),
+              Divider(),
+            ],
+          ),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                  backgroundColor: Colors.green
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
                 ),
-                onPressed: (){
+                onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
 
                   Navigator.pushReplacement(
-                    context, 
-                    MaterialPageRoute(builder: (context) => PilihDinas())
+                    context,
+                    MaterialPageRoute(builder: (context) => PilihDinas()),
                   );
-                }, 
-                child: Text("OK", style: TextStyle(color: Colors.white),)
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -341,15 +342,17 @@ class _CamAndFileState extends State<CamAndFile> {
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
-      context, 
+      context,
       MaterialPageRoute(builder: (_) => MyHomePage()),
-      (route) => false, 
+      (route) => false,
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: 
-        Text(t.translate("dadah"), style: TextStyle(color: Colors.white)),
+        content: Text(
+          t.translate("dadah"),
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
@@ -361,168 +364,210 @@ class _CamAndFileState extends State<CamAndFile> {
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white)),
+        title: Text(
+          t.translate("takePhoto"),
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body:
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child:
-          Column(
-            children: [
-                Expanded(
-                  child: _photo == null 
-                  ? Center(child: Text(t.translate("photoDesk"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),))
-                  : 
-                  ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(20),
-                    child: 
-                      Image.file(_photo!, fit: BoxFit.cover,
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Expanded(
+              child: _photo == null
+                  ? Center(
+                      child: Text(
+                        t.translate("photoDesk"),
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                     )
-                  )
-                ),
-              SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
+                  : ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(20),
+                      child: Image.file(_photo!, fit: BoxFit.cover),
                     ),
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.1),
-                      blurRadius: 30,
-                      spreadRadius: 6,
-                    ),
-                  ]
-                ),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
-                      ),
-                      onPressed: _takePhoto,
-                      icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                      label: Text(t.translate("takePicture"), style: TextStyle(color: Colors.white),),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                    ),
-                    BoxShadow(
-                      color: Colors.cyanAccent.withOpacity(0.1),
-                      blurRadius: 30,
-                      spreadRadius: 6,
-                    ),
-                  ]
-                ),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
-                      ),
-                      onPressed: () async {
-                        final file = await _takePhotoFromGallery();
-                    
-                        if (file != null || file == null) {
-                          setState(() {
-                            _photo = file;
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.folder, color: Colors.white,),
-                      label: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
-                    ),
-                  ),
-                  // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("test"))
-                ],
-              ),
-              SizedBox(height: 8),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     if (_photo == null) {
-              //       debugPrint("Belum ada foto");
-              //       return;
-              //     }
-
-              //     final fileName = p.basename(_photo!.path);
-              //     final extension = p.extension(_photo!.path);
-              //     final fileSize = _photo!.lengthSync();
-
-              //     debugPrint("📸 File name : $fileName");
-              //     debugPrint("📂 Extension : $extension");
-              //     debugPrint("📦 Size      : ${fileSize ~/ 1024} KB");
-              //     debugPrint("📍 Full path : ${_photo!.path}");
-              //   },
-              //   child: const Text("check file Photo"),
-              // ),
-              // SizedBox(height: 8),
-              // TextField(
-              //   controller: _nameController,
-              //   decoration: const InputDecoration(
-              //     labelText: "Name",
-              //     border: OutlineInputBorder()
-              //   ),
-              // ),
-              // SizedBox(height: 8),
-              // DropdownButtonFormField(
-              //   value: _status,
-              //   items: const [
-              //     DropdownMenuItem(value: "Masuk", child: Text("Masuk")),
-              //     DropdownMenuItem(value: "Tidak Masuk", child: Text("Tidak Masuk")),
-              //   ], 
-              //   onChanged: (val) => setState(() => _status = val!),
-              //   decoration: const InputDecoration(
-              //     border: OutlineInputBorder(),
-              //   labelText: "Status",
-              //   ),
-              // ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 1,
-                height: MediaQuery.sizeOf(context).height * 0.08,
-                child: 
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
                 Container(
-                  decoration: 
-                   _photo != null && !_isSubmitting ? BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                    ),
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 34, 249, 92).withOpacity(0.3),
-                      blurRadius: 30,
-                      spreadRadius: 6,
-                    ),
-                  ]
-                ) : null,
-                  child: ElevatedButton(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.cyanAccent.withOpacity(0.3),
+                        blurRadius: 15,
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: Colors.cyanAccent.withOpacity(0.1),
+                        blurRadius: 30,
+                        spreadRadius: 6,
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _isSubmitting ? const Color.fromARGB(255, 211, 211, 211) : const Color.fromARGB(255, 87, 201, 91),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                      backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
                     ),
-                    onPressed: _photo != null && !_isSubmitting
-                    ? _submitAbsence : null,
-                    child: Text(_isSubmitting ? t.translate("isSubmit") : t.translate("Submit"), 
-                      style: TextStyle(color: _isSubmitting ? const Color.fromARGB(255, 74, 74, 74) : Colors.white, 
-                      fontSize: 15, 
-                      fontWeight: FontWeight.w900)
-                    )
+                    onPressed: _takePhoto,
+                    icon: const Icon(
+                      Icons.camera_alt_rounded,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      t.translate("takePicture"),
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              )
-            ],
-          )
-        )
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.cyanAccent.withOpacity(0.3),
+                        blurRadius: 15,
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: Colors.cyanAccent.withOpacity(0.1),
+                        blurRadius: 30,
+                        spreadRadius: 6,
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final file = await _takePhotoFromGallery();
+
+                      if (file != null || file == null) {
+                        setState(() {
+                          _photo = file;
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.folder, color: Colors.white),
+                    label: Text(
+                      t.translate("gallery"),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("test"))
+              ],
+            ),
+            SizedBox(height: 8),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     if (_photo == null) {
+            //       debugPrint("Belum ada foto");
+            //       return;
+            //     }
+
+            //     final fileName = p.basename(_photo!.path);
+            //     final extension = p.extension(_photo!.path);
+            //     final fileSize = _photo!.lengthSync();
+
+            //     debugPrint("📸 File name : $fileName");
+            //     debugPrint("📂 Extension : $extension");
+            //     debugPrint("📦 Size      : ${fileSize ~/ 1024} KB");
+            //     debugPrint("📍 Full path : ${_photo!.path}");
+            //   },
+            //   child: const Text("check file Photo"),
+            // ),
+            // SizedBox(height: 8),
+            // TextField(
+            //   controller: _nameController,
+            //   decoration: const InputDecoration(
+            //     labelText: "Name",
+            //     border: OutlineInputBorder()
+            //   ),
+            // ),
+            // SizedBox(height: 8),
+            // DropdownButtonFormField(
+            //   value: _status,
+            //   items: const [
+            //     DropdownMenuItem(value: "Masuk", child: Text("Masuk")),
+            //     DropdownMenuItem(value: "Tidak Masuk", child: Text("Tidak Masuk")),
+            //   ],
+            //   onChanged: (val) => setState(() => _status = val!),
+            //   decoration: const InputDecoration(
+            //     border: OutlineInputBorder(),
+            //   labelText: "Status",
+            //   ),
+            // ),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              height: MediaQuery.sizeOf(context).height * 0.08,
+              child: Container(
+                decoration: _photo != null && !_isSubmitting
+                    ? BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(
+                              255,
+                              34,
+                              249,
+                              92,
+                            ).withOpacity(0.3),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                          ),
+                          BoxShadow(
+                            color: const Color.fromARGB(
+                              255,
+                              34,
+                              249,
+                              92,
+                            ).withOpacity(0.3),
+                            blurRadius: 30,
+                            spreadRadius: 6,
+                          ),
+                        ],
+                      )
+                    : null,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isSubmitting
+                        ? const Color.fromARGB(255, 211, 211, 211)
+                        : const Color.fromARGB(255, 87, 201, 91),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(10),
+                    ),
+                  ),
+                  onPressed: _photo != null && !_isSubmitting
+                      ? _submitAbsence
+                      : null,
+                  child: Text(
+                    _isSubmitting
+                        ? t.translate("isSubmit")
+                        : t.translate("Submit"),
+                    style: TextStyle(
+                      color: _isSubmitting
+                          ? const Color.fromARGB(255, 74, 74, 74)
+                          : Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -26,10 +26,10 @@ class _LatenessState extends State<Lateness> {
   int? id;
 
   // base64Img state
-    Future<String> imageToBase64(File imageFile) async {
-      final bytes = await imageFile.readAsBytes();
-      return base64Encode(bytes);
-    }
+  Future<String> imageToBase64(File imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+    return base64Encode(bytes);
+  }
 
   // error treshold
   String errorMessage = '';
@@ -48,7 +48,13 @@ class _LatenessState extends State<Lateness> {
   TextEditingController _keterangan = TextEditingController();
 
   // Dropdown list
-  List<String> _dropdownItem = ["Macet", "Kendaraan Bermasalah", "Urusan Keluarga", "Gangguan Kesehatan", "Lainnya"];
+  List<String> _dropdownItem = [
+    "Macet",
+    "Kendaraan Bermasalah",
+    "Urusan Keluarga",
+    "Gangguan Kesehatan",
+    "Lainnya",
+  ];
   String? _selectedReason;
 
   Future<File> _normalizeImage(File file) async {
@@ -80,7 +86,7 @@ class _LatenessState extends State<Lateness> {
     final token = prefs.getString('token');
     final savedId = prefs.getInt('employeesId');
 
-    if(raw == null) return;
+    if (raw == null) return;
 
     setState(() {
       latenessData = jsonDecode(raw) as Map<String, dynamic>;
@@ -110,17 +116,17 @@ class _LatenessState extends State<Lateness> {
   Future<void> _takePhoto() async {
     final granted = await requestCameraPermission();
 
-    if(!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Camera permission denied")),
-      );
+    if (!granted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
       return;
     }
 
     final XFile? image = await _picker.pickImage(
       source: ImageSource.camera,
       preferredCameraDevice: CameraDevice.front,
-      imageQuality: 75
+      imageQuality: 75,
     );
 
     if (image != null) {
@@ -150,16 +156,16 @@ class _LatenessState extends State<Lateness> {
   }
 
   Future<void> _submitAPI() async {
-    if(savedToken == "" || savedToken == null || savedToken == "null"){
+    if (savedToken == "" || savedToken == null || savedToken == "null") {
       print("token expired");
       await _logout();
     }
 
     // foto !null
     if (_photo == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please upload photo")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please upload photo")));
       return;
     }
 
@@ -172,19 +178,19 @@ class _LatenessState extends State<Lateness> {
 
     final url = "https://cais.cbinstrument.com/auth/absensi/konfirmasi";
     final headers = {
-      "Content-Type":"application/json",
-      "Authorization": "Bearer $savedToken"
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $savedToken",
     };
     final body = jsonEncode({
       "id_absensi": "$id",
       "alasan": _selectedReason,
       "keterangan": _keterangan.text,
-      "foto_bukti": res
+      "foto_bukti": res,
     });
     final response = await http.post(
       Uri.parse(url),
       headers: headers,
-      body: body
+      body: body,
     );
 
     if (response.statusCode == 200) {
@@ -195,9 +201,9 @@ class _LatenessState extends State<Lateness> {
     } else {
       final resBody = jsonDecode(response.body);
       print(resBody);
-        setState(() {
-          errorMessage = resBody['message'] ?? 'Failed to submit confirmation';
-        });
+      setState(() {
+        errorMessage = resBody['message'] ?? 'Failed to submit confirmation';
+      });
       _thxForAbsenceFailed();
     }
   }
@@ -205,35 +211,36 @@ class _LatenessState extends State<Lateness> {
   Future<void> _thxForAbsenceFailed() async {
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: 
-            Column(
-              children: [
-                Text("Absence Failed", style: TextStyle(color: Colors.red)),
-                Divider()
-              ],
-            ),
-          content: Text(errorMessage, style: TextStyle(color: Colors.black),),
+          title: Column(
+            children: [
+              Text("Absence Failed", style: TextStyle(color: Colors.red)),
+              Divider(),
+            ],
+          ),
+          content: Text(errorMessage, style: TextStyle(color: Colors.black)),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                  backgroundColor: Colors.green
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
                 ),
-                onPressed: (){
+                onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
-                }, 
-                child: Text("OK", style: TextStyle(color: Colors.white),)
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -241,41 +248,48 @@ class _LatenessState extends State<Lateness> {
     final t = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: 
-            Column(
-              children: [
-                // Text("", style: TextStyle(color: Colors.green)),
-                Icon(MaterialCommunityIcons.check_decagram, color: Colors.green, size: 80,),
-                // Divider()
-              ],
-            ),
-          content: 
-            Text(t.translate("reportLateSent"), style: TextStyle(color: Colors.green, fontSize: 15),),
+          title: Column(
+            children: [
+              // Text("", style: TextStyle(color: Colors.green)),
+              Icon(
+                MaterialCommunityIcons.check_decagram,
+                color: Colors.green,
+                size: 80,
+              ),
+              // Divider()
+            ],
+          ),
+          content: Text(
+            t.translate("reportLateSent"),
+            style: TextStyle(color: Colors.green, fontSize: 15),
+          ),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-                  backgroundColor: Colors.green
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
                 ),
-                onPressed: (){
+                onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
-                    context, 
-                    MaterialPageRoute(builder: (context) => RackupAbsence())
+                    context,
+                    MaterialPageRoute(builder: (context) => RackupAbsence()),
                   );
-                }, 
-                child: Text("OK", style: TextStyle(color: Colors.white),)
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -284,9 +298,9 @@ class _LatenessState extends State<Lateness> {
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
-      context, 
+      context,
       MaterialPageRoute(builder: (_) => MyHomePage()),
-      (route) => false, 
+      (route) => false,
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -306,8 +320,7 @@ class _LatenessState extends State<Lateness> {
       ),
       backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: SingleChildScrollView(
-        child: 
-        Padding(
+        child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
@@ -316,22 +329,32 @@ class _LatenessState extends State<Lateness> {
                 child: Card(
                   color: const Color.fromARGB(255, 66, 91, 130),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child:
-                  Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.02,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                              child: Icon(MaterialCommunityIcons.alarm, color: Colors.redAccent),
+                              padding: const EdgeInsets.only(
+                                left: 8.0,
+                                right: 8.0,
+                              ),
+                              child: Icon(
+                                MaterialCommunityIcons.alarm,
+                                color: Colors.redAccent,
+                              ),
                             ),
-                            Text(t.translate("absenDat"), style: TextStyle(color: Colors.white),),
+                            Text(
+                              t.translate("absenDat"),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
@@ -339,130 +362,241 @@ class _LatenessState extends State<Lateness> {
                       //   height: MediaQuery.sizeOf(context).height * 0.02,
                       // ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
-                        child: 
-                            Card(
-                              color: const Color.fromARGB(255, 3, 23, 58),
-                                child:
-                                Column(
+                        padding: const EdgeInsets.only(
+                          top: 16.0,
+                          bottom: 16.0,
+                          left: 16.0,
+                          right: 16.0,
+                        ),
+                        child: Card(
+                          color: const Color.fromARGB(255, 3, 23, 58),
+                          child: Column(
+                            children: [
+                              // ======== Row Name =========
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8.0,
+                                  top: 5.0,
+                                  bottom: 5.0,
+                                ),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    // ======== Row Name =========
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 5.0),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("name"), style: TextStyle(color: Colors.white),)),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(safeText(userName), style: TextStyle(color: Colors.white))),
-                                        ],
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      child: Text(
+                                        t.translate("name"),
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                     ),
-                        
-                                    // ======== Row Date =========
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 5.0),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("date"), style: TextStyle(color: Colors.white))),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text(safeText(latenessData?['date']), style: TextStyle(color: Colors.white))),
-                                        ],
-                                      ),
-                                    ),
-                        
-                                    // ======== Row CheckIn =========
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 5.0),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("cekin"), style: TextStyle(color: Colors.white))),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text(safeText(latenessData?['check_in']), style: TextStyle(color: Colors.white))),
-                                        ],
-                                      ),
-                                    ),
-
-                                    // ======== Row Location =========
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, top: 5.0, bottom: 5.0),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.4, child: Text(t.translate("location"), style: TextStyle(color: Colors.white))),
-                                          SizedBox(width: MediaQuery.sizeOf(context).width * 0.3, child: Text("........", style: TextStyle(color: Colors.white))),
-                                        ],
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      child: Text(
+                                        safeText(userName),
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
                               ),
-                            ),
-                          Padding(
-                          padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
-                          child:
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height * 0.05,
-                            child: Card(
-                              color: Colors.lightGreen,
-                              child:
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(child: Text(safeText(latenessData?['status'] == 'late' ? "T4" 
-                                                      : latenessData?['status'] == 'T1' ? "T1"
-                                                      : latenessData?['status'] == 'T2' ? "T2"
-                                                      : latenessData?['status'] == 'T3' ? "T3"
-                                                      : ""),
-                                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                                    )
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child:
-                                    Text(latenessData?['status'] == 'late' ? t.translate("urlatee") : t.translate("urlate"),
-                                      style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic),
-                                    )
-                                  )
-                                ],
-                              )
-                            ),
-                          )
+
+                              // ======== Row Date =========
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8.0,
+                                  top: 5.0,
+                                  bottom: 5.0,
+                                ),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      child: Text(
+                                        t.translate("date"),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.3,
+                                      child: Text(
+                                        safeText(latenessData?['date']),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // ======== Row CheckIn =========
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8.0,
+                                  top: 5.0,
+                                  bottom: 5.0,
+                                ),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      child: Text(
+                                        t.translate("cekin"),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.3,
+                                      child: Text(
+                                        safeText(latenessData?['check_in']),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // ======== Row Location =========
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8.0,
+                                  top: 5.0,
+                                  bottom: 5.0,
+                                ),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      child: Text(
+                                        t.translate("location"),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width *
+                                          0.3,
+                                      child: Text(
+                                        "........",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 16.0,
+                          bottom: 16.0,
+                          left: 16.0,
+                          right: 16.0,
+                        ),
+                        child: SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.05,
+                          child: Card(
+                            color: Colors.lightGreen,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    safeText(
+                                      latenessData?['status'] == 'late'
+                                          ? "T4"
+                                          : latenessData?['status'] == 'T1'
+                                          ? "T1"
+                                          : latenessData?['status'] == 'T2'
+                                          ? "T2"
+                                          : latenessData?['status'] == 'T3'
+                                          ? "T3"
+                                          : "",
+                                    ),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    latenessData?['status'] == 'late'
+                                        ? t.translate("urlatee")
+                                        : t.translate("urlate"),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
-                  )
+                  ),
                 ),
               ),
 
-
-
-
               // ============================= Lateness Reason =========================
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 child: Card(
                   color: const Color.fromARGB(255, 66, 91, 130),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child:
-                  Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.02,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                              child: Icon(MaterialCommunityIcons.file_document_edit, color: Colors.blueAccent),
+                              padding: const EdgeInsets.only(
+                                left: 8.0,
+                                right: 8.0,
+                              ),
+                              child: Icon(
+                                MaterialCommunityIcons.file_document_edit,
+                                color: Colors.blueAccent,
+                              ),
                             ),
-                            Text(t.translate("lateReason"), style: TextStyle(color: Colors.white),),
+                            Text(
+                              t.translate("lateReason"),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.02,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                         child: DropdownButtonFormField<String>(
@@ -489,7 +623,7 @@ class _LatenessState extends State<Lateness> {
                             setState(() {
                               _selectedReason = newValue;
                             });
-                          }
+                          },
                         ),
                       ),
                       Padding(
@@ -519,9 +653,7 @@ class _LatenessState extends State<Lateness> {
                                     Color(0xFF0A1426),
                                   ],
                                 ),
-                                border: Border.all(
-                                  color: Colors.white24,
-                                ),
+                                border: Border.all(color: Colors.white24),
                               ),
                               child: TextField(
                                 controller: _keterangan,
@@ -532,63 +664,83 @@ class _LatenessState extends State<Lateness> {
                                   hintText: t.translate("writenb"),
                                   hintStyle: TextStyle(color: Colors.white54),
                                   contentPadding: EdgeInsets.all(16),
-                                  border: InputBorder.none, // hilangkan border default
+                                  border: InputBorder
+                                      .none, // hilangkan border default
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-
                     ],
-                  )
+                  ),
                 ),
               ),
 
-
               // ============================= Lateness Reason =========================
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 child: Card(
                   color: const Color.fromARGB(255, 66, 91, 130),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child:
-                  Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.02,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                              child: Icon(MaterialCommunityIcons.camera, color: const Color.fromARGB(255, 236, 255, 24)),
+                              padding: const EdgeInsets.only(
+                                left: 8.0,
+                                right: 8.0,
+                              ),
+                              child: Icon(
+                                MaterialCommunityIcons.camera,
+                                color: const Color.fromARGB(255, 236, 255, 24),
+                              ),
                             ),
-                            Text(t.translate("latenessReasonProve"), style: TextStyle(color: Colors.white),),
+                            Text(
+                              t.translate("latenessReasonProve"),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
-                             _photo == null 
-                              ? Center(child: 
-                              SizedBox(height: MediaQuery.sizeOf(context).height * 0.1, child: Text(t.translate("photoDesk"), style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w800),)))
-                              : 
-                              SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.8,
-                                child: 
-                                ClipRRect(
-                                  borderRadius: BorderRadiusGeometry.circular(20),
-                                  child: 
-                                    Image.file(_photo!, fit: BoxFit.cover,
-                                  )
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.02,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.02,
+                      ),
+                      _photo == null
+                          ? Center(
+                              child: SizedBox(
+                                height: MediaQuery.sizeOf(context).height * 0.1,
+                                child: Text(
+                                  t.translate("photoDesk"),
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                               ),
-                          SizedBox(height:10),
+                            )
+                          : SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.8,
+                              child: ClipRRect(
+                                borderRadius: BorderRadiusGeometry.circular(20),
+                                child: Image.file(_photo!, fit: BoxFit.cover),
+                              ),
+                            ),
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -596,58 +748,94 @@ class _LatenessState extends State<Lateness> {
                           children: [
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                                backgroundColor: const Color.fromARGB(
+                                  255,
+                                  82,
+                                  177,
+                                  255,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    10,
+                                  ),
+                                ),
                               ),
                               onPressed: _takePhoto,
-                              icon: const Icon(Icons.camera_alt_rounded, color: Colors.white,),
-                              label: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
+                              icon: const Icon(
+                                Icons.camera_alt_rounded,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                t.translate("takePhoto"),
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10))
+                                backgroundColor: const Color.fromARGB(
+                                  255,
+                                  82,
+                                  177,
+                                  255,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    10,
+                                  ),
+                                ),
                               ),
                               onPressed: () async {
                                 final file = await _takePhotoFromGallery();
-                        
+
                                 if (file != null) {
                                   setState(() {
                                     _photo = file;
                                   });
                                 }
                               },
-                              icon: const Icon(MaterialCommunityIcons.file, color: Colors.white,),
-                              label: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
+                              icon: const Icon(
+                                MaterialCommunityIcons.file,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                t.translate("gallery"),
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ),
               ),
 
-
-
-
               // =================== Send Confirmation Button ==============
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.03,),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.95,
                 height: MediaQuery.sizeOf(context).height * 0.07,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: Colors.lightBlueAccent
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: Colors.lightBlueAccent,
                   ),
-                  onPressed:(){
+                  onPressed: () {
                     // Button Funct Here!
                     _submitAPI();
-                  }, 
-                  child: Text(t.translate("sendLate"), style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),)
+                  },
+                  child: Text(
+                    t.translate("sendLate"),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -110,14 +110,12 @@
 
 //   // stream location
 //   StreamSubscription<Position>? positionStream;
-  
+
 //   // KIP office locations
-//   double officeLatKip = -6.951720770791366; 
+//   double officeLatKip = -6.951720770791366;
 //   double officeLngKip = 107.53339375994186;
 
-
 //   // TKI Office Location
-
 
 //   // button State
 //   bool _canPressButton = false;
@@ -177,7 +175,6 @@
 //     print('shift_type: $pulang');
 //   }
 
-
 //   Future<void> _initLocation() async {
 //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 //     if (!serviceEnabled) return;
@@ -200,8 +197,8 @@
 
 //       for (final office in offices) {
 //         final dist = Geolocator.distanceBetween(
-//           position.latitude, 
-//           position.longitude, 
+//           position.latitude,
+//           position.longitude,
 //           office.location.latitude,
 //           office.location.longitude
 //         );
@@ -240,9 +237,9 @@
 //     await prefs.clear();
 
 //     Navigator.pushAndRemoveUntil(
-//       context, 
+//       context,
 //       MaterialPageRoute(builder: (_) => MyHomePage()),
-//       (route) => false, 
+//       (route) => false,
 //     );
 //     ScaffoldMessenger.of(context).showSnackBar(
 //       SnackBar(
@@ -265,7 +262,7 @@
 //   Widget build(BuildContext context) {
 //     return
 //     Scaffold(
-//       body: 
+//       body:
 //       SizedBox(
 //         width: MediaQuery.sizeOf(context).width * 1,
 //         child: Container(
@@ -274,7 +271,7 @@
 //             children: [
 //               Container(
 //                 color: const Color.fromARGB(255, 184, 184, 184),
-//                 child: 
+//                 child:
 //                 Column(
 //                   children: [
 //                     SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
@@ -284,7 +281,7 @@
 //                         // ElevatedButton(
 //                         //   onPressed: (){
 //                         //     _prefsCatcher();
-//                         //   }, 
+//                         //   },
 //                         //   child: Text("Test SharedPrefs")
 //                         // ),
 //                         Image.asset('assets/logoBiru.png', width: 220, height: 65),
@@ -297,7 +294,7 @@
 //                           (){
 //                             // button funct
 //                             _logout();
-//                           }, 
+//                           },
 //                           child: Icon(Icons.logout_rounded, color: Colors.white,)),
 //                       ],
 //                     ),
@@ -367,7 +364,7 @@
 //                               ),
 //                               Padding(
 //                                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04, top: MediaQuery.of(context).size.height * 0.01),
-//                                 child: 
+//                                 child:
 //                                 Text("PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung", style: TextStyle(color: Colors.white, fontSize: 10),),
 //                               ),
 //                               SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
@@ -419,14 +416,14 @@
 //                                       circles: offices.map((office) {
 //                                         final isActive = activeOffice?.id == office.id;
 //                                         return CircleMarker(
-//                                           point: office.location, 
+//                                           point: office.location,
 //                                           radius: office.radius,
 //                                           useRadiusInMeter: true,
 //                                           color: isActive ?
 //                                             Colors.green.withOpacity(0.2) :
 //                                             Colors.red.withOpacity(0.15),
 //                                           borderColor: isActive ?
-//                                             Colors.green : 
+//                                             Colors.green :
 //                                             Colors.red,
 //                                           borderStrokeWidth: 2,
 //                                         );
@@ -480,12 +477,12 @@
 //                                   shape: RoundedRectangleBorder(
 //                                     borderRadius: BorderRadiusGeometry.circular(10)
 //                                   ),
-//                                   backgroundColor: _savedShiftType == "masuk" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
+//                                   backgroundColor: _savedShiftType == "masuk" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220)
 //                                 ),
 //                                 onPressed: (){
 //                                   // button Funct
 //                                   _masukShiftType();
-//                                 }, 
+//                                 },
 //                                 child: Text("Masuk", style: TextStyle(color: _savedShiftType == "masuk" ? Colors.white : Colors.black))
 //                               )
 //                             ),
@@ -499,12 +496,12 @@
 //                                   shape: RoundedRectangleBorder(
 //                                     borderRadius: BorderRadiusGeometry.circular(10)
 //                                   ),
-//                                   backgroundColor: _savedShiftType == "pulang" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220) 
+//                                   backgroundColor: _savedShiftType == "pulang" ? Colors.lightBlueAccent : const Color.fromARGB(255, 220, 220, 220)
 //                                 ),
 //                                 onPressed: (){
 //                                   // button Funct
 //                                   _pulangShiftType();
-//                                 }, 
+//                                 },
 //                                 child: Text("Pulang", style: TextStyle(color: _savedShiftType == "pulang" ? Colors.white : Colors.black))
 //                               )
 //                             )
@@ -568,9 +565,9 @@
 //                           ],
 //                         ),
 //                         Padding(
-//                           padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01, 
-//                                                     right: MediaQuery.sizeOf(context).width *0.01, 
-//                                                     top: MediaQuery.sizeOf(context).width *0.01, 
+//                           padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width *0.01,
+//                                                     right: MediaQuery.sizeOf(context).width *0.01,
+//                                                     top: MediaQuery.sizeOf(context).width *0.01,
 //                                                     bottom: MediaQuery.sizeOf(context).width *0.01
 //                                                   ),
 //                           child: Container(

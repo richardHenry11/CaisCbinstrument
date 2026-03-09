@@ -12,12 +12,14 @@ class AppLocalizations {
   late Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
-    final jsonString = await rootBundle
-        .loadString('lib/l10n/app_${locale.languageCode}.arb');
+    final jsonString = await rootBundle.loadString(
+      'lib/l10n/app_${locale.languageCode}.arb',
+    );
     final Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-    _localizedStrings =
-        jsonMap.map((key, value) => MapEntry(key, value.toString()));
+    _localizedStrings = jsonMap.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
     return true;
   }
 
@@ -35,8 +37,7 @@ class _AppLocalizationsDelegate
   const _AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      ['id', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['id', 'en'].contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
