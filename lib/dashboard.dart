@@ -124,6 +124,7 @@ class _DashboardState extends State<Dashboard> {
       // ambil foto pertama
       String firstPhoto = photoList.isNotEmpty ? photoList[0] : '';
 
+      if (!mounted) return;
       setState(() {
         // merge base url
         _photoProfile = firstPhoto.isNotEmpty

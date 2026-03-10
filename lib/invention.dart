@@ -59,6 +59,377 @@ class _InventionState extends State<Invention> {
     _loadAPI();
   }
 
+  Widget _itemLists(BuildContext context, Map<String, dynamic> item) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.025),
+              child: Image.asset("assets/gedeBox.png", width: MediaQuery.sizeOf(context).width * 0.05,),
+            ), 
+            Expanded(child: Text(item['nama_barang'], style: TextStyle(color: Color(0xFF4a9eff), fontWeight: FontWeight.w900),)),            
+          ],
+        ),
+        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
+        Row(
+          children: [
+            Text("QR Code: ", style: TextStyle(color: Color(0xFF8b9cb6), fontSize: 12),),
+            Text(item['qr_code'], style: TextStyle(color: Colors.green, fontSize: 12),)
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.01, bottom: MediaQuery.sizeOf(context).height * 0.01),
+          child: Divider(
+            color: Color(0xFF1f2937),
+          ),
+        ),
+
+        //========================== Category ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Kategori", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['kategori'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+        //========================== Kind ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Jenis", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['jenis_barang'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+        //========================== Units ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Satuan", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['satuan'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+        //========================== Stocks ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Stok", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['stok_awal'].toString(), style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+        //========================== Position ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Posisi", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['posisi'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+        //========================== Description ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Tanggal", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['created_at'] == "" ? "-" : item['created_at'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+         //========================== Position ========================
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.03,
+          child: 
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.white
+            //   )
+            // ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: Text("Keterangan", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                ),
+                Expanded(child: Text(item['keterangan'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+              ],
+            ),
+          ),
+        ),
+
+        //============================= Good's Photo Preview ===============================
+        SizedBox(height: MediaQuery.sizeOf(context).height * 0.015,),
+
+        if (item['gambar'] != null && item['gambar'] != "")
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network("https://cais.cbinstrument.com/${item['gambar']}",
+            // height: MediaQuery.sizeOf(context).height * 0.4,
+            // width: double.infinity,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+            return Container(
+              height: 150,
+              color: Colors.black12,
+              child: Center(
+                child: Icon(Icons.broken_image, color: Colors.grey),
+              ),
+            );
+          },
+          ),
+        ),
+
+        //===================== Input Button In and Out ========================
+        SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+        // Input
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.4,
+              height: MediaQuery.sizeOf(context).height * 0.08,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Color(0xFF065f46),
+                  side: BorderSide(
+                    width: 1,
+                    color: Color(0xFF047857)
+                  )
+                ),
+                onPressed: (){
+                  // button funct here!!!
+            
+                }, 
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
+                      child: Text("📥"),
+                    ),
+                    Expanded(child: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFF6ee7b7)),))
+                  ],
+                )
+              ),
+            ),
+
+            // Output
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.4,
+              height: MediaQuery.sizeOf(context).height * 0.08,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Color(0xFF7f1d1d),
+                  side: BorderSide(
+                    width: 1,
+                    color: Color(0xFF991b1b)
+                  )
+                ),
+                onPressed: (){
+                  // button funct here!!!
+
+                }, 
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
+                      child: Text("📥"),
+                    ),
+                    Expanded(child: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFFfca5a5)),))
+                  ],
+                )
+              ),
+            )
+          ],
+        ),
+
+        //------------------------------------- CRUD Button ------------------------------------
+        SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+        // Input
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.4,
+              height: MediaQuery.sizeOf(context).height * 0.08,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Color(0xFF2d4a7c),
+                  side: BorderSide(
+                    width: 1,
+                    color: Color.fromARGB(255, 79, 161, 255)
+                  )
+                ),
+                onPressed: (){
+                  // button funct here!!!
+            
+                }, 
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
+                      child: Text("✏️"),
+                    ),
+                    Expanded(child: Text("Ubah", style: TextStyle(color: Color(0xFF4a9eff)),))
+                  ],
+                )
+              ),
+            ),
+
+            // Output
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.4,
+              height: MediaQuery.sizeOf(context).height * 0.08,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Color(0xFF7f1d1d),
+                  side: BorderSide(
+                    width: 1,
+                    color: Color(0xFF991b1b)
+                  )
+                ),
+                onPressed: (){
+                  // button funct here!!!
+
+                }, 
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
+                      child: Text("🗑️"),
+                    ),
+                    Expanded(child: Text("Hapus", style: TextStyle(color: Color(0xFFfca5a5)),))
+                  ],
+                )
+              ),
+            )
+          ],
+        ),
+      ]
+    );
+  }
+
   Future<DateTime?> _pickDate(BuildContext context) async {
     return await showDatePicker(
       context: context,
@@ -445,16 +816,43 @@ class _InventionState extends State<Invention> {
               ),
 
                 //=============================== Content Inventory ==================================
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      // color: Colors.red
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.03,),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        // color: Colors.red
+                      ),
+                      child: 
+                      _apiTresholder.isEmpty ?
+                      Center(child: Text("No Data", style: TextStyle(color: Colors.white),)) :
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _apiTresholder.length,
+                        itemBuilder: (context, index) {
+                          final items = _apiTresholder[index];
+                  
+                          return 
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                width: 2,
+                                color: Color(0xFF1f2937)
+                              )
+                            ),
+                            color: Color(0xFF131927),
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: _itemLists(context, items),
+                            ),
+                          );
+                        }
+                      )
                     ),
-                    child: 
-                    _apiTresholder.isEmpty ?
-                    Center(child: Text("No Data", style: TextStyle(color: Colors.white),)) :
-                    Text("ada isian", style: TextStyle(color: Colors.green),) 
                   ),
                 )
               ],

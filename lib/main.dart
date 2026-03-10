@@ -174,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 22, 84, 134),
+      backgroundColor: Color(0xFF182234),
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height * 1,
@@ -183,31 +183,31 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.9,
+                  width: 200,
                   child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        // outside glowing
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.3),
-                          blurRadius: 15,
-                          spreadRadius: 2,
-                        ),
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.1),
-                          blurRadius: 30,
-                          spreadRadius: 6,
-                        ),
-                      ],
-                    ),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(12),
+                    //   boxShadow: [
+                    //     // outside glowing
+                    //     BoxShadow(
+                    //       color: Colors.cyanAccent.withOpacity(0.3),
+                    //       blurRadius: 15,
+                    //       spreadRadius: 2,
+                    //     ),
+                    //     BoxShadow(
+                    //       color: Colors.cyanAccent.withOpacity(0.1),
+                    //       blurRadius: 30,
+                    //       spreadRadius: 6,
+                    //     ),
+                    //   ],
+                    // ),
                     child: Card(
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: Colors.blue, width: 1),
+                        side: BorderSide(color: const Color.fromARGB(255, 19, 89, 146), width: 1),
                       ),
-                      color: const Color.fromARGB(255, 5, 37, 93),
+                      color: Color(0xFF334155),
                       child: Column(
                         children: [
                           Padding(
@@ -258,9 +258,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       width:
                                           MediaQuery.sizeOf(context).width *
                                           0.75,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.06,
+                                      // height:
+                                      //     MediaQuery.sizeOf(context).height *
+                                      //     0.06,
                                       child: TextFormField(
                                         style: TextStyle(color: Colors.white),
                                         controller: emailController,
@@ -280,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               20,
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue,
+                                              color: const Color.fromARGB(255, 19, 89, 146),
                                             ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
@@ -288,16 +288,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                               20,
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue,
+                                              color: const Color.fromARGB(255, 19, 89, 146),
                                             ),
                                           ),
                                           filled: true,
-                                          fillColor: const Color.fromARGB(
-                                            255,
-                                            6,
-                                            45,
-                                            111,
-                                          ),
+                                          fillColor: Color(0xFF182234)
                                         ),
                                       ),
                                     ),
@@ -310,9 +305,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       width:
                                           MediaQuery.sizeOf(context).width *
                                           0.75,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.06,
+                                      // height:
+                                      //     MediaQuery.sizeOf(context).height *
+                                      //     0.06,
                                       child: TextFormField(
                                         style: TextStyle(color: Colors.white),
                                         controller: AccessCodeController,
@@ -333,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               20,
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue,
+                                              color: const Color.fromARGB(255, 19, 89, 146),
                                             ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
@@ -341,17 +336,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                               20,
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue,
+                                              color: const Color.fromARGB(255, 19, 89, 146),
                                             ),
                                           ),
                                           filled: true,
-                                          fillColor: const Color.fromARGB(
-                                            255,
-                                            6,
-                                            45,
-                                            111,
-                                          ),
-
+                                          fillColor: Color(0xFF182234),
                                           suffixIcon: IconButton(
                                             onPressed: () {
                                               setState(() {
@@ -384,37 +373,30 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   context,
                                                 ).width *
                                                 0.35,
-                                            height:
-                                                MediaQuery.sizeOf(
-                                                  context,
-                                                ).height *
-                                                0.06,
+                                            // height:
+                                            //     MediaQuery.sizeOf(
+                                            //       context,
+                                            //     ).height *
+                                            //     0.06,
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.cyanAccent
-                                                        .withOpacity(0.3),
-                                                    blurRadius: 15,
-                                                    spreadRadius: 2,
-                                                  ),
-                                                  BoxShadow(
-                                                    color: Colors.cyanAccent
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 30,
-                                                    spreadRadius: 6,
-                                                  ),
+                                                      color: Color(0x663B82F6),
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 0),
+                                                    ),
+                                                    BoxShadow(
+                                                      color: Color(0x663B82F6),
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 0),
+                                                    ),
                                                 ],
                                               ),
                                               child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
-                                                      const Color.fromARGB(
-                                                        255,
-                                                        70,
-                                                        188,
-                                                        242,
-                                                      ),
+                                                      Color(0xFF0066ff),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -454,37 +436,30 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                   ).width *
                                                   0.39,
-                                              height:
-                                                  MediaQuery.sizeOf(
-                                                    context,
-                                                  ).height *
-                                                  0.06,
+                                              // height:
+                                              //     MediaQuery.sizeOf(
+                                              //       context,
+                                              //     ).height *
+                                              //     0.06,
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.cyanAccent
-                                                          .withOpacity(0.3),
-                                                      blurRadius: 15,
-                                                      spreadRadius: 2,
+                                                      color: Color(0x663B82F6),
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 0),
                                                     ),
                                                     BoxShadow(
-                                                      color: Colors.cyanAccent
-                                                          .withOpacity(0.1),
-                                                      blurRadius: 30,
-                                                      spreadRadius: 6,
+                                                      color: Color(0x663B82F6),
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 0),
                                                     ),
                                                   ],
                                                 ),
                                                 child: ElevatedButton(
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        const Color.fromARGB(
-                                                          255,
-                                                          70,
-                                                          188,
-                                                          243,
-                                                        ),
+                                                        Color(0xFF0066ff),
                                                     shape: RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(

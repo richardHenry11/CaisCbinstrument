@@ -267,7 +267,7 @@ class _PilihDinasState extends State<PilihDinas> {
       body: SingleChildScrollView(
         child: SizedBox(
           width: MediaQuery.sizeOf(context).width * 1,
-          height: MediaQuery.sizeOf(context).height * 1,
+          // height: MediaQuery.sizeOf(context).height * 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -432,81 +432,166 @@ class _PilihDinasState extends State<PilihDinas> {
                                 ),
                               ),
 
-                              // ),
-
-                              // SizedBox(width: MediaQuery.sizeOf(context).width * 0.001),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 10.0,
-                                  left: 20.0,
-                                ),
+                                padding: const EdgeInsets.only(bottom: 10, left: 20.0),
                                 child: SizedBox(
                                   width:
                                       MediaQuery.sizeOf(context).width * 0.325,
-                                  child: Container(
-                                    // decoration: BoxDecoration(
-                                    //   boxShadow: [
-                                    //     BoxShadow(
-                                    //       color: Colors.cyanAccent.withOpacity(0.3),
-                                    //       blurRadius: 15,
-                                    //       spreadRadius: 2,
-                                    //     ),
-                                    //     BoxShadow(
-                                    //       color: Colors.cyanAccent.withOpacity(0.1),
-                                    //       blurRadius: 30,
-                                    //       spreadRadius: 6,
-                                    //     )
-                                    //   ]
-                                    // ),
-                                    child: ElevatedButton.icon(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.resolveWith((
-                                              states,
-                                            ) {
-                                              if (states.contains(
-                                                MaterialState.pressed,
-                                              )) {
-                                                return Colors.lightBlue;
-                                              }
-                                              return const Color.fromRGBO(
-                                                30,
-                                                41,
-                                                59,
-                                                1,
-                                              );
-                                            }),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              5,
+                                  // height: MediaQuery.sizeOf(context).width * 0.1,
+                                  child:
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     boxShadow: [
+                                      //       BoxShadow(
+                                      //         color: Colors.cyanAccent.withOpacity(0.3),
+                                      //         blurRadius: 15,
+                                      //         spreadRadius: 2,
+                                      //       ),
+                                      //       BoxShadow(
+                                      //         color: Colors.cyanAccent.withOpacity(0.1),
+                                      //         blurRadius: 30,
+                                      //         spreadRadius: 6,
+                                      //       )
+                                      //     ]
+                                      //   ),
+                                      //   child:
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.resolveWith((
+                                                states,
+                                              ) {
+                                                if (states.contains(
+                                                  MaterialState.pressed,
+                                                )) {
+                                                  return Colors
+                                                      .lightBlue; // warna saat ditekan
+                                                }
+                                                return const Color.fromRGBO(
+                                                  30,
+                                                  41,
+                                                  59,
+                                                  1,
+                                                ); // warna normal
+                                              }),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      onPressed: () {
-                                        _dinasLuar();
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => FieldDuty(),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        MaterialCommunityIcons.map_marker,
-                                        color: Colors.white,
-                                      ),
-                                      label: Text(
-                                        t.translate("field"),
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        onPressed: () {
+                                          _dinasLuar();
+
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FieldDuty(),
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                right: 5.0,
+                                              ),
+                                              child: Icon(
+                                                MaterialCommunityIcons.map_marker,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                t.translate("field"),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ),
                                 ),
                               ),
+
+                              // ),
+
+                              // SizedBox(width: MediaQuery.sizeOf(context).width * 0.001),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //     bottom: 10.0,
+                              //     left: 20.0,
+                              //   ),
+                              //   child: SizedBox(
+                              //     width:
+                              //         MediaQuery.sizeOf(context).width * 0.325,
+                              //     child: Container(
+                              //       // decoration: BoxDecoration(
+                              //       //   boxShadow: [
+                              //       //     BoxShadow(
+                              //       //       color: Colors.cyanAccent.withOpacity(0.3),
+                              //       //       blurRadius: 15,
+                              //       //       spreadRadius: 2,
+                              //       //     ),
+                              //       //     BoxShadow(
+                              //       //       color: Colors.cyanAccent.withOpacity(0.1),
+                              //       //       blurRadius: 30,
+                              //       //       spreadRadius: 6,
+                              //       //     )
+                              //       //   ]
+                              //       // ),
+                              //       child: ElevatedButton.icon(
+                              //         style: ButtonStyle(
+                              //           backgroundColor:
+                              //               MaterialStateProperty.resolveWith((
+                              //                 states,
+                              //               ) {
+                              //                 if (states.contains(
+                              //                   MaterialState.pressed,
+                              //                 )) {
+                              //                   return Colors.lightBlue;
+                              //                 }
+                              //                 return const Color.fromRGBO(
+                              //                   30,
+                              //                   41,
+                              //                   59,
+                              //                   1,
+                              //                 );
+                              //               }),
+                              //           shape: MaterialStateProperty.all(
+                              //             RoundedRectangleBorder(
+                              //               borderRadius: BorderRadius.circular(
+                              //                 5,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //         onPressed: () {
+                              //           _dinasLuar();
+                              //           Navigator.push(
+                              //             context,
+                              //             MaterialPageRoute(
+                              //               builder: (context) => FieldDuty(),
+                              //             ),
+                              //           );
+                              //         },
+                              //         icon: Icon(
+                              //           MaterialCommunityIcons.map_marker,
+                              //           color: Colors.white,
+                              //         ),
+                              //         label: Text(
+                              //           t.translate("field"),
+                              //           style: const TextStyle(
+                              //             color: Colors.white,
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

@@ -8,8 +8,10 @@ class AppSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Drawer(
+    return 
+    // Expanded(
+    //   child: 
+      Drawer(
         backgroundColor: const Color.fromARGB(255, 63, 63, 63),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -70,7 +72,7 @@ class AppSidebar extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      // ),
     );
   }
 

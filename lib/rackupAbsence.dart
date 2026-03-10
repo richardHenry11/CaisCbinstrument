@@ -670,7 +670,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
           children: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
-              height: MediaQuery.sizeOf(context).height * 0.25,
+              // height: MediaQuery.sizeOf(context).height * 0.25,
               child: Container(
                 color: const Color.fromARGB(255, 66, 91, 130),
                 child: Column(
@@ -733,7 +733,7 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                     // submit
                     SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
                     SizedBox(
-                      height: MediaQuery.sizeOf(context).height * 0.05,
+                      // height: MediaQuery.sizeOf(context).height * 0.05,
                       width: MediaQuery.sizeOf(context).width * 0.9,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(

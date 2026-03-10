@@ -431,7 +431,7 @@ class _RegistState extends State<Regist> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 22, 84, 134),
+      backgroundColor: Color(0xFF182234),
       body: SingleChildScrollView(
         // child: SizedBox(
         //   height: MediaQuery.sizeOf(context).height * 1,
@@ -442,27 +442,27 @@ class _RegistState extends State<Regist> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.9,
                 child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      // outside glowing
-                      BoxShadow(
-                        color: Colors.cyanAccent.withOpacity(0.3),
-                        blurRadius: 15,
-                        spreadRadius: 2,
-                      ),
-                      BoxShadow(
-                        color: Colors.cyanAccent.withOpacity(0.1),
-                        blurRadius: 30,
-                        spreadRadius: 6,
-                      ),
-                    ],
-                  ),
+                  // decoration: BoxDecoration(
+                  //   borderRadius: BorderRadius.circular(12),
+                  //   boxShadow: [
+                  //     // outside glowing
+                  //     BoxShadow(
+                  //       color: Colors.cyanAccent.withOpacity(0.3),
+                  //       blurRadius: 15,
+                  //       spreadRadius: 2,
+                  //     ),
+                  //     BoxShadow(
+                  //       color: Colors.cyanAccent.withOpacity(0.1),
+                  //       blurRadius: 30,
+                  //       spreadRadius: 6,
+                  //     ),
+                  //   ],
+                  // ),
                   child: Card(
-                    color: const Color.fromARGB(255, 5, 37, 93),
+                    color: Color(0xFF334155),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(color: Colors.blue, width: 1),
+                      side: BorderSide(color: const Color.fromARGB(255, 19, 89, 146), width: 1),
                     ),
                     child: Column(
                       children: [
@@ -720,7 +720,7 @@ class _RegistState extends State<Regist> {
                                       MediaQuery.sizeOf(context).height * 0.25,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors.blueAccent,
+                                      color: const Color.fromARGB(255, 19, 89, 146),
                                       style: BorderStyle.solid,
                                     ),
                                     borderRadius: BorderRadius.circular(12),
@@ -815,6 +815,7 @@ class _RegistState extends State<Regist> {
                                         ),
                                       ),
                                     ),
+                                    
                                   // ========== take Photo ==========
                                   if (!_isPhotoCompleted)
                                     Padding(
