@@ -183,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 200,
+                  width: 400,
                   child: Container(
                     // decoration: BoxDecoration(
                     //   borderRadius: BorderRadius.circular(12),
@@ -244,248 +244,265 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Form(
                             key: _formKey,
-                            child: SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.75,
-                              child: Container(
-                                // decoration: BoxDecoration(
-                                //   border: Border.all(
-                                //     color: Colors.white
-                                //   )
-                                // ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.sizeOf(context).width *
-                                          0.75,
-                                      // height:
-                                      //     MediaQuery.sizeOf(context).height *
-                                      //     0.06,
-                                      child: TextFormField(
-                                        style: TextStyle(color: Colors.white),
-                                        controller: emailController,
-                                        decoration: InputDecoration(
-                                          hintText: t.translate("username"),
-                                          hintStyle: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              145,
-                                              145,
-                                              145,
+                            child: 
+                            Container(
+                              // decoration: BoxDecoration(
+                              //   border: Border.all(
+                              //     color: Colors.white
+                              //   )
+                              // ),
+                              child: SizedBox(
+                                width: 
+                                // MediaQuery.sizeOf(context).width * 0.75
+                                350,
+                                child: Container(
+                                  // decoration: BoxDecoration(
+                                  //   border: Border.all(
+                                  //     color: Colors.white
+                                  //   )
+                                  // ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            350,
+                                        // height:
+                                        //     MediaQuery.sizeOf(context).height *
+                                        //     0.06,
+                                        child: TextFormField(
+                                          style: TextStyle(color: Colors.white),
+                                          controller: emailController,
+                                          decoration: InputDecoration(
+                                            hintText: t.translate("username"),
+                                            hintStyle: TextStyle(
+                                              color: const Color.fromARGB(
+                                                255,
+                                                145,
+                                                145,
+                                                145,
+                                              ),
+                                              fontSize: 14,
                                             ),
-                                            fontSize: 14,
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              20,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                20,
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: const Color.fromARGB(255, 19, 89, 146),
+                                              ),
                                             ),
-                                            borderSide: BorderSide(
-                                              color: const Color.fromARGB(255, 19, 89, 146),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                20,
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: const Color.fromARGB(255, 19, 89, 146),
+                                              ),
                                             ),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: const Color.fromARGB(255, 19, 89, 146),
-                                            ),
-                                          ),
-                                          filled: true,
-                                          fillColor: Color(0xFF182234)
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.01,
-                                    ),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.sizeOf(context).width *
-                                          0.75,
-                                      // height:
-                                      //     MediaQuery.sizeOf(context).height *
-                                      //     0.06,
-                                      child: TextFormField(
-                                        style: TextStyle(color: Colors.white),
-                                        controller: AccessCodeController,
-                                        obscureText: !_isVisible,
-                                        decoration: InputDecoration(
-                                          hintText: t.translate("password"),
-                                          hintStyle: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              145,
-                                              145,
-                                              145,
-                                            ),
-                                            fontSize: 14,
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: const Color.fromARGB(255, 19, 89, 146),
-                                            ),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: const Color.fromARGB(255, 19, 89, 146),
-                                            ),
-                                          ),
-                                          filled: true,
-                                          fillColor: Color(0xFF182234),
-                                          suffixIcon: IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isVisible = !_isVisible;
-                                              });
-                                            },
-                                            icon: Icon(
-                                              _isVisible == true
-                                                  ? Icons.visibility
-                                                  : Icons.visibility_off,
-                                              color: Colors.grey,
-                                            ),
+                                            filled: true,
+                                            fillColor: Color(0xFF182234)
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 20.0,
-                                        bottom: 15,
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                            0.01,
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          // Regist
-                                          SizedBox(
-                                            width:
-                                                MediaQuery.sizeOf(
-                                                  context,
-                                                ).width *
-                                                0.35,
-                                            // height:
-                                            //     MediaQuery.sizeOf(
-                                            //       context,
-                                            //     ).height *
-                                            //     0.06,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color(0x663B82F6),
-                                                      blurRadius: 20,
-                                                      offset: Offset(0, 0),
-                                                    ),
-                                                    BoxShadow(
-                                                      color: Color(0x663B82F6),
-                                                      blurRadius: 20,
-                                                      offset: Offset(0, 0),
-                                                    ),
-                                                ],
+                                      SizedBox(
+                                        width:
+                                            350,
+                                        // height:
+                                        //     MediaQuery.sizeOf(context).height *
+                                        //     0.06,
+                                        child: TextFormField(
+                                          style: TextStyle(color: Colors.white),
+                                          controller: AccessCodeController,
+                                          obscureText: !_isVisible,
+                                          decoration: InputDecoration(
+                                            hintText: t.translate("password"),
+                                            hintStyle: TextStyle(
+                                              color: const Color.fromARGB(
+                                                255,
+                                                145,
+                                                145,
+                                                145,
                                               ),
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Color(0xFF0066ff),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          15,
-                                                        ),
-                                                  ),
-                                                ),
-                                                onPressed:
-                                                    // button regist funct
-                                                    () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Regist(),
-                                                        ),
-                                                      );
-                                                    },
-                                                child: Text(
-                                                  t.translate("reg"),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
+                                              fontSize: 14,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                20,
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: const Color.fromARGB(255, 19, 89, 146),
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                20,
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: const Color.fromARGB(255, 19, 89, 146),
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Color(0xFF182234),
+                                            suffixIcon: IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  _isVisible = !_isVisible;
+                                                });
+                                              },
+                                              icon: Icon(
+                                                _isVisible == true
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color: Colors.grey,
                                               ),
                                             ),
                                           ),
-
-                                          // login
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 0.0,
-                                            ),
-                                            child: SizedBox(
-                                              width:
-                                                  MediaQuery.sizeOf(
-                                                    context,
-                                                  ).width *
-                                                  0.39,
-                                              // height:
-                                              //     MediaQuery.sizeOf(
-                                              //       context,
-                                              //     ).height *
-                                              //     0.06,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Color(0x663B82F6),
-                                                      blurRadius: 20,
-                                                      offset: Offset(0, 0),
-                                                    ),
-                                                    BoxShadow(
-                                                      color: Color(0x663B82F6),
-                                                      blurRadius: 20,
-                                                      offset: Offset(0, 0),
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Color(0xFF0066ff),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            15,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 20.0,
+                                          bottom: 15,
+                                        ),
+                                        child: 
+                                        
+                                        // SizedBox(
+                                        //   width: 350,
+                                        //   child: 
+                                        //   Container(
+                                        //     decoration: BoxDecoration(
+                                        //       border: Border.all(
+                                        //         color: Colors.white
+                                        //       )
+                                        //     ),
+                                        //     child: 
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                // Regist
+                                                SizedBox(
+                                                  width:
+                                                      150,
+                                                  // height:
+                                                  //     MediaQuery.sizeOf(
+                                                  //       context,
+                                                  //     ).height *
+                                                  //     0.06,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Color(0x663B82F6),
+                                                            blurRadius: 20,
+                                                            offset: Offset(0, 0),
                                                           ),
+                                                          BoxShadow(
+                                                            color: Color(0x663B82F6),
+                                                            blurRadius: 20,
+                                                            offset: Offset(0, 0),
+                                                          ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                  onPressed:
-                                                      // button submit funct
-                                                      () {
-                                                        _login();
-                                                      },
-                                                  child: Text(
-                                                    t.translate("in"),
-                                                    style: TextStyle(
-                                                      color: Colors.white,
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        backgroundColor:
+                                                            Color(0xFF0066ff),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                15,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      onPressed:
+                                                          // button regist funct
+                                                          () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    Regist(),
+                                                              ),
+                                                            );
+                                                          },
+                                                      child: Text(
+                                                        t.translate("reg"),
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
+                                            
+                                                // login
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                    right: 0.0,
+                                                  ),
+                                                  child: 
+                                                  SizedBox(
+                                                    width:
+                                                        150,
+                                                    // height:
+                                                    //     MediaQuery.sizeOf(
+                                                    //       context,
+                                                    //     ).height *
+                                                    //     0.06,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Color(0x663B82F6),
+                                                            blurRadius: 20,
+                                                            offset: Offset(0, 0),
+                                                          ),
+                                                          BoxShadow(
+                                                            color: Color(0x663B82F6),
+                                                            blurRadius: 20,
+                                                            offset: Offset(0, 0),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: ElevatedButton(
+                                                        style: ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              Color(0xFF0066ff),
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  15,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        onPressed:
+                                                            // button submit funct
+                                                            () {
+                                                              _login();
+                                                            },
+                                                        child: Text(
+                                                          t.translate("in"),
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

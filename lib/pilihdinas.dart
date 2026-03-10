@@ -1,5 +1,6 @@
 import 'package:absence/cuti.dart';
 import 'package:absence/cutiLapangan.dart';
+import 'package:absence/cutiSetengah.dart';
 import 'package:absence/dashboard.dart';
 import 'package:absence/drawer.dart';
 import 'package:absence/fieldDuty.dart';
@@ -97,6 +98,7 @@ class _PilihDinasState extends State<PilihDinas> {
   bool isCutiSelected = false;
   bool isCutlapSelected = false;
   bool isSickSelected = false;
+  bool isCutiSetengah = false;
 
   @override
   void initState() {
@@ -180,6 +182,17 @@ class _PilihDinasState extends State<PilihDinas> {
   void _sakit() async {
     final Att_type = "sakit";
     final status = "Sakit";
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('attendance_type', Att_type);
+    await prefs.setString('status', status);
+    print("attendance type: $Att_type");
+    print("shift type: $status");
+  }
+
+  void _cutiSetengah() async {
+    final Att_type = "cuti1/2";
+    final status = "Cuti1/2";
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('attendance_type', Att_type);
@@ -934,6 +947,71 @@ class _PilihDinasState extends State<PilihDinas> {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.7,
+                            child: Container(
+                              // decoration: BoxDecoration(
+                              //   boxShadow: [
+                              //     BoxShadow(
+                              //       color: Colors.cyanAccent.withOpacity(0.3),
+                              //       blurRadius: 15,
+                              //       spreadRadius: 2,
+                              //     ),
+                              //     BoxShadow(
+                              //       color: Colors.cyanAccent.withOpacity(0.1),
+                              //       blurRadius: 30,
+                              //       spreadRadius: 6,
+                              //     )
+                              //   ]
+                              // ),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.resolveWith((
+                                              states,
+                                            ) {
+                                              if (states.contains(
+                                                MaterialState.pressed,
+                                              )) {
+                                                return Colors.lightBlue;
+                                              }
+                                              return const Color.fromRGBO(
+                                                30,
+                                                41,
+                                                59,
+                                                1,
+                                              );
+                                            }),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              5,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                onPressed: () {
+                                  _cutiSetengah();
+                                  // _logout();
+                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Sick()));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CutiSetengah(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  t.translate("Cuti1/2"),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
 

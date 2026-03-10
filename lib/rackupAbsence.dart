@@ -110,10 +110,11 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
             children: [
               Row(
                 children: [
-                  Icon(
-                    MaterialCommunityIcons.calendar,
-                    color: Colors.grey,
-                    size: 15,
+                  Text(
+                    "📅"
+                    // MaterialCommunityIcons.calendar,
+                    // color: Colors.grey,
+                    // size: 15,
                   ),
                   SizedBox(width: 8),
                   Text(
@@ -216,7 +217,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(MaterialCommunityIcons.alarm, color: Colors.red),
+                  Text("⏰"),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Text(
@@ -234,37 +235,43 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
       Divider(color: Colors.grey),
 
       // =================== STATUS ===================
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      Row(
         children: [
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.check_box, color: Colors.green, size: 15),
-              SizedBox(width: 8),
-              Text(
-                t.translate("confirmation"),
-                style: TextStyle(color: Colors.grey),
+              Row(
+                children: [
+                  Icon(Icons.check_box, color: Colors.green, size: 15),
+                  SizedBox(width: 8),
+                  Text(
+                    t.translate("confirmation"),
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+              SizedBox(height: 6),
+              Card(
+                color: item['supervisor_status'] == 'pending'
+                    ? Colors.amber.withOpacity(0.3)
+                    : item['supervisor_status'] == 'approved'
+                    ? Colors.green.withOpacity(0.5)
+                    : Colors.red.withOpacity(0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: Text(
+                    item['supervisor_status'] == 'pending' ? '-' : item['supervisor_status'],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
             ],
           ),
-          SizedBox(height: 6),
-          Card(
-            color: item['supervisor_status'] == 'pending'
-                ? Colors.amber
-                : item['supervisor_status'] == 'approved'
-                ? Colors.green
-                : Colors.red,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Text(
-                item['supervisor_status'] ?? '-',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+
+          
         ],
       ),
 
@@ -443,11 +450,19 @@ Widget _timeColumn(BuildContext context, String title, String? value) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontSize: 12, color: Colors.grey)),
+        Row(
+          children: [
+            Text("⏰"),
+            Text(title, style: TextStyle(fontSize: 12, color: Colors.grey)),
+          ],
+        ),
         SizedBox(height: 4),
-        Text(
-          value == null || value.isEmpty ? "-" : value,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        Padding(
+          padding: const EdgeInsets.only(left: 3.0),
+          child: Text(
+            value == null || value.isEmpty ? "-" : value,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     ),
@@ -475,7 +490,7 @@ Widget _photoButton(
           : null,
       child: Row(
         children: [
-          Icon(MaterialCommunityIcons.camera, size: 16),
+          Text("📷"),
           SizedBox(width: 4),
           Text(label, style: TextStyle(fontSize: 12)),
         ],
@@ -767,12 +782,13 @@ class _RackupAbsenceState extends State<RackupAbsence> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 15,)
                   ],
                 ),
               ),
             ),
 
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
 
             // ===================== ABSENCE CARD ======================
             SizedBox(

@@ -12,7 +12,7 @@ class AppSidebar extends StatelessWidget {
     // Expanded(
     //   child: 
       Drawer(
-        backgroundColor: const Color.fromARGB(255, 63, 63, 63),
+        backgroundColor: const Color.fromRGBO(2, 6, 23, 1),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -21,7 +21,7 @@ class AppSidebar extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width * 1,
                   child: DrawerHeader(
                     decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 60, 122, 228),
+                      color: Color(0xFF182234),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -168,9 +168,9 @@ class _CamAndFileState extends State<CamAndFile> {
       "start_date": _savedStartTime,
       "end_date": _savedEndTime,
       "duration_days": _savedDayDuration,
-      "document_photo_bukti1": photoData,
       "status": _savedStatus,
       "shift_type": "masuk",
+      "document_photo_bukti1": photoData,
     };
 
     print("Bodi: $body");
