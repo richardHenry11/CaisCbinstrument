@@ -1,20 +1,19 @@
 import 'dart:convert';
 
-import 'package:absence/goodInputLists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 // import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-class Invention extends StatefulWidget {
-  const Invention({super.key});
+class GoodInputList extends StatefulWidget {
+  const GoodInputList({super.key});
 
   @override
-  State<Invention> createState() => _InventionState();
+  State<GoodInputList> createState() => _GoodInputListState();
 }
 
-class _InventionState extends State<Invention> {
+class _GoodInputListState extends State<GoodInputList> {
   // dropdown Items
   List<String> _kategoriBarang = [
     "Siap Jual",
@@ -270,96 +269,96 @@ class _InventionState extends State<Invention> {
           ),
         ),
 
-        //============================= Good's Photo Preview ===============================
-        SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+        // //============================= Good's Photo Preview ===============================
+        // SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
 
-        if (item['gambar'] != null && item['gambar'] != "")
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.network("https://cais.cbinstrument.com/${item['gambar']}",
-            // height: MediaQuery.sizeOf(context).height * 0.4,
-            // width: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-            return Container(
-              height: 150,
-              color: Colors.black12,
-              child: Center(
-                child: Icon(Icons.broken_image, color: Colors.grey),
-              ),
-            );
-          },
-          ),
-        ),
+        // if (item['gambar'] != null && item['gambar'] != "")
+        // ClipRRect(
+        //   borderRadius: BorderRadius.circular(10),
+        //   child: Image.network("https://cais.cbinstrument.com/${item['gambar']}",
+        //     // height: MediaQuery.sizeOf(context).height * 0.4,
+        //     // width: double.infinity,
+        //     fit: BoxFit.cover,
+        //     errorBuilder: (context, error, stackTrace) {
+        //     return Container(
+        //       height: 150,
+        //       color: Colors.black12,
+        //       child: Center(
+        //         child: Icon(Icons.broken_image, color: Colors.grey),
+        //       ),
+        //     );
+        //   },
+        //   ),
+        // ),
 
         //===================== Input Button In and Out ========================
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
         // Input
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width * 0.4,
-              height: MediaQuery.sizeOf(context).height * 0.08,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  backgroundColor: Color(0xFF065f46),
-                  side: BorderSide(
-                    width: 1,
-                    color: Color(0xFF047857)
-                  )
-                ),
-                onPressed: (){
-                  // button funct here!!!
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     SizedBox(
+        //       width: MediaQuery.sizeOf(context).width * 0.4,
+        //       height: MediaQuery.sizeOf(context).height * 0.08,
+        //       child: ElevatedButton(
+        //         style: ElevatedButton.styleFrom(
+        //           shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(10),
+        //           ),
+        //           backgroundColor: Color(0xFF065f46),
+        //           side: BorderSide(
+        //             width: 1,
+        //             color: Color(0xFF047857)
+        //           )
+        //         ),
+        //         onPressed: (){
+        //           // button funct here!!!
             
-                }, 
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
-                      child: Text("📥"),
-                    ),
-                    Expanded(child: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFF6ee7b7)),))
-                  ],
-                )
-              ),
-            ),
+        //         }, 
+        //         child: Row(
+        //           children: [
+        //             Padding(
+        //               padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
+        //               child: Text("📥"),
+        //             ),
+        //             Expanded(child: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFF6ee7b7)),))
+        //           ],
+        //         )
+        //       ),
+        //     ),
 
-            // Output
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width * 0.4,
-              height: MediaQuery.sizeOf(context).height * 0.08,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  backgroundColor: Color(0xFF7f1d1d),
-                  side: BorderSide(
-                    width: 1,
-                    color: Color(0xFF991b1b)
-                  )
-                ),
-                onPressed: (){
-                  // button funct here!!!
+        //     // Output
+        //     SizedBox(
+        //       width: MediaQuery.sizeOf(context).width * 0.4,
+        //       height: MediaQuery.sizeOf(context).height * 0.08,
+        //       child: ElevatedButton(
+        //         style: ElevatedButton.styleFrom(
+        //           shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(10),
+        //           ),
+        //           backgroundColor: Color(0xFF7f1d1d),
+        //           side: BorderSide(
+        //             width: 1,
+        //             color: Color(0xFF991b1b)
+        //           )
+        //         ),
+        //         onPressed: (){
+        //           // button funct here!!!
 
-                }, 
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
-                      child: Text("📥"),
-                    ),
-                    Expanded(child: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFFfca5a5)),))
-                  ],
-                )
-              ),
-            )
-          ],
-        ),
+        //         }, 
+        //         child: Row(
+        //           children: [
+        //             Padding(
+        //               padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.015),
+        //               child: Text("📥"),
+        //             ),
+        //             Expanded(child: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFFfca5a5)),))
+        //           ],
+        //         )
+        //       ),
+        //     )
+        //   ],
+        // ),
 
         //------------------------------------- CRUD Button ------------------------------------
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
@@ -476,13 +475,11 @@ class _InventionState extends State<Invention> {
           children: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.1,
-              child: 
-              // Image.asset(
-              //   "assets/gedeBox.png",
-              //   width: MediaQuery.sizeOf(context).width * 0.04,
-              //   height: MediaQuery.sizeOf(context).height * 0.04,
-              // ),
-              Text("📥")
+              child: Image.asset(
+                "assets/gedeBox.png",
+                width: MediaQuery.sizeOf(context).width * 0.04,
+                height: MediaQuery.sizeOf(context).height * 0.04,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
@@ -720,7 +717,7 @@ class _InventionState extends State<Invention> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF2563eb),
-                          shape: RoundedRectangleBorder(
+                          shape: RoundedRectangleBorder(  
                             borderRadius: BorderRadius.circular(10)
                           )
                         ),
@@ -769,10 +766,7 @@ class _InventionState extends State<Invention> {
                                   backgroundColor: Color(0xFF065f46)
                                 ),
                                 onPressed: (){
-                                  Navigator.push(
-                                    context, 
-                                    MaterialPageRoute(builder: (context) => GoodInputList())
-                                  );
+                              
                                 }, 
                                 child: 
                                 Row(
