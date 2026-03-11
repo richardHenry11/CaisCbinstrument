@@ -851,10 +851,12 @@ class _PilihDinasState extends State<PilihDinas> {
                                               color: Colors.white,
                                             ),
                                           ),
-                                          Text(
-                                            t.translate("cutLap"),
-                                            style: TextStyle(
-                                              color: Colors.white,
+                                          Expanded(
+                                            child: Text(
+                                              t.translate("cutLap"),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ],
