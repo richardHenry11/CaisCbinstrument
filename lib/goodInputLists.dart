@@ -66,7 +66,9 @@ class _GoodInputListState extends State<GoodInputList> {
           children: [
             Padding(
               padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.025),
-              child: Image.asset("assets/gedeBox.png", width: MediaQuery.sizeOf(context).width * 0.05,),
+              child: 
+              // Image.asset("assets/gedeBox.png", width: MediaQuery.sizeOf(context).width * 0.05,),
+              Text("📥")
             ), 
             Expanded(child: Text(item['nama_barang'], style: TextStyle(color: Color(0xFF4a9eff), fontWeight: FontWeight.w900),)),            
           ],
@@ -74,8 +76,8 @@ class _GoodInputListState extends State<GoodInputList> {
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.01,),
         Row(
           children: [
-            Text("QR Code: ", style: TextStyle(color: Color(0xFF8b9cb6), fontSize: 12),),
-            Text(item['qr_code'], style: TextStyle(color: Colors.green, fontSize: 12),)
+            Text("QR Code: ", style: TextStyle(color: Color(0xFF8b9cb6), fontSize: 15),),
+            Text(item['qr_code'], style: TextStyle(color: Colors.green, fontSize: 15),)
           ],
         ),
         Padding(
@@ -89,7 +91,7 @@ class _GoodInputListState extends State<GoodInputList> {
         SizedBox(
           height: 
           // 16,
-          16,
+          20,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -101,13 +103,13 @@ class _GoodInputListState extends State<GoodInputList> {
               children: [
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Kategori", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                  child: Text("Kategori", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
                 ),
-                Expanded(child: Text(item['kategori'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+                Expanded(child: Text(item['kategori'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
               ],
             ),
           ),
@@ -115,7 +117,7 @@ class _GoodInputListState extends State<GoodInputList> {
 
         //========================== Kind ========================
         SizedBox(
-          height: 16,
+         height: 20,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -127,99 +129,99 @@ class _GoodInputListState extends State<GoodInputList> {
               children: [
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Jenis", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                  child: Text("Jenis", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
                 ),
-                Expanded(child: Text(item['jenis_barang'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+                Expanded(child: Text(item['jenis_barang'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
               ],
             ),
           ),
         ),
 
         //========================== Units ========================
-        SizedBox(
-          height: 16,
-          child: 
-          Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Satuan", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
-                ),
-                Expanded(child: Text(item['satuan'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
-              ],
-            ),
-          ),
-        ),
+        // SizedBox(
+        //  height: 20,
+        //   child: 
+        //   Container(
+        //     // decoration: BoxDecoration(
+        //     //   border: Border.all(
+        //     //     color: Colors.white
+        //     //   )
+        //     // ),
+        //     child: Row(
+        //       children: [
+        //         SizedBox(
+        //           width: MediaQuery.sizeOf(context).width * 0.25,
+        //           child: Text("Satuan", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
+        //         ),
+        //         Padding(
+        //           padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+        //           child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
+        //         ),
+        //         Expanded(child: Text(item['satuan'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
+        //       ],
+        //     ),
+        //   ),
+        // ),
 
         //========================== Stocks ========================
-        SizedBox(
-          height: 16,
-          child: 
-          Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Stok", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
-                ),
-                Expanded(child: Text(item['stok_awal'].toString(), style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
-              ],
-            ),
-          ),
-        ),
+        // SizedBox(
+        //  height: 20,
+        //   child: 
+        //   Container(
+        //     // decoration: BoxDecoration(
+        //     //   border: Border.all(
+        //     //     color: Colors.white
+        //     //   )
+        //     // ),
+        //     child: Row(
+        //       children: [
+        //         SizedBox(
+        //           width: MediaQuery.sizeOf(context).width * 0.25,
+        //           child: Text("Stok", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
+        //         ),
+        //         Padding(
+        //           padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+        //           child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
+        //         ),
+        //         Expanded(child: Text(item['stok_awal'].toString(), style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
+        //       ],
+        //     ),
+        //   ),
+        // ),
 
         //========================== Position ========================
-        SizedBox(
-          height: 16,
-          child: 
-          Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Posisi", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
-                ),
-                Expanded(child: Text(item['posisi'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
-              ],
-            ),
-          ),
-        ),
+        // SizedBox(
+        //  height: 20,
+        //   child: 
+        //   Container(
+        //     // decoration: BoxDecoration(
+        //     //   border: Border.all(
+        //     //     color: Colors.white
+        //     //   )
+        //     // ),
+        //     child: Row(
+        //       children: [
+        //         SizedBox(
+        //           width: MediaQuery.sizeOf(context).width * 0.25,
+        //           child: Text("Posisi", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
+        //         ),
+        //         Padding(
+        //           padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
+        //           child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
+        //         ),
+        //         Expanded(child: Text(item['posisi'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
+        //       ],
+        //     ),
+        //   ),
+        // ),
 
         //========================== Description ========================
         SizedBox(
-          height: 16,
+         height: 20,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -231,13 +233,13 @@ class _GoodInputListState extends State<GoodInputList> {
               children: [
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Tanggal", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                  child: Text("Tanggal", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
                 ),
-                Expanded(child: Text(item['created_at'] == "" ? "-" : item['created_at'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+                Expanded(child: Text(item['tanggal_jam'] == "" ? "-" : item['tanggal_jam'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
               ],
             ),
           ),
@@ -245,7 +247,7 @@ class _GoodInputListState extends State<GoodInputList> {
 
          //========================== Position ========================
         SizedBox(
-          height: 16,
+         height: 20,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -257,13 +259,14 @@ class _GoodInputListState extends State<GoodInputList> {
               children: [
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.25,
-                  child: Text("Keterangan", style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),)
+                  child: Text("Jumlah Masuk", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),),
+                  child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
                 ),
-                Expanded(child: Text(item['keterangan'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),))
+                Text("+", style: TextStyle(color: Color(0xFF6ee7b7)),),
+                Expanded(child: Text(item['jumlah'].toString(), style: TextStyle(color: Color(0xFF6ee7b7), fontSize: 15),))
               ],
             ),
           ),
@@ -442,8 +445,8 @@ class _GoodInputListState extends State<GoodInputList> {
   }
 
   Future<void> _loadAPI() async {
-    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzQ5NzE2NSwiaWF0IjoxNzcyNjc0NzY1fQ.4K5Q8gdsq1r5qZp_p5s6rir-LKWtPoU_umM-sV-c998";
-    final url = "https://cais.cbinstrument.com/auth/inventory/barang?page=$_page&per_page=$_perPage";
+    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+    final url = "https://cais.cbinstrument.com/auth/inventory/barang-masuk?page=$_page&per_page=$_perPage";
     final headers = {
       "Authorization" : "Bearer $token"
     };
@@ -475,11 +478,13 @@ class _GoodInputListState extends State<GoodInputList> {
           children: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.1,
-              child: Image.asset(
-                "assets/gedeBox.png",
-                width: MediaQuery.sizeOf(context).width * 0.04,
-                height: MediaQuery.sizeOf(context).height * 0.04,
-              ),
+              child: 
+              // Image.asset(
+              //   "assets/gedeBox.png",
+              //   width: MediaQuery.sizeOf(context).width * 0.04,
+              //   height: MediaQuery.sizeOf(context).height * 0.04,
+              // ),
+              Text("📥")
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),

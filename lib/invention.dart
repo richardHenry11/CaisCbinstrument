@@ -477,12 +477,12 @@ class _InventionState extends State<Invention> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.1,
               child: 
-              // Image.asset(
-              //   "assets/gedeBox.png",
-              //   width: MediaQuery.sizeOf(context).width * 0.04,
-              //   height: MediaQuery.sizeOf(context).height * 0.04,
-              // ),
-              Text("📥")
+              Image.asset(
+                "assets/gedeBox.png",
+                width: MediaQuery.sizeOf(context).width * 0.04,
+                height: MediaQuery.sizeOf(context).height * 0.04,
+              ),
+              // Text("📥")
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
