@@ -24,7 +24,7 @@
   "office" : "Office",
   "field" : "Field Duty",
   "wfh" : "WFH",
-  "cuti" : "Cuti",
+  "cuti" : "Leave",
   "cuti1/2" : "Leave 1/2",
   "cutLap" : "Field Leave",
   "sick" : "Sick",
@@ -39,6 +39,8 @@
   "noneedgps" : "No GPS needed ",
   "norphoto" : "nor Photo",
   "dokumenwajib" : "* Document Photo or annual leave",
+  "lemurConfirmation" : "Overtime",
+  "noreport" : "No report",
 
 
   "takePhoto" : "Take Photo",

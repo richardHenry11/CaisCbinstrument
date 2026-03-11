@@ -87,7 +87,9 @@ class _InventionState extends State<Invention> {
 
         //========================== Category ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 
+          // 16,
+          16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -113,7 +115,7 @@ class _InventionState extends State<Invention> {
 
         //========================== Kind ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -139,7 +141,7 @@ class _InventionState extends State<Invention> {
 
         //========================== Units ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -165,7 +167,7 @@ class _InventionState extends State<Invention> {
 
         //========================== Stocks ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -191,7 +193,7 @@ class _InventionState extends State<Invention> {
 
         //========================== Position ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -217,7 +219,7 @@ class _InventionState extends State<Invention> {
 
         //========================== Description ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -243,7 +245,7 @@ class _InventionState extends State<Invention> {
 
          //========================== Position ========================
         SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.03,
+          height: 16,
           child: 
           Container(
             // decoration: BoxDecoration(
@@ -268,7 +270,7 @@ class _InventionState extends State<Invention> {
         ),
 
         //============================= Good's Photo Preview ===============================
-        SizedBox(height: MediaQuery.sizeOf(context).height * 0.015,),
+        SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
 
         if (item['gambar'] != null && item['gambar'] != "")
         ClipRRect(
@@ -706,11 +708,11 @@ class _InventionState extends State<Invention> {
                       ),
                                       // ),
                       
-                                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
-                                      // Button Tambah Barang
-                                      SizedBox(
+                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                      // Button Tambah Barang
+                      SizedBox(
                       width: MediaQuery.sizeOf(context).width * 0.9,
-                      height: MediaQuery.sizeOf(context).height * 0.08,
+                      // height: MediaQuery.sizeOf(context).height * 0.08,
                       child:
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -755,7 +757,7 @@ class _InventionState extends State<Invention> {
                             //================ good's input ===================
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.43,
-                              height: MediaQuery.sizeOf(context).height * 0.06,
+                              // height: MediaQuery.sizeOf(context).height * 0.06,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -768,6 +770,7 @@ class _InventionState extends State<Invention> {
                                 }, 
                                 child: 
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("📥"),
                                     Padding(
@@ -782,7 +785,7 @@ class _InventionState extends State<Invention> {
                             //================ good's output ===================
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.43,
-                              height: MediaQuery.sizeOf(context).height * 0.06,
+                              // height: MediaQuery.sizeOf(context).height * 0.06,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -795,6 +798,7 @@ class _InventionState extends State<Invention> {
                                 }, 
                                 child: 
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("📥"),
                                     Padding(

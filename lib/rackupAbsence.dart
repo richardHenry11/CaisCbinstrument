@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:absence/lateness.dart';
 import 'package:absence/lemur.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+// import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -133,8 +133,8 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
 
           // STATUS (T1, T2, dll)
           SizedBox(
-            width: 60,
-            height: 30,
+            width: 80,
+            height: 50,
             child: Card(
               color:
                   item['status'] == 'Kantor' ||
@@ -143,14 +143,14 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
                       item['status'] == 'T3'
                   ? Colors.green
                   : item['status'] == 'sick'
-                  ? Colors.purpleAccent
+                  ? Color(0xFFa855f7)
                   : item['status'] == 'wfh'
                   ? Colors.blue
-                  : Colors.yellow,
+                  : Colors.yellow.withOpacity(0.8),
               child: Center(
                 child: Text(
-                  item['status'] ?? '-',
-                  style: TextStyle(color: Colors.white),
+                  item['status'] == "leave" ? t.translate("cuti") : item['status'] == "sick" ? t.translate("sick") : item['status'] != "leave" ? item['status'] : "-",
+                  style: TextStyle(color: item['status'] == "leave"? const Color.fromARGB(255, 39, 39, 39): Colors.white),
                 ),
               ),
             ),
@@ -237,41 +237,103 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
       // =================== STATUS ===================
       Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.45,
+            child: Container(
+              // decoration: BoxDecoration(
+              //   border: Border.all(
+              //     color: Colors.white
+              //   )
+              // ),
+              child: Row(
                 children: [
-                  Icon(Icons.check_box, color: Colors.green, size: 15),
-                  SizedBox(width: 8),
-                  Text(
-                    t.translate("confirmation"),
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.check_box, color: Colors.green, size: 15),
+                          SizedBox(width: 8),
+                          Text(
+                            t.translate("confirmation"),
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 6),
+                      Card(
+                        color: item['supervisor_status'] == 'pending'
+                            ? Colors.amber.withOpacity(0.3)
+                            : item['supervisor_status'] == 'approved'
+                            ? Colors.green.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          child: Text(
+                            item['supervisor_status'] == 'pending' ? '-' : item['supervisor_status'],
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),  
                 ],
               ),
-              SizedBox(height: 6),
-              Card(
-                color: item['supervisor_status'] == 'pending'
-                    ? Colors.amber.withOpacity(0.3)
-                    : item['supervisor_status'] == 'approved'
-                    ? Colors.green.withOpacity(0.5)
-                    : Colors.red.withOpacity(0.3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  child: Text(
-                    item['supervisor_status'] == 'pending' ? '-' : item['supervisor_status'],
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
 
-          
+          //================== Overtime Approval =====
+          SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.45,
+            child: Container(
+              // decoration: BoxDecoration(
+              //   border: Border.all(
+              //     color: Colors.white
+              //   )
+              // ),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          // Icon(Icons.check_box, color: Colors.green, size: 15),
+                          Text("⏰"),
+                          SizedBox(width: 8),
+                          Text(
+                            t.translate("lemurConfirmation"),
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 6),
+                      Card(
+                        color: item['supervisor_status'] == 'pending'
+                            ? Colors.amber.withOpacity(0.3)
+                            : item['supervisor_status'] == 'approved'
+                            ? Colors.green.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          child: Text(
+                            item['overtime_approval'] == '' ? t.translate('noreport') : item['overtime_approval'],
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),  
+                ],
+              ),
+            ),
+          ),
         ],
       ),
 
@@ -320,11 +382,12 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
         children: [
           Row(
             children: [
-              Icon(
-                MaterialCommunityIcons.file_document_edit,
-                color: Colors.white,
-                size: 15,
-              ),
+              // Icon(
+              //   MaterialCommunityIcons.file_document_edit,
+              //   color: Colors.white,
+              //   size: 15,
+              // ),
+              Text("📝"),
               Padding(
                 padding: EdgeInsetsGeometry.only(left: 8.0),
                 child: Text(
