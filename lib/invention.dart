@@ -4,6 +4,8 @@ import 'package:absence/addGoods.dart';
 import 'package:absence/editGood.dart';
 import 'package:absence/goodInputLists.dart';
 import 'package:absence/goodOutputLists.dart';
+import 'package:absence/inputGoodsInput.dart';
+import 'package:absence/inputGoodsOutput.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -317,7 +319,10 @@ class _InventionState extends State<Invention> {
                 ),
                 onPressed: (){
                   // button funct here!!!
-            
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => InputGoodsInput(barang: _apiTresholder[index]))
+                  );
                 }, 
                 child: Row(
                   children: [
@@ -348,7 +353,10 @@ class _InventionState extends State<Invention> {
                 ),
                 onPressed: (){
                   // button funct here!!!
-
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => InputGoodsOutput(barang: _apiTresholder[index]))
+                  );
                 }, 
                 child: Row(
                   children: [

@@ -1,30 +1,25 @@
 import 'dart:convert';
-import 'dart:io';
 
-// import 'package:absence/goodInputLists.dart';
-// import 'package:absence/goodOutputLists.dart';
+import 'package:absence/goodInputLists.dart';
 import 'package:absence/goodsKind.dart';
-import 'package:absence/invention.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:permission_handler/permission_handler.dart';
 
-class EditGood extends StatefulWidget {
+class InputGoodsOutput extends StatefulWidget {
 
   final Map<String, dynamic> barang;
 
-  const EditGood({super.key,required this.barang});
+  const InputGoodsOutput({super.key,required this.barang});
 
   @override
-  State<EditGood> createState() => _EditGoodState();
+  State<InputGoodsOutput> createState() => _InputGoodsOutputState();
 }
 
-class _EditGoodState extends State<EditGood> {
+class _InputGoodsOutputState extends State<InputGoodsOutput> {
   //===================== global funct here!! ===========================
   List<String> _kategoriBarang = [
     "Siap Jual",
@@ -42,18 +37,10 @@ class _EditGoodState extends State<EditGood> {
 
   String? _selectedKategori;
 
-  List<String> _units = [
-    "Unit",
-    "Pcs",
-    "Set"
-  ];
-
-  String? _selectedUnit;
-
   // Date state
   DateTime? startDateTime;
   final TextEditingController _startDate = TextEditingController();
-  final DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm:ss");
+  final DateFormat formatter = DateFormat("yyyy-MM-dd'T'HH:mm");
 
   // radio
   String? selectedValue = "Peralatan Kantor";
@@ -61,27 +48,9 @@ class _EditGoodState extends State<EditGood> {
   // TextFieldController
   final TextEditingController _QRCode = TextEditingController();
   final TextEditingController _namaBarang = TextEditingController();
-  final TextEditingController _stokAwal = TextEditingController();
+  final TextEditingController _jumlah = TextEditingController();
   final TextEditingController _keterangan = TextEditingController();
-  // final TextEditingController _satuan = TextEditingController();
-  final TextEditingController _posisiBarang = TextEditingController();
 
-  // Camera permission and converter
-  Future<bool> requestCameraPermission() async {
-    final status = await Permission.camera.request();
-    return status.isGranted;
-  }
-
-  Future<String> imageToBase64(File imageFile) async {
-    final bytes = await imageFile.readAsBytes();
-    return base64Encode(bytes);
-  }
-  final ImagePicker _picker = ImagePicker();
-  File? _photo;
-
-  // Uint8List? _imageBytes;
-
-  String? _imageUrl;
 
 
   //=====================  Functions  ===================================
@@ -93,19 +62,12 @@ class _EditGoodState extends State<EditGood> {
     _namaBarang.text = widget.barang["nama_barang"];
     _selectedKategori = widget.barang["kategori"];
     selectedValue = widget.barang["jenis_barang"];
-    _stokAwal.text = widget.barang["stok_awal"].toString();
+    _jumlah.text = widget.barang["stok_awal"].toString();
     _keterangan.text = widget.barang["keterangan"] ?? "";
-    _selectedUnit = widget.barang['satuan'];
-    _posisiBarang.text = widget.barang['posisi'];
-    final gambar = widget.barang["gambar"];
-
-    if (gambar != null && gambar.isNotEmpty) {
-      _imageUrl = "https://cais.cbinstrument.com/$gambar";
-    }
-
 
     startDateTime = DateFormat("yyyy-MM-dd HH:mm:ss")
     .parse(widget.barang["created_at"]);
+
     _startDate.text = formatter.format(startDateTime!);
   }
 
@@ -141,44 +103,21 @@ class _EditGoodState extends State<EditGood> {
   }
 
   Future<void> _sendAPI() async {
-    String? photoData;
-
-    if (_photo != null) {
-      final base64Image = await imageToBase64(_photo!);
-      photoData = "data:image/jpeg;base64,$base64Image";
-    }
-
-    // debugPrint("PHOTO LENGTH: ${photoData.length}");
-    // debugPrint("PHOTO PREFIX: ${photoData.substring(0, 30)}");
-    // debugPrint("full photo: ${photoData}");
-
-    final id = widget.barang["id"];
     final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
-    final url = "https://cais.cbinstrument.com/auth/inventory/barang/$id";
+    final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar";
     final headers = {"Authorization":"Bearer $token", "Content-Type": "application/json"};
     final body = {
       "id": "0",
       "jenis_barang": selectedValue,
-      "stok_awal": int.parse(_stokAwal.text),
+      "jumlah": int.parse(_jumlah.text),
       "kategori": _selectedKategori,
       "keterangan": _keterangan.text,
       "nama_barang": _namaBarang.text,
       "qr_code": _QRCode.text,
-      "created_at": _startDate.text,
-      "satuan": _selectedUnit,
-      "stok_masuk": 0,
-      "stok_akhir": 3,
-      "barang_masuk": 0,
-      "barang_keluar": 0,
-      "harga_beli": 0,
-      "harga_masuk": 0,
-      // hanya kirim gambar jika ada foto baru
-      if (photoData != null) "gambar": photoData,
+      "tanggal_jam": _startDate.text
     };
-    // print(id);
-    // print(body);
 
-    final sendData = await http.put(
+    final sendData = await http.post(
       Uri.parse(url),
       headers: headers,
       body: jsonEncode(body)
@@ -189,14 +128,14 @@ class _EditGoodState extends State<EditGood> {
       print(bodi);
       _thxShowDialog();
     } else {
+      print(sendData.statusCode);
       final awak = jsonDecode(sendData.body);
       print(awak);
-      print(sendData.statusCode);
-      _confirmFoto();
+      _thxShowDialogPailed();
     }
   }
 
-  Future<void> _confirmFoto() async {
+  Future<void> _thxShowDialogPailed() async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -204,12 +143,11 @@ class _EditGoodState extends State<EditGood> {
         return AlertDialog(
           title: Column(
             children: [
-              Icon(MaterialCommunityIcons.close_circle, color: const Color.fromARGB(255, 191, 65, 56), size: 80),
+              Icon(MaterialCommunityIcons.close_circle, color: const Color.fromARGB(255, 179, 50, 41), size: 80),
               Divider(),
             ],
           ),
-          content: 
-              Text("Silahkan ambil Foto ulang!!", style: TextStyle(color: Color.fromARGB(255, 191, 65, 56))),
+          content: Text("Gagal Menambah Barang Masuk", style: TextStyle(color: const Color.fromARGB(255, 179, 50, 41))),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
@@ -245,8 +183,7 @@ class _EditGoodState extends State<EditGood> {
               Divider(),
             ],
           ),
-          content: 
-              Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
+          content: Text("Data Barang berhasil ditambah", style: TextStyle(color: Colors.green)),
           actions: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 1,
@@ -263,7 +200,7 @@ class _EditGoodState extends State<EditGood> {
 
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => Invention()),
+                    MaterialPageRoute(builder: (context) => GoodInputList()),
                   );
                 },
                 child: Text("OK", style: TextStyle(color: Colors.white)),
@@ -273,43 +210,6 @@ class _EditGoodState extends State<EditGood> {
         );
       },
     );
-  }
-
-  Future<File?> _takePhotoFromGallery() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 75,
-    );
-
-    if (image == null) {
-      return null;
-    }
-    return File(image.path);
-  }
-
-  Future<void> _takePhoto() async {
-    final granted = await requestCameraPermission();
-    if (!granted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
-      return;
-    }
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.camera,
-      preferredCameraDevice: CameraDevice.front,
-      imageQuality: 75,
-    );
-    if (image != null) {
-      setState(() {
-        _photo = File(image.path);
-      });
-
-      debugPrint("Photo Taken: ${image.path}");
-
-      // // Continue Absence
-      // _submitAbsence();
-    }
   }
 
   //===================== UI Scaffold ===================================
@@ -333,7 +233,7 @@ class _EditGoodState extends State<EditGood> {
             ),
           ),
         ),
-        title: Text("Tambah Barang", style: TextStyle(color: Color(0xFF4a9eff)),),
+        title: Text("Input Barang Masuk", style: TextStyle(color: Color(0xFF4a9eff)),),
       ),
 
       // Body
@@ -481,149 +381,9 @@ class _EditGoodState extends State<EditGood> {
                   },
                 ),
               ),
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
-
-              //======================== Photo Section ======================
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.9,
-                child: 
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                      width: 1,
-                      color: Color(0xFF2d4a7c)
-                    )
-                  ),
-                  color: Color(0xFF1f2937),
-                  child: 
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-
-                      if (_photo != null)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.file(
-                            _photo!,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      else if (_imageUrl != null)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            _imageUrl!,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      else
-                        Column(
-                          children: [
-                            Icon(Icons.camera_alt, size: 80, color: Colors.grey),
-                            SizedBox(height: 10),
-                            Text(
-                              "Belum ada Foto",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        ),
-                      // : ClipRRect(
-                      //   borderRadius: BorderRadiusGeometry.circular(20),
-                      //   child: Image.file(_photo!, fit: BoxFit.cover),
-                      //             ),
-                                SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.3),
-                          blurRadius: 15,
-                          spreadRadius: 2,
-                        ),
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.1),
-                          blurRadius: 30,
-                          spreadRadius: 6,
-                        ),
-                      ],
-                    ),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(10),
-                        ),
-                      ),
-                      onPressed: _takePhoto,
-                      icon: const Icon(
-                        Icons.camera_alt_rounded,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        "Ambil Foto",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                                    ),
-                                    Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.3),
-                          blurRadius: 15,
-                          spreadRadius: 2,
-                        ),
-                        BoxShadow(
-                          color: Colors.cyanAccent.withOpacity(0.1),
-                          blurRadius: 30,
-                          spreadRadius: 6,
-                        ),
-                      ],
-                    ),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(10),
-                        ),
-                      ),
-                      onPressed: () async {
-                        final file = await _takePhotoFromGallery();
-                    
-                        if (file != null || file == null) {
-                          setState(() {
-                            _photo = file;
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.folder, color: Colors.white),
-                      label: Text(
-                        "Pilih Dari Gallery",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                                    ),
-                                    // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("test"))
-                                  ],
-                                ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
 
               //=========================== Date Input ================================
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.9,
                 child: TextField(
@@ -664,52 +424,7 @@ class _EditGoodState extends State<EditGood> {
                         ),
               ),
 
-              //=========================== Good's Units ==============================
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-              Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.02),
-                child: 
-                SizedBox(
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      // height: MediaQuery.sizeOf(context).height * 0.06,
-                      child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          fillColor: Color(0xFF1f2937),
-                          filled: true,
-                          labelText: "Unit",
-                          labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 157, 157, 157),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFF2d4a7c)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFF2d4a7c)),
-                          ),
-                        ),
-                        style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
-                        value: _selectedUnit,
-                        items: _units.map((unit) {
-                          return DropdownMenuItem<String>(
-                            value: unit,
-                            child: Text(unit),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedUnit = value;
-                          });
-                        },
-                      ),
-                    ),
-              ),
-
-              //=================================== Stok Awal =======================================
+              //=================================== Quantity =======================================
               SizedBox(height: MediaQuery.sizeOf(context).width * 0.02,),
               Padding(
                 padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.02),
@@ -725,51 +440,11 @@ class _EditGoodState extends State<EditGood> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Stok Awal", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text("Jumlah", style: TextStyle(color: Color(0xFF8b9cb6))),
                         TextFormField(
                           style: TextStyle(color: Color(0xFF8b9cb6)),
-                          controller: _stokAwal,
+                          controller: _jumlah,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Color(0xFF2d4a7c)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Color(0xFF2d4a7c)),
-                                ),
-                                filled: true,
-                                fillColor: Color(0xFF1f2937),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              
-              //=================================== Posisi Barang =======================================
-              SizedBox(height: MediaQuery.sizeOf(context).width * 0.02,),
-              Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.02),
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.9,
-                  child:
-                  Container(
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(
-                    //     color: Colors.white
-                    //   )
-                    // ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Posisi Barang", style: TextStyle(color: Color(0xFF8b9cb6))),
-                        TextFormField(
-                          style: TextStyle(color: Color(0xFF8b9cb6)),
-                          controller: _posisiBarang,
-                          // keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
