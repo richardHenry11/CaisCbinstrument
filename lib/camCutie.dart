@@ -374,7 +374,8 @@ class _CamAndFileState extends State<CamAndFile> {
         child: Column(
           children: [
             Expanded(
-              child: _photo == null
+              child: 
+              _photo == null
                   ? Center(
                       child: Text(
                         t.translate("photoDesk"),

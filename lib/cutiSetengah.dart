@@ -97,7 +97,7 @@ class _CutiSetengahState extends State<CutiSetengah> {
   DateTime? endDateTime;
 
   // dateTime picker formatter
-  final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm');
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
 
   @override
   void initState() {

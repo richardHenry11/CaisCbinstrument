@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:absence/addGoods.dart';
+import 'package:absence/editGood.dart';
 import 'package:absence/goodInputLists.dart';
+import 'package:absence/goodOutputLists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -60,7 +63,7 @@ class _InventionState extends State<Invention> {
     _loadAPI();
   }
 
-  Widget _itemLists(BuildContext context, Map<String, dynamic> item) {
+  Widget _itemLists(BuildContext context, Map<String, dynamic> item, int index) {
     return Column(
       children: [
         Row(
@@ -383,7 +386,10 @@ class _InventionState extends State<Invention> {
                 ),
                 onPressed: (){
                   // button funct here!!!
-            
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => EditGood(barang: _apiTresholder[index]))
+                  );
                 }, 
                 child: Row(
                   children: [
@@ -414,7 +420,7 @@ class _InventionState extends State<Invention> {
                 ),
                 onPressed: (){
                   // button funct here!!!
-
+                  _confirmShowDialog(item["id"]);
                 }, 
                 child: Row(
                   children: [
@@ -462,6 +468,179 @@ class _InventionState extends State<Invention> {
       });
       print("hasil API: $_apiTresholder");
     }
+  }
+
+  Future<void> _delete(String id) async {
+    final token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+    final url = "https://cais.cbinstrument.com/auth/inventory/barang/$id";
+    final headers = {"Authorization" : token};
+
+    final responseAPI = await http.delete(
+      Uri.parse(url),
+      headers: headers
+    );
+
+    if(responseAPI.statusCode == 200){
+      setState(() {
+        _apiTresholder.removeWhere((item) => item["id"] == id);
+      });
+      _thxShowDialog();      
+    } else {
+      _thxShowDialogFailed();
+    }
+  }
+
+  Future<void> _thxShowDialogFailed() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              // Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
+              Icon(MaterialCommunityIcons.close_circle, color: Color(0xFF7f1d1d), size: 80),
+              Divider(),
+            ],
+          ),
+          content: Text("Data berhasil di hapus"),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: () {
+                  // button Funct
+                  Navigator.of(context).pop();
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => GoodInputList()),
+                  );
+                  
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Gagal menghapus barang")),
+                  );
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _thxShowDialog() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              // Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
+              Icon(MaterialCommunityIcons.check_circle, color: Colors.green, size: 80),
+              Divider(),
+            ],
+          ),
+          content: Text("Data berhasil di hapus"),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: () {
+                  // button Funct
+                  Navigator.of(context).pop();
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Invention()),
+                  );
+                  
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Barang berhasil dihapus")),
+                  );
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmShowDialog(String id) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              // Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
+              Icon(MaterialCommunityIcons.alert_box, color: const Color.fromARGB(255, 139, 129, 36), size: 80),
+              Divider(),
+            ],
+          ),
+          content: Text("Apakah Anda Yakin??!!??"),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                      backgroundColor: Colors.grey,
+                    ),
+                    onPressed: () {
+                      // button Funct
+                      Navigator.of(context).pop();                      
+                    },
+                    child: Text("Cancel", style: TextStyle(color: const Color.fromARGB(255, 92, 92, 92))),
+                  ),
+                ),
+
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                    onPressed: () {
+                      // button Funct
+                      Navigator.of(context).pop();
+                      // final id = _apiTresholder[index]["id"];
+                      _delete(id);
+                    },
+                    child: Text("OK", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
 
@@ -725,7 +904,11 @@ class _InventionState extends State<Invention> {
                           )
                         ),
                         onPressed: (){
-                          
+                          // Button Funct here!!
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => AddGoods())
+                          );                        
                         }, 
                         child:
                         Row(
@@ -800,7 +983,12 @@ class _InventionState extends State<Invention> {
                                   backgroundColor: Color(0xFF7f1d1d)
                                 ),
                                 onPressed: (){
-                              
+                                  Navigator.push(
+                                    context, 
+                                    MaterialPageRoute(
+                                      builder: (context) => GoodOutputLists()
+                                    )
+                                  );
                                 }, 
                                 child: 
                                 Row(
@@ -857,7 +1045,7 @@ class _InventionState extends State<Invention> {
                             margin: const EdgeInsets.only(bottom: 12),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: _itemLists(context, items),
+                              child: _itemLists(context, items, index),
                             ),
                           );
                         }

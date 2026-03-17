@@ -1,22 +1,24 @@
 import 'dart:convert';
 
-import 'package:absence/addGoodInput.dart';
-import 'package:absence/editGoodInput.dart';
-import 'package:absence/goodOutputLists.dart';
+// import 'package:absence/addGoodInput.dart';
+import 'package:absence/addGoodOutput.dart';
+// import 'package:absence/editGoodInput.dart';
+import 'package:absence/editGoodOutput.dart';
+import 'package:absence/goodInputLists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 // import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-class GoodInputList extends StatefulWidget {
-  const GoodInputList({super.key});
+class GoodOutputLists extends StatefulWidget {
+  const GoodOutputLists({super.key});
 
   @override
-  State<GoodInputList> createState() => _GoodInputListState();
+  State<GoodOutputLists> createState() => _GoodOutputListsState();
 }
 
-class _GoodInputListState extends State<GoodInputList> {
+class _GoodOutputListsState extends State<GoodOutputLists> {
   // dropdown Items
   List<String> _kategoriBarang = [
     "Siap Jual",
@@ -390,7 +392,7 @@ class _GoodInputListState extends State<GoodInputList> {
                   // button funct here!!!
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => EditGoodInput(
+                    MaterialPageRoute(builder: (context) => EditGoodOutput(
                       barang: _apiTresholder[index],
                     ))
                   );
@@ -454,7 +456,7 @@ class _GoodInputListState extends State<GoodInputList> {
 
   Future<void> _loadAPI() async {
     final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
-    final url = "https://cais.cbinstrument.com/auth/inventory/barang-masuk?page=$_page&per_page=$_perPage";
+    final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar?page=$_page&per_page=$_perPage";
     final headers = {
       "Authorization" : "Bearer $token"
     };
@@ -476,7 +478,7 @@ class _GoodInputListState extends State<GoodInputList> {
 
   Future<void> _delete(String id) async {
     final token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
-    final url = "https://cais.cbinstrument.com/auth/inventory/barang-masuk/$id";
+    final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar/$id";
     final headers = {"Authorization" : token};
 
     final responseAPI = await http.delete(
@@ -585,11 +587,21 @@ class _GoodInputListState extends State<GoodInputList> {
 
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => GoodInputList()),
+                    MaterialPageRoute(builder: (context) => GoodOutputLists()),
                   );
                   
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Barang berhasil dihapus")),
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Row(
+                        children: [
+                          Text("Barang berhasil dihapus"),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Icon(MaterialCommunityIcons.check_circle, color: Colors.white,),
+                          )
+                        ],
+                      )),
                   );
                 },
                 child: Text("OK", style: TextStyle(color: Colors.white)),
@@ -672,8 +684,8 @@ class _GoodInputListState extends State<GoodInputList> {
               child: Column(
                 children: [
                   Text(
-                    "Barang Masuk",
-                    style: TextStyle(color: Color(0xFF4a9eff)),
+                    "Barang Keluar",
+                    style: TextStyle(color: Color(0xFFfca5a5)),
                   ),
                   Text(
                     "Management Stok & peminjaman",
@@ -903,7 +915,7 @@ class _GoodInputListState extends State<GoodInputList> {
                       child:
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF047857),
+                          backgroundColor: Color(0xFF7f1d1d),
                           shape: RoundedRectangleBorder(  
                             borderRadius: BorderRadius.circular(10)
                           )
@@ -912,17 +924,17 @@ class _GoodInputListState extends State<GoodInputList> {
                           // Button Funct here!!
                           Navigator.push(
                             context, 
-                            MaterialPageRoute(builder: (context) => Addgoodinput())
+                            MaterialPageRoute(builder: (context) => Addgoodoutput())
                           );
                         }, 
                         child:
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(MaterialCommunityIcons.plus_circle, color: Colors.green, size: MediaQuery.sizeOf(context).height * 0.03,),
+                            Icon(MaterialCommunityIcons.plus_circle, color: Color.fromARGB(255, 189, 189, 189), size: MediaQuery.sizeOf(context).height * 0.03,),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: Text("Tambah Barang Masuk", style: TextStyle(color: Colors.white),),
+                              child: Text("Tambah Barang Keluar", style: TextStyle(color: Colors.white),),
                             ),
                       
                           ],
@@ -957,7 +969,10 @@ class _GoodInputListState extends State<GoodInputList> {
                                   backgroundColor: Color(0xFF065f46)
                                 ),
                                 onPressed: (){
-                              
+                                  Navigator.push(
+                                    context, 
+                                    MaterialPageRoute(builder: (context) => GoodInputList())
+                                  );
                                 }, 
                                 child: 
                                 Row(
@@ -985,12 +1000,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                   backgroundColor: Color(0xFF7f1d1d)
                                 ),
                                 onPressed: (){
-                                  Navigator.push(
-                                    context, 
-                                    MaterialPageRoute(
-                                      builder: (context) => GoodOutputLists()
-                                    )
-                                  );
+                              
                                 }, 
                                 child: 
                                 Row(
@@ -1040,7 +1050,7 @@ class _GoodInputListState extends State<GoodInputList> {
                               borderRadius: BorderRadius.circular(10),
                               side: BorderSide(
                                 width: 2,
-                                color: Color(0xFF047857)
+                                color: Color(0xFF7f1d1d)
                               )
                             ),
                             color: Color(0xFF131927),
