@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:absence/goodInputLists.dart';
+// import 'package:absence/goodInputLists.dart';
+import 'package:absence/goodOutputLists.dart';
 import 'package:absence/goodsKind.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -200,7 +201,7 @@ class _InputGoodsOutputState extends State<InputGoodsOutput> {
 
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => GoodInputList()),
+                    MaterialPageRoute(builder: (context) => GoodOutputLists()),
                   );
                 },
                 child: Text("OK", style: TextStyle(color: Colors.white)),
