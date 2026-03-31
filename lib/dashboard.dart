@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absence/dashboardDua.dart';
 import 'package:absence/invention.dart';
 import 'package:absence/l10n/app_localizations.dart';
 // import 'package:absence/lateness.dart';
@@ -72,8 +73,7 @@ class _DashboardState extends State<Dashboard> {
   Future<void> _prefsCatcher() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _userPref = _prefs.getString('user') ?? 'who are you?';
-    _tokenPrefs =
-        _prefs.getString('token') ?? 'there is no token here, go away';
+    _tokenPrefs =_prefs.getString('token') ?? 'there is no token here, go away';
     _namePrefs = _prefs.getString('name') ?? 'who are you again?';
     _idPrefs = _prefs.getString('id') ?? 'unIDfied :D';
     _isLoggedInPrefs = _prefs.getBool('isLoggedIn');
@@ -235,7 +235,7 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40, color: Colors.cyanAccent),
+            Icon(icon, size: 40, color: icon == Icons.logout ? Colors.red : Colors.cyanAccent,),
             const SizedBox(height: 12),
             Text(
               title,
@@ -371,11 +371,14 @@ class _DashboardState extends State<Dashboard> {
               mainAxisSpacing: 16,
               childAspectRatio: 1, // square (adjustable height and width)
               children: [
-                // menuCard(Icons.dashboard, "Dashboard",
-                //   (){
-                //     // Button funct
-                //   }
-                // ),
+                menuCard(Icons.dashboard, t.translate("dabor"), () {
+                  // Funct Button here!
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => DashboardDua())
+                  );
+                }),
+
                 menuCard(Icons.how_to_reg, t.translate("absentDashboard"), () {
                   // Button funct
                   Navigator.pushReplacement(
@@ -395,11 +398,21 @@ class _DashboardState extends State<Dashboard> {
                 //      Navigator.push(context, MaterialPageRoute(builder: (context) => Lemur()));
                 //   }
                 // ),
-                // menuCard(Icons.bar_chart, t.translate("disiplineGraph"),
-                //   (){
-                //     // Button funct
-                //   }
-                // ),
+                menuCard(Icons.access_time, t.translate("rackupAbsent"), () {
+                  //Button Funct
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RackupAbsence()),
+                  );
+                }),
+
+                menuCard(Icons.report, t.translate("dailyReport"),
+                  (){
+                    // Button funct
+
+                  }
+                ),
+
                 menuCard(Icons.inventory, t.translate("inputGoods"), () {
                   // Button funct
                   Navigator.push(
@@ -416,16 +429,7 @@ class _DashboardState extends State<Dashboard> {
                 //     );
                 //   }
                 // ),
-                menuCard(Icons.dashboard, t.translate("dabor"), () {
-                  // Funct Button here!
-                }),
-                menuCard(Icons.access_time, t.translate("rackupAbsent"), () {
-                  //Button Funct
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RackupAbsence()),
-                  );
-                }),
+                
                 menuCard(Icons.logout, t.translate("logout"), () async {
                   await _logout();
                 }),

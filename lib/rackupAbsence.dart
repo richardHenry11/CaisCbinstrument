@@ -412,7 +412,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
           ),
 
           // Lateness Button
-          if (isLate(item['check_in']))
+          if (item['status'] == "T2" || item['status'] == "T3" || item['status'] == "late" )
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: SizedBox(
