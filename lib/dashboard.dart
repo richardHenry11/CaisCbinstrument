@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absence/dailyReport.dart';
 import 'package:absence/dashboardDua.dart';
 import 'package:absence/invention.dart';
 import 'package:absence/l10n/app_localizations.dart';
@@ -8,6 +9,7 @@ import 'package:absence/l10n/app_localizations.dart';
 import 'package:absence/main.dart';
 import 'package:absence/pilihdinas.dart';
 import 'package:absence/rackupAbsence.dart';
+import 'package:absence/test.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as ktp;
@@ -409,7 +411,10 @@ class _DashboardState extends State<Dashboard> {
                 menuCard(Icons.report, t.translate("dailyReport"),
                   (){
                     // Button funct
-
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => DailyReport())
+                    );
                   }
                 ),
 
@@ -420,15 +425,15 @@ class _DashboardState extends State<Dashboard> {
                     MaterialPageRoute(builder: (context) => Invention()),
                   );
                 }),
-                // menuCard(Icons.warning, t.translate("lateness"),
-                //   (){
-                //     // Button funct
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => Lateness())
-                //     );
-                //   }
-                // ),
+                menuCard(Icons.warning, "test dropdown",
+                  (){
+                    // Button funct
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SimpleChat())
+                    );
+                  }
+                ),
                 
                 menuCard(Icons.logout, t.translate("logout"), () async {
                   await _logout();

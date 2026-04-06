@@ -269,7 +269,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         // height:
                                         //     MediaQuery.sizeOf(context).height *
                                         //     0.06,
-                                        child: TextFormField(
+                                        child: 
+                                        TextFormField(
                                           style: TextStyle(color: Colors.white),
                                           controller: emailController,
                                           decoration: InputDecoration(

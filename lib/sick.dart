@@ -126,8 +126,7 @@ class _SickState extends State<Sick> {
       _savedToken = prefs.getString('token') ?? "this is token";
       _savedName = prefs.getString('name') ?? "who is this?";
       _savedStatus = prefs.getString('status') ?? "which type r u?";
-      _savedAttType =
-          prefs.getString('attendance_type') ?? "what att type r u?";
+      _savedAttType = prefs.getString('attendance_type') ?? "what att type r u?";
       _savedShiftType = prefs.getString('shift_type');
       _startDatepref = prefs.getString('start_date');
       _endDatePref = prefs.getString('end_date');

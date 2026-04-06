@@ -412,7 +412,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
           ),
 
           // Lateness Button
-          if (item['status'] == "T2" || item['status'] == "T3" || item['status'] == "late" )
+          if (item['status'] == "T3" || item['status'] == "late" )
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: SizedBox(
@@ -637,11 +637,13 @@ class _RackupAbsenceState extends State<RackupAbsence> {
       if (responses.statusCode == 200) {
         final body = jsonDecode(responses.body);
 
+      if(!mounted) return;
         setState(() {
           absences = body.cast<Map<String, dynamic>>();
         });
       }
     } finally {
+      if(!mounted) return;
       // 🔄 matikan loader
       setState(() {
         isLoading = false;
