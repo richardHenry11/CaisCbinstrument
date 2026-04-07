@@ -51,8 +51,12 @@ class _InventionState extends State<Invention> {
   DateTime? endDateTime;
 
   // pages
-  final _page = 1;
-  final _perPage = 20;
+  int _page = 1;
+  final int _perPage = 20;
+  bool _isLoading = false;
+  bool _hasMore = true;
+
+  ScrollController _scrollController = ScrollController();
 
   // list map API result tresholder
   List<Map<String, dynamic>> _apiTresholder = [];
@@ -64,42 +68,68 @@ class _InventionState extends State<Invention> {
     // TODO: implement initState
     super.initState();
     _loadAPI();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          !_isLoading &&
+          _hasMore) {
+        _loadMore();
+      }
+    });
   }
 
-  // Future<void> _fetchFilteredData() async {
-  //   final token =
-  //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+  Future<void> _loadMore() async {
+    if (_isLoading) return;
 
-  //   final queryParams = {
-  //     "page": "$_page",
-  //     "per_page": "$_perPage",
-  //     if (_search.text.isNotEmpty) "search": _search.text,
-  //     if (_selectedKategori != null) "kategori": _selectedKategori!,
-  //     if (_startDate.text.isNotEmpty) "start_date": _startDate.text,
-  //     if (_endDate.text.isNotEmpty) "end_date": _endDate.text,
-  //   };
+    setState(() {
+      _isLoading = true;
+    });
 
-  //   final uri = Uri.https(
-  //     "cais.cbinstrument.com",
-  //     "/auth/inventory/barang",
-  //     queryParams,
-  //   );
+    _page++;
 
-  //   print("category: $_selectedKategori");
-  //   print("URL FILTER: $uri");
+    final response = await _fetchData(_page);
 
-  //   final response = await http.get(uri, headers: {"Authorization": token});
+    setState(() {
+      _apiTresholder.addAll(response);
+      _isLoading = false;
 
-  //   if (response.statusCode == 200) {
-  //     final body = jsonDecode(response.body);
+      if (response.isEmpty) {
+        _hasMore = false;
+      }
+    });
 
-  //     setState(() {
-  //       _apiTresholder = List<Map<String, dynamic>>.from(body["data"]);
-  //     });
-  //   } else {
-  //     print("Error filter: ${response.body}");
-  //   }
-  // }
+    _applyFilter(); // penting
+  }
+
+  Future<void> _loadAPI() async {
+    _page = 1;
+    _hasMore = true;
+
+    final response = await _fetchData(_page);
+
+    setState(() {
+      _apiTresholder = response;
+      _filteredData = response;
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchData(int page) async {
+    final token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzQ5NzE2NSwiaWF0IjoxNzcyNjc0NzY1fQ.4K5Q8gdsq1r5qZp_p5s6rir-LKWtPoU_umM-sV-c998";
+    final url =
+        "https://cais.cbinstrument.com/auth/inventory/barang?page=$page&per_page=$_perPage";
+    final headers = {"Authorization": "Bearer $token"};
+
+    final responseAPI = await http.get(Uri.parse(url), headers: headers);
+
+    if (responseAPI.statusCode == 200) {
+      final body = jsonDecode(responseAPI.body);
+      return List<Map<String, dynamic>>.from(body["data"]);
+    } else {
+      return [];
+    }
+  }
 
   void _applyFilter() {
     final search = _search.text.toLowerCase();
@@ -111,15 +141,16 @@ class _InventionState extends State<Invention> {
         final qr = (item['qr_code'] ?? "").toLowerCase();
         final kat = (item['kategori'] ?? "");
 
-        final matchSearch = 
-          search.isEmpty ||
-          nama.contains(search) ||
-          qr.contains(search);
+        final keywords = search.split(" ");
 
-        final matchKategori =
-          kategori == null || kategori == "Pilih Kategori"
-          ? true
-          : kat == kategori;
+        final matchSearch = search.isEmpty ||
+        keywords.every((k) =>
+          nama.contains(k) || qr.contains(k)
+        );
+
+        final matchKategori = kategori == null || kategori == "Pilih Kategori"
+            ? true
+            : kat == kategori;
 
         return matchSearch && matchKategori;
       }).toList();
@@ -182,11 +213,6 @@ class _InventionState extends State<Invention> {
               // 16,
               16,
           child: Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
             child: Row(
               children: [
                 SizedBox(
@@ -258,11 +284,6 @@ class _InventionState extends State<Invention> {
         SizedBox(
           height: 16,
           child: Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
             child: Row(
               children: [
                 SizedBox(
@@ -296,11 +317,6 @@ class _InventionState extends State<Invention> {
         SizedBox(
           height: 16,
           child: Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
             child: Row(
               children: [
                 SizedBox(
@@ -334,11 +350,6 @@ class _InventionState extends State<Invention> {
         SizedBox(
           height: 16,
           child: Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
             child: Row(
               children: [
                 SizedBox(
@@ -410,11 +421,6 @@ class _InventionState extends State<Invention> {
         SizedBox(
           height: 16,
           child: Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.white
-            //   )
-            // ),
             child: Row(
               children: [
                 SizedBox(
@@ -654,26 +660,6 @@ class _InventionState extends State<Invention> {
     );
   }
 
-  Future<void> _loadAPI() async {
-    final token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzQ5NzE2NSwiaWF0IjoxNzcyNjc0NzY1fQ.4K5Q8gdsq1r5qZp_p5s6rir-LKWtPoU_umM-sV-c998";
-    final url =
-        "https://cais.cbinstrument.com/auth/inventory/barang?page=$_page&per_page=$_perPage";
-    final headers = {"Authorization": "Bearer $token"};
-
-    final responseAPI = await http.get(Uri.parse(url), headers: headers);
-
-    if (responseAPI.statusCode == 200) {
-      final bodi = jsonDecode(responseAPI.body);
-
-      setState(() {
-        _apiTresholder = List<Map<String, dynamic>>.from(bodi["data"]);
-        _filteredData = _apiTresholder;
-      });
-      print("hasil API: $_apiTresholder");
-    }
-  }
-
   Future<void> _delete(String id) async {
     final token =
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
@@ -909,16 +895,10 @@ class _InventionState extends State<Invention> {
         ),
       ),
 
-      body: SingleChildScrollView(
+      body: 
+      SingleChildScrollView(
+        controller: _scrollController,
         child:
-            // Container(
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       width: 1,
-            //       color: Colors.white
-            //     )
-            //   ),
-            //   child:
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -946,7 +926,9 @@ class _InventionState extends State<Invention> {
                             child: TextFormField(
                               onChanged: (value) => _applyFilter(),
                               controller: _search,
-                              style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 157, 157, 157),
+                              ),
                               decoration: InputDecoration(
                                 hint: Row(
                                   children: [
@@ -1033,7 +1015,7 @@ class _InventionState extends State<Invention> {
                                 setState(() {
                                   _selectedKategori = value;
                                 });
-                                 _applyFilter();
+                                _applyFilter();
                               },
                             ),
                           ),
@@ -1042,15 +1024,6 @@ class _InventionState extends State<Invention> {
                             height: MediaQuery.sizeOf(context).height * 0.02,
                           ),
 
-                          //=================== date filters =======================
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     border: Border.all(
-                          //       width: 1,
-                          //       color: Colors.white
-                          //     )
-                          //   ),
-                          //   child:
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1163,20 +1136,7 @@ class _InventionState extends State<Invention> {
                               ),
                             ],
                           ),
-                          // SizedBox(
-                          //   width: MediaQuery.sizeOf(context).width * 0.9,
-                          //   child: ElevatedButton(
-                          //     style: ElevatedButton.styleFrom(
-                          //       backgroundColor: Color(0xFF2563eb),
-                          //     ),
-                          //     onPressed: () async {
-                          //       await _fetchFilteredData();
-                          //     },
-                          //     child: Text("Apply Filter", style: TextStyle(color: Colors.white),),
-                          //   ),
-                          // ),
-
-                          // ),
+    
                           SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.02,
                           ),
@@ -1347,14 +1307,46 @@ class _InventionState extends State<Invention> {
                       decoration: BoxDecoration(
                         // color: Colors.red
                       ),
-                      child: _apiTresholder.isEmpty
+                      child: _filteredData.isEmpty
                           ? Center(
-                              child: Text(
-                                "No Data",
-                                style: TextStyle(color: Colors.white),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      "📦",
+                                      style: TextStyle(fontSize: 50),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Belum ada Barang",
+                                    style: TextStyle(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        159,
+                                        159,
+                                        159,
+                                      ),
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Klik tombol 'Tambah Barang' untuk memulai",
+                                    style: TextStyle(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        159,
+                                        159,
+                                        159,
+                                      ),
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
                               ),
                             )
                           : ListView.builder(
+                              // controller: _scrollController,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: _filteredData.length,

@@ -19,6 +19,10 @@ class GoodOutputLists extends StatefulWidget {
 }
 
 class _GoodOutputListsState extends State<GoodOutputLists> {
+  TextEditingController _search = TextEditingController();
+
+  // List<Map<String, dynamic>> _allData = [];
+  List<Map<String, dynamic>> _filteredData = [];
   // dropdown Items
   List<String> _kategoriBarang = [
     "Siap Jual",
@@ -62,6 +66,31 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
     // TODO: implement initState
     super.initState();
     _loadAPI();
+  }
+
+  void _applyFilter() {
+    final search = _search.text.toLowerCase();
+    final kategori = _selectedKategori;
+
+    setState(() {
+      _filteredData = _apiTresholder.where((item) {
+        final nama = (item['nama_barang'] ?? "").toLowerCase();
+        final qr = (item['qr_code'] ?? "").toLowerCase();
+        final kat = (item['kategori'] ?? "");
+
+        final matchSearch = 
+          search.isEmpty ||
+          nama.contains(search) ||
+          qr.contains(search);
+
+        final matchKategori =
+          kategori == null || kategori == "Pilih Kategori"
+          ? true
+          : kat == kategori;
+
+        return matchSearch && matchKategori;
+      }).toList();
+    });
   }
 
   Widget _itemLists(BuildContext context, Map<String, dynamic> item, int index) {
@@ -471,6 +500,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
 
       setState(() {
         _apiTresholder = List<Map<String, dynamic>>.from(bodi["data"]);
+        _filteredData = _apiTresholder;
       });
       print("hasil API: $_apiTresholder");
     }
@@ -745,6 +775,9 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                         width: MediaQuery.sizeOf(context).width * 0.9,
                         child: 
                         TextFormField(
+                          controller: _search,
+                          onChanged: (value) => _applyFilter(),
+                          style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
                           decoration: InputDecoration(
                             hint: Row(
                               children: [
@@ -812,6 +845,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                           setState(() {
                             _selectedKategori = value;
                           });
+                          _applyFilter();
                         },
                       ),
                                       ),
@@ -1035,14 +1069,14 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                         // color: Colors.red
                       ),
                       child: 
-                      _apiTresholder.isEmpty ?
+                      _filteredData.isEmpty ?
                       Center(child: Text("No Data", style: TextStyle(color: Colors.white),)) :
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: _apiTresholder.length,
+                        itemCount: _filteredData.length,
                         itemBuilder: (context, index) {
-                          final items = _apiTresholder[index];
+                          final items = _filteredData[index];
                   
                           return 
                           Card(
