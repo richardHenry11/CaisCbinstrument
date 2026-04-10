@@ -99,7 +99,7 @@ class _InventionState extends State<Invention> {
       }
     });
 
-    _applyFilter(); // penting
+    _applyFilter();
   }
 
   Future<void> _loadAPI() async {
@@ -142,6 +142,17 @@ class _InventionState extends State<Invention> {
         final kat = (item['kategori'] ?? "");
 
         final keywords = search.split(" ");
+        final date = item['tanggal_jam'];
+
+        //============ Date Parse ===============
+        DateTime? dateTime;
+        if (date != null) {
+          try {
+            dateTime = DateTime.parse(date);
+          } catch (e) {
+            dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+          }
+        }
 
         final matchSearch = search.isEmpty ||
         keywords.every((k) =>
@@ -152,7 +163,41 @@ class _InventionState extends State<Invention> {
             ? true
             : kat == kategori;
 
-        return matchSearch && matchKategori;
+        final matchDate = (() {
+          if (dateTime == null) return true;
+
+          DateTime? start;
+          DateTime? end;
+
+          if (startDateTime != null) {
+            start = DateTime(
+              startDateTime!.year,
+              startDateTime!.month,
+              startDateTime!.day,
+              0,
+              0,
+              0,
+            );
+          }
+
+          if (endDateTime != null) {
+            end = DateTime(
+              endDateTime!.year,
+              endDateTime!.month,
+              endDateTime!.day,
+              23,
+              59,
+              59,
+            );
+          }
+
+          if (start != null && dateTime.isBefore(start)) return false;
+          if (end != null && dateTime.isAfter(end)) return false;
+
+          return true;
+        })();
+
+        return matchSearch && matchKategori && matchDate;
       }).toList();
     });
   }
@@ -848,6 +893,13 @@ class _InventionState extends State<Invention> {
     );
   }
 
+  @override
+  void dispose() {
+    // workingListCtrl.dispose();
+    super.dispose();
+    _scrollController.dispose();
+  }
+
   // Scaffold body / context builder
   @override
   Widget build(BuildContext context) {
@@ -1075,6 +1127,7 @@ class _InventionState extends State<Invention> {
                                         _startDate.text = formatter.format(
                                           _datePicked,
                                         );
+                                        _applyFilter();
                                       });
                                     }
                                   },
@@ -1129,6 +1182,7 @@ class _InventionState extends State<Invention> {
                                         _endDate.text = formatter.format(
                                           _datePicked,
                                         );
+                                        _applyFilter();
                                       });
                                     }
                                   },
@@ -1303,7 +1357,8 @@ class _InventionState extends State<Invention> {
                 Center(
                   child: SizedBox(
                     width: MediaQuery.sizeOf(context).width * 0.9,
-                    child: Container(
+                    child: 
+                    Container(
                       decoration: BoxDecoration(
                         // color: Colors.red
                       ),

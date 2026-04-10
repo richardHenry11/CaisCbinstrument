@@ -49,9 +49,13 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
   DateTime? startDateTime;
   DateTime? endDateTime;
 
+  ScrollController _scrollController = ScrollController();
+
   // pages
-  final _page = 1;
-  final _perPage = 20;
+  int _page = 1;
+  final int _perPage = 20;
+  bool _isLoading = false;
+  bool _hasMore = true;
 
   // list map API result tresholder
   List<Map<String, dynamic>> _apiTresholder  = [];
@@ -66,6 +70,74 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
     // TODO: implement initState
     super.initState();
     _loadAPI();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          !_isLoading &&
+          _hasMore) {
+        _loadMore();
+      }
+    });
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final _nextPage = _page + 1;
+
+    final response = await _fetchData(_nextPage);
+
+    setState(() {
+      if (response.isEmpty) {
+        _hasMore = false;
+        print("Scroll reach its limit");
+      } else {
+        _page = _nextPage;
+        _apiTresholder.addAll(response);
+      }
+      _isLoading = false;
+    });
+
+    _applyFilter();
+  }
+
+  Future<void> _loadAPI() async {
+    _page = 1;
+    _hasMore = true;
+
+    final response = await _fetchData(_page);
+
+    setState(() {
+      _apiTresholder = response;
+      _filteredData = response;
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchData(int page) async {
+    try {
+      final token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzQ5NzE2NSwiaWF0IjoxNzcyNjc0NzY1fQ.4K5Q8gdsq1r5qZp_p5s6rir-LKWtPoU_umM-sV-c998";
+      final url =
+          "https://cais.cbinstrument.com/auth/inventory/barang-keluar?page=$page&per_page=$_perPage";
+      final headers = {"Authorization": "Bearer $token"};
+
+      final responseAPI = await http.get(Uri.parse(url), headers: headers);
+
+      if (responseAPI.statusCode == 200) {
+        final body = jsonDecode(responseAPI.body);
+        return List<Map<String, dynamic>>.from(body["data"]);
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print("Error: $e");
+      return [];
+    }
   }
 
   void _applyFilter() {
@@ -77,6 +149,51 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
         final nama = (item['nama_barang'] ?? "").toLowerCase();
         final qr = (item['qr_code'] ?? "").toLowerCase();
         final kat = (item['kategori'] ?? "");
+        final date = item['tanggal_jam'];
+
+        // ========== Date Parse ============
+        DateTime? dateTime;
+        if (date != null) {
+          try {
+            dateTime = DateTime.parse(date);
+          } catch (e) {
+            dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+          }
+        }
+
+        final matchDate = (() {
+          if (dateTime == null) return true;
+
+          DateTime? start;
+          DateTime? end;
+
+          if (startDateTime != null) {
+            start = DateTime(
+              startDateTime!.year,
+              startDateTime!.month,
+              startDateTime!.day,
+              0,
+              0,
+              0,
+            );
+          }
+
+          if (endDateTime != null) {
+            end = DateTime(
+              endDateTime!.year,
+              endDateTime!.month,
+              endDateTime!.day,
+              23,
+              59,
+              59,
+            );
+          }
+
+          if (start != null && dateTime.isBefore(start)) return false;
+          if (end != null && dateTime.isAfter(end)) return false;
+
+          return true;
+        })();
 
         final matchSearch = 
           search.isEmpty ||
@@ -88,7 +205,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
           ? true
           : kat == kategori;
 
-        return matchSearch && matchKategori;
+        return matchSearch && matchKategori && matchDate;
       }).toList();
     });
   }
@@ -483,28 +600,28 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
     );
   }
 
-  Future<void> _loadAPI() async {
-    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
-    final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar?page=$_page&per_page=$_perPage";
-    final headers = {
-      "Authorization" : "Bearer $token"
-    };
+  // Future<void> _loadAPI() async {
+  //   final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+  //   final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar?page=$_page&per_page=$_perPage";
+  //   final headers = {
+  //     "Authorization" : "Bearer $token"
+  //   };
 
-    final responseAPI = await http.get(
-      Uri.parse(url),
-      headers: headers
-    );
+  //   final responseAPI = await http.get(
+  //     Uri.parse(url),
+  //     headers: headers
+  //   );
 
-    if(responseAPI.statusCode == 200) {
-      final bodi= jsonDecode(responseAPI.body);
+  //   if(responseAPI.statusCode == 200) {
+  //     final bodi= jsonDecode(responseAPI.body);
 
-      setState(() {
-        _apiTresholder = List<Map<String, dynamic>>.from(bodi["data"]);
-        _filteredData = _apiTresholder;
-      });
-      print("hasil API: $_apiTresholder");
-    }
-  }
+  //     setState(() {
+  //       _apiTresholder = List<Map<String, dynamic>>.from(bodi["data"]);
+  //       _filteredData = _apiTresholder;
+  //     });
+  //     print("hasil API: $_apiTresholder");
+  //   }
+  // }
 
   Future<void> _delete(String id) async {
     final token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
@@ -689,7 +806,12 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
     );
   }
 
-
+  @override
+  void dispose() {
+    // workingListCtrl.dispose();
+    super.dispose();
+    _scrollController.dispose();
+  }
 
   // Scaffold body / context builder
   @override
@@ -740,6 +862,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
       ),
 
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: 
         // Container(
         //   decoration: BoxDecoration(
@@ -895,6 +1018,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                                   setState(() {
                                     startDateTime = _datePicked;
                                     _startDate.text = formatter.format(_datePicked);
+                                    _applyFilter();
                                   });
                                 }
                               },
@@ -930,8 +1054,9 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                                 final _datePicked = await _pickDate(context);
                                 if(_datePicked != null) {
                                   setState(() {
-                                    startDateTime = _datePicked;
-                                    _startDate.text = formatter.format(_datePicked);
+                                    endDateTime = _datePicked;
+                                    _endDate.text = formatter.format(_datePicked);
+                                    _applyFilter();
                                   });
                                 }
                               },
