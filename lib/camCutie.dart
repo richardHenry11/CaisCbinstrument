@@ -45,6 +45,9 @@ class _CamAndFileState extends State<CamAndFile> {
   // error treshold
   String? error;
 
+  // // Loader
+  // bool _isLoading = false;
+
   Future<bool> requestCameraPermission() async {
     final status = await Permission.camera.request();
     return status.isGranted;
@@ -123,6 +126,7 @@ class _CamAndFileState extends State<CamAndFile> {
   }
 
   Future<void> _submitAbsence() async {
+    // _isLoading = true;
     // if (_nameController.text.isEmpty || _photo == null) {
     //   ScaffoldMessenger.of(context).showSnackBar(
     //     const SnackBar(content: Text("Please Fill the Blanks...")),
@@ -173,13 +177,17 @@ class _CamAndFileState extends State<CamAndFile> {
       "document_photo_bukti1": photoData,
     };
 
+    setState(() {
+      _thxForAbsence();  
+    });
     print("Bodi: $body");
+    print("simulasi kirim berhasil");
 
     final responses = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/input/absensi"),
       headers: {"Content-Type": "application/json", "Authorization": header},
       body: jsonEncode(body),
-    );
+    ).timeout(Duration(seconds: 10));
 
     if (responses.statusCode == 200) {
       final resBody = jsonDecode(responses.body);
@@ -190,6 +198,7 @@ class _CamAndFileState extends State<CamAndFile> {
       setState(() {
         _isSubmitting = false;
       });
+      // _isLoading = false;
     } else {
       final bodi = jsonDecode(responses.body);
 
@@ -321,6 +330,10 @@ class _CamAndFileState extends State<CamAndFile> {
                 onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
+
+                  setState(() {
+                    _isSubmitting = false;
+                  });
 
                   Navigator.pushReplacement(
                     context,
@@ -549,12 +562,30 @@ class _CamAndFileState extends State<CamAndFile> {
                     ),
                   ),
                   onPressed: _photo != null && !_isSubmitting
-                      ? _submitAbsence
-                      : null,
-                  child: Text(
+                    ? () async {
+                      setState(() {
+                        _isSubmitting = true;
+                      });
+                      if (!mounted) return;
+                      await _submitAbsence();
+                      // setState(() {
+                      //     _isSubmitting = false;
+                      //   });
+                      }
+                    : null,
+                  child:
                     _isSubmitting
-                        ? t.translate("isSubmit")
-                        : t.translate("Submit"),
+                        ? 
+                        // t.translate("isSubmit")
+                        SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+                        : Text(t.translate("Submit"),
                     style: TextStyle(
                       color: _isSubmitting
                           ? const Color.fromARGB(255, 74, 74, 74)

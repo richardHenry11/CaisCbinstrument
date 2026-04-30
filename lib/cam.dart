@@ -446,7 +446,7 @@ class _CameraState extends State<Camera> {
       Uri.parse("https://cais.cbinstrument.com/auth/input/absensi"),
       headers: {"Content-Type": "application/json", "Authorization": header},
       body: jsonEncode(body),
-    );
+    ).timeout(Duration(seconds: 10));
 
     if (responses.statusCode == 200) {
       final resBody = jsonDecode(responses.body);
@@ -591,7 +591,7 @@ class _CameraState extends State<Camera> {
                 onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
-
+                  // _isSubmitting = false;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => PilihDinas()),
@@ -793,12 +793,25 @@ class _CameraState extends State<Camera> {
                     ),
                   ),
                   onPressed: _photo != null && _faceValid && !_isSubmitting
-                      ? _submitAbsence
-                      : null,
-                  child: Text(
-                    _isSubmitting
-                        ? t.translate("isSubmit")
-                        : t.translate("Submit"),
+                      ? (){
+                        setState(() {
+                          _isSubmitting = true;
+                        }); 
+                        if (!mounted) return;
+                        _submitAbsence();
+                      }: null,
+                  child: _isSubmitting
+                        ? 
+                        // t.translate("isSubmit")
+                        SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+                        : Text(t.translate("Submit"),
                     style: TextStyle(
                       color: _isSubmitting
                           ? const Color.fromARGB(255, 74, 74, 74)

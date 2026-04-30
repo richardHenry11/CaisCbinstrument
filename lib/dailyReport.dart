@@ -3,6 +3,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:absence/dashboard.dart';
+import 'package:absence/reportLists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -67,6 +69,9 @@ class _DailyReportState extends State<DailyReport> {
 
   List<Map<String, dynamic>> tasks = [];
 
+  // form validation
+  bool _isActivated = false;
+
   //================================== Functions ==================================
   @override
   void initState() {
@@ -102,6 +107,39 @@ class _DailyReportState extends State<DailyReport> {
     // progress controller
     _progressBar.text = percentage.toInt().toString();
   }
+
+  void _validateSubmit() {
+  bool isValid = true;
+
+  // validasi dropdown lokasi kerja
+  if (_selectedItem == null || _selectedItem!.isEmpty) {
+    isValid = false;
+  }
+
+  // validasi planning
+  if (_planning.text.trim().isEmpty) {
+    isValid = false;
+  }
+
+  // validasi semua task
+  for (var task in tasks) {
+    if (task["project"].text.trim().isEmpty ||
+        task["title"].text.trim().isEmpty ||
+        task["desc"].text.trim().isEmpty ||
+        task["kendala"].text.trim().isEmpty ||
+        task["solusi"].text.trim().isEmpty ||
+        task["job"] == null) {
+      isValid = false;
+      break;
+    }
+  }
+
+  if (_isActivated != isValid) {
+    setState(() {
+      _isActivated = isValid;
+    });
+  }
+}
 
   Future<void> _takePhotoInterruptions(int index) async {
     final granted = await requestCameraPermission();
@@ -434,6 +472,8 @@ class _DailyReportState extends State<DailyReport> {
 
     print("Payload FINAL:\n$body");
 
+    _successNotif();
+
     final response = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/absensi/daily-report"),
       headers: {
@@ -446,6 +486,7 @@ class _DailyReportState extends State<DailyReport> {
     if (response.statusCode == 200) {
       final bodi = jsonDecode(response.body);
       print(bodi);
+      _successNotif();
     } else {
       final bodi = jsonDecode(response.body);
       print("error: $bodi");
@@ -453,11 +494,160 @@ class _DailyReportState extends State<DailyReport> {
     }
   }
 
+  Future<void> _confirmShowDialog() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              // Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
+              Icon(
+                MaterialCommunityIcons.alert_box,
+                color: const Color.fromARGB(255, 139, 129, 36),
+                size: 80,
+              ),
+              Divider(),
+            ],
+          ),
+          content: Text("Apakah Anda Yakin??!!??"),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                      backgroundColor: Colors.grey,
+                    ),
+                    onPressed: () {
+                      // button Funct
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 92, 92, 92),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                    onPressed: () {
+                      // button Funct
+                      Navigator.of(context).pop();
+                      // final id = _apiTresholder[index]["id"];
+                      _systemCallback();
+                    },
+                    child: Text("OK", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _successNotif() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              Icon(MaterialCommunityIcons.check_circle, color: Colors.green, size: 80,),
+              Divider(),
+            ],
+          ),
+          content: Text("Laporan Berhasil Terkirim", style: TextStyle(color: Colors.green)),
+          actions: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: () {
+                  // button Funct
+                  Navigator.of(context).pop();
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Dashboard()),
+                  );
+                },
+                child: Text("OK", style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF182234),
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Container(
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(10),
+              //   border: Border.all(
+              //     color: Color.fromRGBO(37, 99, 235, 0.2)
+              //   )
+              // ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(37, 99, 235, 0.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                ),
+                onPressed: (){
+                  // Button funct here later!!
+                  Navigator.push(context, 
+                  MaterialPageRoute(builder: (context) => reportList())
+                  );
+                }, 
+                child: 
+                Row(
+                  children: [
+                    Icon(Icons.folder, color: Color.fromRGBO(147, 197, 253, 1)),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Text("List Laporan Saya", style: TextStyle(color: Color.fromRGBO(147, 197, 253, 1)),),
+                    ),
+                  ],
+                )
+              ),
+            ),
+          )
+        ],
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           "Daily Report",
@@ -539,6 +729,7 @@ class _DailyReportState extends State<DailyReport> {
                                         enabled: false,
                                         style: TextStyle(color: Colors.white),
                                         controller: _nameController,
+                                        // onChanged: (_) => _validateSubmit(),
                                         decoration: InputDecoration(
                                           hintText: "$_savedName",
                                           hintStyle: TextStyle(
@@ -660,6 +851,7 @@ class _DailyReportState extends State<DailyReport> {
                                         setState(() {
                                           _selectedItem = value;
                                         });
+                                        _validateSubmit();
                                       },
                                     ),
                                   ),
@@ -759,6 +951,7 @@ class _DailyReportState extends State<DailyReport> {
                                       },
                                     ),
                                   ),
+
                                   Text(
                                     "Tanggal otomatis mengikuti hari ini.",
                                     style: TextStyle(
@@ -808,6 +1001,8 @@ class _DailyReportState extends State<DailyReport> {
                                               ],
                                             ),
                                           ),
+
+                                          // Start Time
                                           SizedBox(
                                             width:
                                                 MediaQuery.sizeOf(
@@ -1207,6 +1402,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 0.01,
                                                           ),
                                                           TextField(
+                                                            onChanged: (_) => _validateSubmit(),
                                                             controller:
                                                                 task["project"],
                                                             style: TextStyle(
@@ -1362,6 +1558,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                   task["job"] = value;
                                                                   print(_selectedItemJob);
                                                                 });
+                                                                (_) => _validateSubmit();
                                                               },
                                                             ),
                                                           ),
@@ -1394,6 +1591,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 0.01,
                                                           ),
                                                           TextField(
+                                                            onChanged: (_) => _validateSubmit(),
                                                             controller:
                                                                 task["title"],
                                                             style: TextStyle(
@@ -1472,6 +1670,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 0.01,
                                                           ),
                                                           TextField(
+                                                            onChanged: (_) => _validateSubmit(),
                                                             controller:
                                                                 task["desc"],
                                                             style: TextStyle(
@@ -1576,6 +1775,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                           .toInt()
                                                                           .toString();
                                                                     });
+                                                                    _validateSubmit();
                                                                   },
                                                                 ),
                                                               ),
@@ -1645,6 +1845,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                         task["percentage"] =
                                                                             intValue;
                                                                       });
+                                                                      _validateSubmit();
                                                                     }
                                                                   },
                                                                 ),
@@ -1698,6 +1899,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 0.01,
                                                           ),
                                                           TextField(
+                                                            onChanged: (_) => _validateSubmit(),
                                                             controller:
                                                                 task["kendala"],
                                                             style: TextStyle(
@@ -1776,6 +1978,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 0.01,
                                                           ),
                                                           TextField(
+                                                            onChanged: (_) => _validateSubmit(),
                                                             controller:
                                                                 task["solusi"],
                                                             style: TextStyle(
@@ -2823,6 +3026,7 @@ class _DailyReportState extends State<DailyReport> {
                                         0.01,
                                   ),
                                   TextField(
+                                    onChanged: (_) => _validateSubmit(),
                                     controller: _planning,
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 157, 157, 157),
@@ -2845,6 +3049,15 @@ class _DailyReportState extends State<DailyReport> {
                                           color: Color(0xFF2d4a7c),
                                         ),
                                       ),
+                                    ),
+                                  ),
+
+                                  if(!_isActivated)
+                                   Padding(
+                                    padding: EdgeInsets.only(top: 8),
+                                    child: Text(
+                                      "Silahkan Lengkapi laporan diatas...!!",
+                                      style: TextStyle(color: Colors.orangeAccent, fontSize: 15, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   // ============================================ submit button and back button ==========================================
@@ -2897,10 +3110,7 @@ class _DailyReportState extends State<DailyReport> {
                                                   BorderRadius.circular(10),
                                             ),
                                           ),
-                                          onPressed: () {
-                                            // Button Funct here!!
-                                            _systemCallback();
-                                          },
+                                          onPressed: _isActivated ? _confirmShowDialog: null,
                                           child: Text(
                                             "Kirim",
                                             style: TextStyle(

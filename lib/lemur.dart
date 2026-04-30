@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:absence/main.dart';
+import 'package:absence/rackupAbsence.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 // import 'package:http/http.dart' as http;
@@ -272,6 +273,9 @@ class _LemurState extends State<Lemur> {
   // error treshold
   String? error;
 
+  // Loader
+  bool _isLoading = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -315,6 +319,7 @@ class _LemurState extends State<Lemur> {
   }
 
   Future<void> _submitApi() async {
+    _isLoading = true;
     if (_token == null) {
       _logout();
       return;
@@ -322,18 +327,18 @@ class _LemurState extends State<Lemur> {
 
     if (_photo == null || _workingPhoto == null) return;
 
-    // To base6eimage
+    // To base64image
     final base64Image1 = await imageToBase64(_photo!);
     final photoDataApproval = "data:image/jpeg;base64,$base64Image1";
     final base64Image2 = await imageToBase64(_workingPhoto!);
     final photoDataWorking = "data:image/jpeg;base64,$base64Image2";
 
-    debugPrint("PHOTO LENGTH approval: ${photoDataApproval.length}");
-    debugPrint("PHOTO PREFIX approval: ${photoDataApproval.substring(0, 30)}");
-    debugPrint("full photo approval: ${photoDataApproval}");
-    debugPrint("PHOTO LENGTH Working: ${photoDataWorking.length}");
-    debugPrint("PHOTO PREFIX Working: ${photoDataWorking.substring(0, 30)}");
-    debugPrint("full photo Working: ${photoDataWorking}");
+    // debugPrint("PHOTO LENGTH approval: ${photoDataApproval.length}");
+    // debugPrint("PHOTO PREFIX approval: ${photoDataApproval.substring(0, 30)}");
+    // debugPrint("full photo approval: ${photoDataApproval}");
+    // debugPrint("PHOTO LENGTH Working: ${photoDataWorking.length}");
+    // debugPrint("PHOTO PREFIX Working: ${photoDataWorking.substring(0, 30)}");
+    // debugPrint("full photo Working: ${photoDataWorking}");
 
     final url = "https://cais.cbinstrument.com/auth/absensi/input-lembur";
     final headers = {
@@ -355,6 +360,13 @@ class _LemurState extends State<Lemur> {
       "bukti_pekerjaan": [photoDataWorking],
     });
 
+    // setState(() {
+    //   print("Simulasi Kirim: $body"); 
+    //   _isLoading = false;
+    //   _thxForAbsence();
+    // });
+    
+
     final postResponse = await http.post(
       Uri.parse(url),
       headers: headers,
@@ -366,6 +378,7 @@ class _LemurState extends State<Lemur> {
       print(resBody);
       print("Absence Fuccessful");
       _thxForAbsence();
+      _isLoading = false;
     } else {
       final body = jsonDecode(postResponse.body);
       _thxForAbsenceFailed();
@@ -411,6 +424,79 @@ class _LemurState extends State<Lemur> {
     );
   }
 
+  Future<void> _confirmShowDialog() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              // Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
+              Icon(
+                MaterialCommunityIcons.alert_box,
+                color: const Color.fromARGB(255, 139, 129, 36),
+                size: 80,
+              ),
+              Divider(),
+            ],
+          ),
+          content: Text("Apakah Anda Yakin??!!??"),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                      backgroundColor: Colors.grey,
+                    ),
+                    onPressed: () {
+                      // button Funct
+                      Navigator.of(context).pop();
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 92, 92, 92),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                    onPressed: () {
+                      // button Funct
+                      Navigator.of(context).pop();
+                      // final id = _apiTresholder[index]["id"];
+                      _submitApi();
+                    },
+                    child: Text("OK", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _thxForAbsence() async {
     showDialog(
       context: context,
@@ -445,6 +531,10 @@ class _LemurState extends State<Lemur> {
                 onPressed: () {
                   // button Funct
                   Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context, 
+                    MaterialPageRoute(builder: (context) => RackupAbsence())
+                  );
                 },
                 child: Text("OK", style: TextStyle(color: Colors.white)),
               ),
@@ -1146,7 +1236,7 @@ class _LemurState extends State<Lemur> {
                               ),
                             ),
                             onPressed: _takeWorkingPhoto,
-                            child: Text(t.translate("takePhoto")),
+                            child: Text(t.translate("takePhoto"), style: TextStyle(color: Colors.white),),
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -1161,7 +1251,7 @@ class _LemurState extends State<Lemur> {
                               ),
                             ),
                             onPressed: _pickWorkingPhotoFromGallery,
-                            child: Text(t.translate("gallery")),
+                            child: Text(t.translate("gallery"), style: TextStyle(color: Colors.white),),
                           ),
                         ],
                       ),
@@ -1185,14 +1275,28 @@ class _LemurState extends State<Lemur> {
               width: MediaQuery.sizeOf(context).width * 0.9,
               height: MediaQuery.sizeOf(context).height * 0.07,
               child: ElevatedButton(
-                onPressed: _isActivated ? _submitApi : null,
+                onPressed: _isActivated && _isLoading == false ? (){
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  _confirmShowDialog();
+                  } : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isActivated ? Colors.green : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(
+                child: _isLoading ?
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                ) : 
+                Text(
                   t.translate("submitOver"),
                   style: TextStyle(color: Colors.white),
                 ),
