@@ -96,6 +96,7 @@ class _EditDailyState extends State<EditDaily> {
   _loadTasks();
 
   _validateSubmit();
+  print("Name: ${_nameController.text}");
   }
 
   void _loadTasks() {
@@ -187,6 +188,11 @@ class _EditDailyState extends State<EditDaily> {
 
   // validasi dropdown lokasi kerja
   if (_selectedItem == null || _selectedItem!.isEmpty) {
+    isValid = false;
+  }
+
+  // validasi dropdown lokasi kerja
+  if (_date.text.trim().isEmpty) {
     isValid = false;
   }
 
@@ -534,7 +540,7 @@ class _EditDailyState extends State<EditDaily> {
     final createdAt = DateTime.now().toUtc().toIso8601String();
 
     final body = {
-      "nama": _savedName,
+      "nama": _nameController,
       "lokasi_kerja": _selectedItem.toString(),
       "tanggal": _date.text,
       "jam_mulai": _startTime.text,

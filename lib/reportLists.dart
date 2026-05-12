@@ -1,10 +1,11 @@
 // import 'package:absence/dailyReport.dart';
 import 'dart:convert';
 
+import 'package:absence/detailReports.dart';
 import 'package:absence/editdaily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:data_table_2/data_table_2.dart';
@@ -26,7 +27,7 @@ class _reportListState extends State<reportList> {
   TextEditingController _jobTitle = TextEditingController();
 
   // prefs
-  String? _savedName;
+  // String? _savedName;
 
   // Datings
   DateTime? Date;
@@ -48,16 +49,16 @@ class _reportListState extends State<reportList> {
   }
 
   Future<void> _initialize() async {
-    await _nameGetter();
+    // await _nameGetter();
     _getData();
   }
 
-  Future<void> _nameGetter() async {
-    final prefs = await SharedPreferences.getInstance();
+  // Future<void> _nameGetter() async {
+  //   final prefs = await SharedPreferences.getInstance();
 
-    _savedName = prefs.getString("name");
-    print("_savedName");
-  }
+  //   _savedName = prefs.getString("name");
+  //   print("_savedName");
+  // }
 
   Future<DateTime?> _pickDate(BuildContext context) async {
     return await showDatePicker(
@@ -933,7 +934,15 @@ class _reportListState extends State<reportList> {
                       children: [
 
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // Button Funct here!!
+                            Navigator.push(
+                                context, 
+                                MaterialPageRoute(
+                                  builder: (context) => detailReports(reportData: item)
+                                )
+                              );
+                          },
                           icon: Icon(
                             Icons.visibility,
                             color: Color.fromRGBO(34, 211, 238, 1),
@@ -959,13 +968,13 @@ class _reportListState extends State<reportList> {
                           ),
                         ),
 
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.delete,
-                            color: Color.fromRGBO(248, 113, 113, 1),
-                          ),
-                        ),
+                        // IconButton(
+                        //   onPressed: () {},
+                        //   icon: Icon(
+                        //     Icons.delete,
+                        //     color: Color.fromRGBO(248, 113, 113, 1),
+                        //   ),
+                        // ),
                       ],
                     ),
                     ),

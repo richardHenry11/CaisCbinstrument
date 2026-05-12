@@ -177,11 +177,11 @@ class _CamAndFileState extends State<CamAndFile> {
       "document_photo_bukti1": photoData,
     };
 
-    setState(() {
-      _thxForAbsence();  
-    });
-    print("Bodi: $body");
-    print("simulasi kirim berhasil");
+    // setState(() {
+    //   _thxForAbsence();  
+    // });
+    // print("Bodi: $body");
+    // print("simulasi kirim berhasil");
 
     final responses = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/input/absensi"),
