@@ -58,7 +58,7 @@ class _detailReportsState extends State<detailReports> {
     "Troubleshooting",
     "Training",
   ];
-  String? _selectedItemJob;
+  // String? _selectedItemJob;
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   DateTime? Date;
   String? _selectedItem;
