@@ -1,6 +1,6 @@
 # CAIS Account Deletion Request
 Users may request deletion of their account and associated data by contacting:
 
-erwin.cbinstrument@gmail.com
+richardkumbang04@gmail.com or richard@cbinstrument.com
 
 Please include:
