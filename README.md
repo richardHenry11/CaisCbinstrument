@@ -88,5 +88,6 @@ This Privacy Policy may be updated from time to time. Users are encouraged to re
 ## Contact
 
 If you have any questions regarding this Privacy Policy, please contact the application developer.
+richardkumbang04@gmail.com
 
 # CaisCbinstrument
