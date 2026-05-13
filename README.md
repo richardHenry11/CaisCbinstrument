@@ -35,12 +35,27 @@ The application may access:
 * Camera
 * Storage
 * Internet connection
+* Map GPS geolocator
 
-These permissions are used only to support application features such as attendance photo capture, documentation, and reporting.
+These permissions are used only to support application features such as attendance photo capture, zone attendace , documentation, and reporting.
 
 ## Camera Permission
 
 The camera permission is used for:
+
+* Attendance photo capture
+* Supporting work documentation features
+* Image upload functionality
+
+The application does not use the camera without user interaction.
+
+## Map GPS geolocator Permission
+
+The GPS geolocator is used for:
+
+* taking your specific zone while taking attendance since it has range area of taking attendace from 200m from office
+
+GPS geolocator is:
 
 * Attendance photo capture
 * Supporting work documentation features
