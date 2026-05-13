@@ -1,18 +1,77 @@
-# absence
+# CAIS Android Application
 
-A new Flutter project.
+CAIS (CB Instrument Attendance & Inventory System) is a mobile application developed to simplify employee attendance, inventory management, and daily work reporting.
+
+## Features
+
+* Employee attendance management
+* Camera-based attendance support
+* Inventory management
+* Daily reporting system
+* Mobile-friendly interface
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is built using Flutter.
 
-A few resources to get you started if this is your first Flutter project:
+Useful resources for Flutter development:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* https://docs.flutter.dev/get-started/codelab
+* https://docs.flutter.dev/cookbook
+* https://docs.flutter.dev/
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# CaisCbinstrument
+---
+
+# Privacy Policy
+
+Effective Date: 2026
+
+CAIS respects and protects user privacy. This Privacy Policy explains how the application uses device permissions and handles user data.
+
+## Information We Collect
+
+The application may access:
+
+* Camera
+* Storage
+* Internet connection
+
+These permissions are used only to support application features such as attendance photo capture, documentation, and reporting.
+
+## Camera Permission
+
+The camera permission is used for:
+
+* Attendance photo capture
+* Supporting work documentation features
+* Image upload functionality
+
+The application does not use the camera without user interaction.
+
+## Data Usage
+
+Any collected data is used only for operational purposes inside the application and is not sold or shared with third parties.
+
+## Data Security
+
+We take reasonable steps to protect user information and prevent unauthorized access.
+
+## Third-Party Services
+
+The application may use trusted third-party services such as:
+
+* Google Play Services
+* Firebase services
+* Flutter plugins
+
+These services may collect limited technical information required for application functionality.
+
+## Changes to This Policy
+
+This Privacy Policy may be updated from time to time. Users are encouraged to review this page periodically.
+
+## Contact
+
+If you have any questions regarding this Privacy Policy, please contact the application developer.
+
 # CaisCbinstrument
