@@ -425,15 +425,16 @@ class _DashboardState extends State<Dashboard> {
                     MaterialPageRoute(builder: (context) => Invention()),
                   );
                 }),
-                menuCard(Icons.warning, "test dropdown",
-                  (){
-                    // Button funct
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SimpleChat())
-                    );
-                  }
-                ),
+                
+                // menuCard(Icons.warning, "test dropdown",
+                //   (){
+                //     // Button funct
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => SimpleChat())
+                //     );
+                //   }
+                // ),
                 
                 menuCard(Icons.logout, t.translate("logout"), () async {
                   await _logout();
