@@ -140,6 +140,7 @@ class _SickState extends State<Sick> {
       print("Shift Status: $_savedShiftType");
       print("start_date: $_startDatepref");
       print("end_date: $_endDatePref");
+      print("that's all");
     });
   }
 
