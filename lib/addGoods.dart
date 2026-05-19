@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -77,6 +78,9 @@ class _AddGoodsState extends State<AddGoods> {
   final ImagePicker _picker = ImagePicker();
   File? _photo;
 
+  // token getter
+  String? savedToken;
+
 
 
   //=====================  Functions  ===================================
@@ -84,9 +88,17 @@ class _AddGoodsState extends State<AddGoods> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _tokenGetter();
 
     startDateTime = DateTime.now();
     _startDate.text = formatter.format(startDateTime!);
+  }
+
+  Future<void> _tokenGetter() async {
+    final _p = await SharedPreferences.getInstance();
+    savedToken = _p.getString("token") ?? "no token here. go away!!";
+
+    print(savedToken);
   }
 
   Future<File?> _takePhotoFromGallery() async {
@@ -171,7 +183,7 @@ class _AddGoodsState extends State<AddGoods> {
     debugPrint("PHOTO PREFIX: ${photoData.substring(0, 30)}");
     debugPrint("full photo: ${photoData}");
 
-    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+    final token = savedToken;
     final url = "https://cais.cbinstrument.com/auth/inventory/barang";
     final headers = {
         "Authorization":"Bearer $token",

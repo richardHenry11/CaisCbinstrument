@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class GoodOutputLists extends StatefulWidget {
@@ -60,6 +61,9 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
   // list map API result tresholder
   List<Map<String, dynamic>> _apiTresholder  = [];
 
+  // token getter
+  String? savedToken;
+
 
 
 
@@ -69,7 +73,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadAPI();
+    _initAPI();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -79,6 +83,19 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
         _loadMore();
       }
     });
+  }
+
+  Future<void> _initAPI() async {
+    await _tokenGetter();
+    _loadAPI();
+  }
+
+  Future<void> _tokenGetter() async {
+    final _prefs = await SharedPreferences.getInstance();
+
+    savedToken = _prefs.getString("token") ?? "no token here go away!!";
+
+    print(savedToken);
   }
 
   Future<void> _loadMore() async {
@@ -120,8 +137,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
 
   Future<List<Map<String, dynamic>>> _fetchData(int page) async {
     try {
-      final token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzQ5NzE2NSwiaWF0IjoxNzcyNjc0NzY1fQ.4K5Q8gdsq1r5qZp_p5s6rir-LKWtPoU_umM-sV-c998";
+      final token = savedToken;
       final url =
           "https://cais.cbinstrument.com/auth/inventory/barang-keluar?page=$page&per_page=$_perPage";
       final headers = {"Authorization": "Bearer $token"};

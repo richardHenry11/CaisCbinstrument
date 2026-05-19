@@ -9,6 +9,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:data_table_2/data_table_2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class reportList extends StatefulWidget {
   const reportList({super.key});
@@ -40,6 +41,9 @@ class _reportListState extends State<reportList> {
   // List getData
   List<Map<String, dynamic>> data = [];
 
+  // saved token
+  String? savedToken;
+
   // ====================================================== Functions =====================================================================
   @override
   void initState() {
@@ -50,7 +54,13 @@ class _reportListState extends State<reportList> {
 
   Future<void> _initialize() async {
     // await _nameGetter();
+    await _tokenGetter();
     _getData();
+  }
+
+  Future<void> _tokenGetter() async {
+    final _p = await SharedPreferences.getInstance();
+    savedToken = _p.getString("token");
   }
 
   // Future<void> _nameGetter() async {
@@ -143,7 +153,7 @@ class _reportListState extends State<reportList> {
   Future<void> _getData() async {
     try {
       final url= "https://cais.cbinstrument.com/auth/absensi/daily-report?page=1&per_page=20&nama=RICHARD%20HENDRIK&role=Operator";
-      final token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+      final token = "Bearer $savedToken";
       final header = {
         "Authorization": token,
         "Content-type": "application/json"

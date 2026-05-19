@@ -9,6 +9,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditGoodOutput extends StatefulWidget {
 
@@ -52,6 +53,9 @@ class _EditGoodOutputState extends State<EditGoodOutput> {
   final TextEditingController _jumlah = TextEditingController();
   final TextEditingController _keterangan = TextEditingController();
 
+  // token getter
+  String? savedToken;
+
 
 
   //=====================  Functions  ===================================
@@ -59,6 +63,7 @@ class _EditGoodOutputState extends State<EditGoodOutput> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _tokenGetter();
     _QRCode.text = widget.barang["qr_code"];
     _namaBarang.text = widget.barang["nama_barang"];
     _selectedKategori = widget.barang["kategori"];
@@ -68,6 +73,12 @@ class _EditGoodOutputState extends State<EditGoodOutput> {
 
     startDateTime = DateTime.parse(widget.barang["tanggal_jam"]);
     _startDate.text = formatter.format(startDateTime!);
+  }
+
+  Future<void> _tokenGetter() async {
+    final _prefs = await SharedPreferences.getInstance();
+    savedToken = _prefs.getString("token") ?? "no token here, go away";
+    print(savedToken);
   }
 
   Future<DateTime?> _pickDateTime(BuildContext context) async {
@@ -103,7 +114,7 @@ class _EditGoodOutputState extends State<EditGoodOutput> {
 
   Future<void> _sendAPI() async {
     final id = widget.barang["id"];
-    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+    final token = savedToken;
     final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar/$id";
     final headers = {"Authorization":"Bearer $token"};
     final body = {

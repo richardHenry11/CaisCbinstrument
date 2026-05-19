@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditDaily extends StatefulWidget {
   final Map<String, dynamic> reportData;
@@ -74,6 +75,9 @@ class _EditDailyState extends State<EditDaily> {
   // form validation
   bool _isActivated = false;
 
+  // token getter
+  String? savedToken;
+
   //================================== Functions ==================================
   @override
   void initState() {
@@ -94,9 +98,15 @@ class _EditDailyState extends State<EditDaily> {
   _endTime.text = widget.reportData['jam_selesai'] ?? "";
 
   _loadTasks();
+  _tokenGetter();
 
   _validateSubmit();
   print("Name: ${_nameController.text}");
+  }
+
+  Future<void> _tokenGetter() async {
+    final _prefs = await SharedPreferences.getInstance();
+    savedToken = _prefs.getString("token") ?? "no token here. go away";
   }
 
   void _loadTasks() {
@@ -557,7 +567,7 @@ class _EditDailyState extends State<EditDaily> {
     final response = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/absensi/daily-report"),
       headers: {
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw",
+        "Authorization": "Bearer $savedToken",
         "Content-Type": "application/json",
       },
       body: jsonEncode(body),

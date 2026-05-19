@@ -72,6 +72,9 @@ class _DailyReportState extends State<DailyReport> {
   // form validation
   bool _isActivated = false;
 
+  // token getter
+  String? savedToken;
+
   //================================== Functions ==================================
   @override
   void initState() {
@@ -98,6 +101,7 @@ class _DailyReportState extends State<DailyReport> {
 
   Future<void> _initialize() async {
     await _nameGetter();
+    _tokenGetter();
     // default date now
     final now = DateTime.now();
     _date.text = formatter.format(now);
@@ -106,6 +110,11 @@ class _DailyReportState extends State<DailyReport> {
 
     // progress controller
     _progressBar.text = percentage.toInt().toString();
+  }
+
+  Future<void> _tokenGetter() async {
+    final _p = await SharedPreferences.getInstance();
+    savedToken = _p.getString("token") ?? "no token here. Go away!!!";
   }
 
   void _validateSubmit() {
@@ -477,7 +486,7 @@ class _DailyReportState extends State<DailyReport> {
     final response = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/absensi/daily-report"),
       headers: {
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw",
+        "Authorization": "Bearer $savedToken",
         "Content-Type": "application/json",
       },
       body: jsonEncode(body),

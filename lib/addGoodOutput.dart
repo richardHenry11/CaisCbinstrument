@@ -9,6 +9,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Addgoodoutput extends StatefulWidget {
 
@@ -50,6 +51,8 @@ class _AddgoodoutputState extends State<Addgoodoutput> {
   final TextEditingController _jumlah = TextEditingController();
   final TextEditingController _keterangan = TextEditingController();
 
+  // token Getter
+  String? savedToken;
 
 
   //=====================  Functions  ===================================
@@ -57,9 +60,16 @@ class _AddgoodoutputState extends State<Addgoodoutput> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _tokenGetter();
 
     startDateTime = DateTime.now();
     _startDate.text = formatter.format(startDateTime!);
+  }
+
+  Future<void> _tokenGetter() async {
+    final _p = await SharedPreferences.getInstance();
+    savedToken = _p.getString("token") ?? "No Token Here. Go Away!!";
+    print(savedToken);
   }
 
   Future<DateTime?> _pickDateTime(BuildContext context) async {
@@ -99,7 +109,7 @@ class _AddgoodoutputState extends State<Addgoodoutput> {
   }
 
   Future<void> _sendAPI() async {
-    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3ZTMyYzU3Ny1lODY0LTQwM2UtYTI5MS1lMzZkNWRiMGIwNjIiLCJlbWFpbCI6InJpY2hhcmRAY2JpbnN0cnVtZW50LmNvbSIsImV4cCI6MjA2MzkzMzI1NywiaWF0IjoxNzczMTEwODU3fQ.8mQIOadBQbWhetUXIRsqhtUADGbfR5Pfz7PIYYie9Qw";
+    final token = savedToken;
     final url = "https://cais.cbinstrument.com/auth/inventory/barang-keluar";
     final headers = {
         "Authorization":"Bearer $token",
