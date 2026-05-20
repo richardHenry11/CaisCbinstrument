@@ -45,12 +45,20 @@ dependencies:
   geocoding: ^2.1.1
   file_picker: ^8.0.0
   data_table_2: ^2.5.11
+  google_mlkit_face_detection: ^0.13.2
+
+  camera: ^0.10.5+9
+  camera_android: ^0.10.10+6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   path: ^1.9.1
   intl: ^0.20.2
+
+# dependency_overrides:
+#   camera_android_camerax:
+#     path: ./empty_package
 
 dev_dependencies:
   flutter_test:

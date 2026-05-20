@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:async';
+import 'package:intl/intl.dart';
 
 import 'package:absence/l10n/app_localizations.dart';
 import 'package:absence/main.dart';
@@ -6,7 +8,8 @@ import 'package:absence/pilihdinas.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +27,12 @@ class Camera extends StatefulWidget {
 }
 
 class _CameraState extends State<Camera> {
-  final ImagePicker _picker = ImagePicker();
+  CameraController? _controller;
+  List<CameraDescription>? cameras;
+
+  Timer? _captureTimer;
+
+  bool _isProcessing = false;
 
   Future<String> imageToBase64(File imageFile) async {
     final bytes = await imageFile.readAsBytes();
@@ -57,6 +65,13 @@ class _CameraState extends State<Camera> {
   double? _lat;
   double? _lng;
   String? _address;
+
+  // clock timer overlayed
+  Timer? _clockTimer;
+
+  // in or out
+  String? attendance;
+  
 
   Future<bool> requestCameraPermission() async {
     final status = await Permission.camera.request();
@@ -139,11 +154,162 @@ class _CameraState extends State<Camera> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initPage();
     });
+    _clockTimer = Timer.periodic(
+    const Duration(seconds: 1),
+    (_) {
+      if (mounted) {
+        setState(() {});
+      }
+    },
+  );
   }
 
   Future<void> _initPage() async {
     await _prefsCatcher();
-    await _takePhoto();
+    await _initCamera();
+    _startRealtimeCapture();
+  }
+
+  Future<void> _initCamera() async {
+    cameras = await availableCameras();
+
+    final frontCamera = cameras!.firstWhere(
+      (cam) => cam.lensDirection == CameraLensDirection.front,
+    );
+
+    _controller = CameraController(
+      frontCamera,
+      ResolutionPreset.medium,
+      enableAudio: false,
+    );
+
+    await _controller!.initialize();
+
+    if (!mounted) return;
+
+    setState(() {});
+  }
+
+  void _startRealtimeCapture() {
+    _captureTimer?.cancel();
+
+    _captureTimer = Timer.periodic(
+      const Duration(seconds: 2),
+      (timer) async {
+        if (_isProcessing) return;
+
+        _isProcessing = true;
+
+        try {
+          await _captureAndRecognize();
+        } catch (e) {
+          debugPrint("Capture Error: $e");
+        }
+
+        _isProcessing = false;
+      },
+    );
+  }
+
+  Future<void> _captureAndRecognize() async {
+    if (_controller == null) return;
+
+    if (!_controller!.value.isInitialized) return;
+
+    final XFile image = await _controller!.takePicture();
+
+    final file = File(image.path);
+
+    await _getLocation();
+
+    final normalized = await _normalizeImage(file);
+
+    final stamped = await _drawGpsOverlay(normalized);
+
+    if (!mounted) return;
+
+    setState(() {
+      _photo = stamped;
+    });
+
+    await recognizeFace(stamped);
+
+    if (_faceValid) {
+      _captureTimer?.cancel();
+    }
+  }
+
+  Future<void> _timeSelector() async {
+    
+  }
+
+  Widget _buildGPSOverlay() {
+    return 
+    Container(
+      padding : EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.45),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ================================= DateTime Now ===============================
+          Text(
+          DateFormat("yyyy/MMMM/dd HH:mm:ss", "en_EN").format(DateTime.now()),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          // ================================= Lattitide and Longitude =====================
+          const SizedBox(height: 5),
+          Text(
+            "${_lat?.toStringAsFixed(6)}, ${_lng?.toStringAsFixed(6)}",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+            ),
+          ),
+
+          // ================================= Address ======================================
+          const SizedBox(height: 5),
+          Text(
+            _address ?? "Loading location...",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+            ),
+          ),
+
+          // ================================= Attendance Type ===============================
+          const SizedBox(height: 5),
+          Container(
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.red
+            //   )
+            // ),
+            child: 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.location_on, color: Colors.red),
+                SizedBox(width: 5),
+                Text(
+                  "$_savedAttType - " ?? 'NULL',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          )
+
+        ],
+      ),
+    );
   }
 
   Future<File> _normalizeImage(File file) async {
@@ -168,43 +334,43 @@ class _CameraState extends State<Camera> {
     return newFile;
   }
 
-  Future<void> _takePhoto() async {
-    final granted = await requestCameraPermission();
-    if (!granted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
-      return;
-    }
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.camera,
-      preferredCameraDevice: CameraDevice.front,
-      imageQuality: 75,
-    );
-    if (image != null) {
-      await _getLocation();
-      setState(() {
-        _photo = File(image.path);
-        _faceValid = false;
-      });
+  // Future<void> _takePhoto() async {
+  //   final granted = await requestCameraPermission();
+  //   if (!granted) {
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
+  //     return;
+  //   }
+  //   final XFile? image = await _picker.pickImage(
+  //     source: ImageSource.camera,
+  //     preferredCameraDevice: CameraDevice.front,
+  //     imageQuality: 75,
+  //   );
+  //   if (image != null) {
+  //     await _getLocation();
+  //     setState(() {
+  //       _photo = File(image.path);
+  //       _faceValid = false;
+  //     });
 
-      final normalized = await _normalizeImage(_photo!);
-      final stamped = await _drawGpsOverlay(normalized);
+  //     final normalized = await _normalizeImage(_photo!);
+  //     final stamped = await _drawGpsOverlay(normalized);
 
-      setState(() {
-        _photo = stamped;
-      });
+  //     setState(() {
+  //       _photo = stamped;
+  //     });
 
-      await recognizeFace(stamped);
+  //     await recognizeFace(stamped);
 
-      // final image = await _controller.takePicture();
-      // debugPrint("Photo Taken: ${image.path}");
+  //     // final image = await _controller.takePicture();
+  //     // debugPrint("Photo Taken: ${image.path}");
 
-      // await _sendToCompreFace(image.path);
-      // // Continue Absence
-      // _submitAbsence();
-    }
-  }
+  //     // await _sendToCompreFace(image.path);
+  //     // // Continue Absence
+  //     // _submitAbsence();
+  //   }
+  // }
 
   Future<void> _prefsCatcher() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -628,6 +794,14 @@ class _CameraState extends State<Camera> {
   }
 
   @override
+  void dispose() {
+    _captureTimer?.cancel();
+    _controller?.dispose();
+    _clockTimer?.cancel(); 
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
@@ -644,53 +818,31 @@ class _CameraState extends State<Camera> {
         child: Column(
           children: [
             Expanded(
-              child: _photo == null
-                  ? Center(
-                      child: Text(
-                        t.translate("photoDesk"),
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
+              child: 
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: 
+                _controller == null ||
+                        !_controller!.value.isInitialized
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : 
+                    Stack(
+                      children: [
+                        CameraPreview(_controller!),
+
+                        Positioned(
+                          bottom: 100,
+                          left: 20,
+                          right: 20,
+                          child: _buildGPSOverlay(),
                         ),
-                      ),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadiusGeometry.circular(20),
-                      child: Image.file(_photo!, fit: BoxFit.cover),
+                      ]
                     ),
+              ),
             ),
             SizedBox(height: 5),
-            Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.cyanAccent.withOpacity(0.3),
-                    blurRadius: 15,
-                    spreadRadius: 2,
-                  ),
-                  BoxShadow(
-                    color: Colors.cyanAccent.withOpacity(0.1),
-                    blurRadius: 30,
-                    spreadRadius: 6,
-                  ),
-                ],
-              ),
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(10),
-                  ),
-                ),
-                onPressed: _takePhoto,
-                icon: const Icon(Icons.camera_alt_rounded, color: Colors.white),
-                label: Text(
-                  t.translate("takePhoto"),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
             SizedBox(height: 8),
             if (_faceMessage.isNotEmpty)
               Padding(
