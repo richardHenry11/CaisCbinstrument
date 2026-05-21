@@ -239,9 +239,9 @@ class _CameraState extends State<Camera> {
     }
   }
 
-  Future<void> _timeSelector() async {
-    
-  }
+  // Future<void> _timeSelector() async {
+
+  // }
 
   Widget _buildGPSOverlay() {
     return 
@@ -300,7 +300,7 @@ class _CameraState extends State<Camera> {
                 Icon(Icons.location_on, color: Colors.red),
                 SizedBox(width: 5),
                 Text(
-                  "$_savedAttType - " ?? 'NULL',
+                  "$_savedAttType - $_savedShiftType",
                   style: TextStyle(color: Colors.white),
                 ),
               ],
@@ -460,8 +460,26 @@ class _CameraState extends State<Camera> {
     final response = await request.send();
     final body = await response.stream.bytesToString();
 
+    final data = jsonDecode(body);
+
+    debugPrint(body);
+
     if (response.statusCode != 200) {
       final t = AppLocalizations.of(context)!;
+
+      if (data['message'] == "No face is found in the given image") {
+
+        if (!mounted) return;
+
+        setState(() {
+          final t = AppLocalizations.of(context)!;
+          _faceMessage = t.translate("noFace");
+          _faceValid = false;
+        });
+
+        return;
+      }
+
       if (!mounted) return;
       setState(() {
         _faceMessage = t.translate("nor");
@@ -470,18 +488,7 @@ class _CameraState extends State<Camera> {
       return;
     }
 
-    final data = jsonDecode(body);
     final faces = data['result'];
-
-    if (faces == null || faces.isEmpty) {
-      if (!mounted) return;
-      setState(() {
-        final t = AppLocalizations.of(context)!;
-        _faceMessage = t.translate("noFace");
-        _faceValid = false;
-      });
-      return;
-    }
 
     if (faces.length != 1) {
       if (!mounted) return;
@@ -634,62 +641,6 @@ class _CameraState extends State<Camera> {
       });
     }
   }
-
-  // Future<bool> _recognitionWithHombre(File imageFile) async {
-
-  // }
-
-  // Future<void> _confirmSubmitAbsence() async {
-  //   final t = AppLocalizations.of(context)!;
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title:
-  //           Column(
-  //             children: [
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text(t.translate("confirm"), style: TextStyle(color: const Color.fromARGB(255, 219, 197, 0))),
-  //                   Icon(Icons.warning_rounded, color: const Color.fromARGB(255, 219, 197, 0)),
-  //                 ],
-  //               ),
-  //               Divider()
-  //             ],
-  //           ),
-  //         content:
-  //         Text(t.translate("rusure"), style: TextStyle(color: const Color.fromARGB(255, 61, 61, 61)),),
-  //         actions: [
-  //           ElevatedButton(
-  //             style: ElevatedButton.styleFrom(
-  //               shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-  //               backgroundColor: Colors.red
-  //             ),
-  //             onPressed: (){
-  //               // button Funct
-  //                Navigator.of(context).pop();
-  //             },
-  //             child: Text(t.translate("cancel"), style: TextStyle(color: Colors.white),)
-  //           ),
-  //           ElevatedButton(
-  //             style: ElevatedButton.styleFrom(
-  //               shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
-  //               backgroundColor: Colors.green
-  //             ),
-  //             onPressed: (){
-  //               // button Funct
-  //               _submitAbsence();
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: Text(t.translate("sure"), style: TextStyle(color: Colors.white),)
-  //           )
-  //         ],
-  //       );
-  //     }
-  //   );
-  // }
 
   Future<void> _thxForAbsenceFailed() async {
     final t = AppLocalizations.of(context)!;

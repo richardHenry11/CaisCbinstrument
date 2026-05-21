@@ -215,7 +215,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
             accuracy: LocationAccuracy.high,
             distanceFilter: 3,
           ),
-        ).listen((position) {
+        ).listen((position) async {
           OfficeLocation? matchedOffice;
           double? nearestDistance;
 
@@ -230,6 +230,11 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
             if (dist <= office.radius) {
               matchedOffice = office;
               nearestDistance = dist;
+              await _setShiftTypeByTime();
+
+              if (!mounted) return;
+
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Camera()));
               break;
             }
 
@@ -254,6 +259,36 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
 
           // debugPrint("Distance: ${dist.toStringAsFixed(2)} m");
         });
+  }
+
+  Future<void> _setShiftTypeByTime() async {
+    final now = DateTime.now();
+    final hour = now.hour;
+    final minute = now.minute;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    // ========================= 00:00 - 12:00 ===========================
+    if(hour < 12 || (hour == 12 && minute == 0)) {
+      await prefs.setString('shift_type', 'masuk');
+
+      setState(() {
+        _savedShiftType = 'masuk';
+      });
+
+      debugPrint("Shift Type: masuk");
+    }
+
+    // ========================== 12:01 - 23:59 ===========================
+    else {
+      await prefs.setString('shift_type', 'pulang');
+
+      setState(() {
+        _savedShiftType = 'pulang';
+      });
+
+      debugPrint("Shift Type: pulang");
+    }
   }
 
   Future<void> _logout() async {
@@ -639,93 +674,93 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                             ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.3,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadiusGeometry.circular(
-                                      10,
-                                    ),
-                                  ),
-                                  backgroundColor: _savedShiftType == "masuk"
-                                      ? Colors.lightBlueAccent
-                                      : const Color.fromARGB(
-                                          255,
-                                          220,
-                                          220,
-                                          220,
-                                        ),
-                                ),
-                                onPressed: _canPressButton
-                                    ? () async {
-                                        await _masukShiftType();
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   children: [
+                        //     SizedBox(
+                        //       width: MediaQuery.sizeOf(context).width * 0.3,
+                        //       child: ElevatedButton(
+                        //         style: ElevatedButton.styleFrom(
+                        //           shape: RoundedRectangleBorder(
+                        //             borderRadius: BorderRadiusGeometry.circular(
+                        //               10,
+                        //             ),
+                        //           ),
+                        //           backgroundColor: _savedShiftType == "masuk"
+                        //               ? Colors.lightBlueAccent
+                        //               : const Color.fromARGB(
+                        //                   255,
+                        //                   220,
+                        //                   220,
+                        //                   220,
+                        //                 ),
+                        //         ),
+                        //         onPressed: _canPressButton
+                        //             ? () async {
+                        //                 await _masukShiftType();
 
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => Camera(),
-                                          ),
-                                        );
-                                      }
-                                    : null,
-                                child: Text(
-                                  t.translate("inButton"),
-                                  style: TextStyle(
-                                    color: _savedShiftType == "masuk"
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
+                        //                 Navigator.push(
+                        //                   context,
+                        //                   MaterialPageRoute(
+                        //                     builder: (_) => Camera(),
+                        //                   ),
+                        //                 );
+                        //               }
+                        //             : null,
+                        //         child: Text(
+                        //           t.translate("inButton"),
+                        //           style: TextStyle(
+                        //             color: _savedShiftType == "masuk"
+                        //                 ? Colors.white
+                        //                 : Colors.black,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
 
-                            // Pulang
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width * 0.3,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadiusGeometry.circular(
-                                      10,
-                                    ),
-                                  ),
-                                  backgroundColor: _savedShiftType == "pulang"
-                                      ? Colors.lightBlueAccent
-                                      : const Color.fromARGB(
-                                          255,
-                                          220,
-                                          220,
-                                          220,
-                                        ),
-                                ),
-                                onPressed: _canPressButton
-                                    ? () async {
-                                        await _pulangShiftType();
+                        //     // Pulang
+                        //     SizedBox(
+                        //       width: MediaQuery.sizeOf(context).width * 0.3,
+                        //       child: ElevatedButton(
+                        //         style: ElevatedButton.styleFrom(
+                        //           shape: RoundedRectangleBorder(
+                        //             borderRadius: BorderRadiusGeometry.circular(
+                        //               10,
+                        //             ),
+                        //           ),
+                        //           backgroundColor: _savedShiftType == "pulang"
+                        //               ? Colors.lightBlueAccent
+                        //               : const Color.fromARGB(
+                        //                   255,
+                        //                   220,
+                        //                   220,
+                        //                   220,
+                        //                 ),
+                        //         ),
+                        //         onPressed: _canPressButton
+                        //             ? () async {
+                        //                 await _pulangShiftType();
 
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => CamPulang(),
-                                          ),
-                                        );
-                                      }
-                                    : null,
-                                child: Text(
-                                  t.translate("outButton"),
-                                  style: TextStyle(
-                                    color: _savedShiftType == "pulang"
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        //                 Navigator.push(
+                        //                   context,
+                        //                   MaterialPageRoute(
+                        //                     builder: (_) => CamPulang(),
+                        //                   ),
+                        //                 );
+                        //               }
+                        //             : null,
+                        //         child: Text(
+                        //           t.translate("outButton"),
+                        //           style: TextStyle(
+                        //             color: _savedShiftType == "pulang"
+                        //                 ? Colors.white
+                        //                 : Colors.black,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: MediaQuery.sizeOf(context).height * 0.01,
                         ),
