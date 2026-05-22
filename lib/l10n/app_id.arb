@@ -173,5 +173,11 @@
   "inputGood" : "Barang Masuk",
   "inputGoodInput" : "Tambah Barang Masuk",
   "OutputGoodInput" : "Tambah Barang Keluar",
-  "OutputGood" : "Barang Keluar"
+  "OutputGood" : "Barang Keluar",
+
+  "goodName" : "Nama Barang",
+  "goodCategories" : "Pilih Kategori",
+  "dateAndTime" : "Tanggal Dan Jam",
+  "Value" : "Jumlah",
+  "desc" : "Keterangan"
   }

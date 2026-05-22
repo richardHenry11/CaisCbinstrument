@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:absence/cam.dart';
-import 'package:absence/camPulang.dart';
+// import 'package:absence/camPulang.dart';
 import 'package:absence/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -173,31 +173,31 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
     });
   }
 
-  Future<void> _masukShiftType() async {
-    final masuk = "masuk";
+  // Future<void> _masukShiftType() async {
+  //   final masuk = "masuk";
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('shift_type', masuk);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('shift_type', masuk);
 
-    setState(() {
-      _savedShiftType = masuk;
-    });
+  //   setState(() {
+  //     _savedShiftType = masuk;
+  //   });
 
-    print('shift_type: $masuk');
-  }
+  //   print('shift_type: $masuk');
+  // }
 
-  Future<void> _pulangShiftType() async {
-    final pulang = "pulang";
+  // Future<void> _pulangShiftType() async {
+  //   final pulang = "pulang";
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('shift_type', pulang);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('shift_type', pulang);
 
-    setState(() {
-      _savedShiftType = pulang;
-    });
+  //   setState(() {
+  //     _savedShiftType = pulang;
+  //   });
 
-    print('shift_type: $pulang');
-  }
+  //   print('shift_type: $pulang');
+  // }
 
   Future<void> _initLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();

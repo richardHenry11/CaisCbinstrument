@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:absence/goodInputLists.dart';
 import 'package:absence/goodsKind.dart';
+import 'package:absence/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -171,6 +172,7 @@ class _EditGoodInputState extends State<EditGoodInput> {
   //===================== UI Scaffold ===================================
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Color(0xFF182234),
       appBar: AppBar(
@@ -255,7 +257,7 @@ class _EditGoodInputState extends State<EditGoodInput> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Nama Barang", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text(t.translate(""), style: TextStyle(color: Color(0xFF8b9cb6))),
                         TextFormField(
                           style: TextStyle(color: Color(0xFF8b9cb6)),
                           controller: _namaBarang,

@@ -173,5 +173,12 @@
   "inputGood" : "Input Goods",
   "inputGoodInput" : "Add Input Good",
   "OutputGoodInput" : "Add Output Good",
-  "OutputGood" : "Output Goods"
+  "OutputGood" : "Output Goods",
+
+
+  "goodName" : "Goods Name",
+  "goodCategories" : "Good Categories",
+  "dateAndTime" : "Date & Time",
+  "Value" : "Quantity",
+  "desc" : "Description"
 }

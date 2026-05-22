@@ -103,8 +103,45 @@ class _FieldDutyState extends State<FieldDuty> {
   void initState() {
     super.initState();
     // this is prefsCatcher
-    _prefsCatcher();
-    _initLocation();
+    _initialized();
+  }
+
+  Future<void> _initialized() async {
+    await _prefsCatcher();
+    await _initLocation();
+    _setShiftTypeByTime();
+  }
+
+  Future<void> _setShiftTypeByTime() async {
+    final now = DateTime.now();
+    final hour = now.hour;
+    final minute = now.minute;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    // ========================= 00:00 - 12:00 ===========================
+    if(hour < 12 || (hour == 12 && minute == 0)) {
+      await prefs.setString('shift_type', 'masuk');
+
+      setState(() {
+        _savedShiftType = 'masuk';
+      });
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Camera()));
+      debugPrint("Shift Type: $_savedShiftType");
+    }
+
+    // ========================== 12:01 - 23:59 ===========================
+    else {
+      await prefs.setString('shift_type', 'pulang');
+
+      setState(() {
+        _savedShiftType = 'pulang';
+      });
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Camera()));
+      debugPrint("Shift Type: $_savedShiftType");
+    }
   }
 
   Future<void> _prefsCatcher() async {
