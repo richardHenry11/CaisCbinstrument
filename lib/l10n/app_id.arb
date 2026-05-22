@@ -158,5 +158,20 @@
   "nb" : "Keterangan Tambahan",
   "writenb" : "Tulis keterangan tambahan...",
   "latenessReasonProve" : "Photo Alasan",
-  "sendLate" : "Kirim konfirmasi keterlambatan"
+  "sendLate" : "Kirim konfirmasi keterlambatan",
+
+
+  "addGood" : "Tambah Barang",
+  "inputGoodList" : "List Barang Masuk",
+  "outputGoodList" : "List Barang Keluar",
+  "startDateInvent" : "Tanggal Mulai",
+  "endDateInvent" : "Sampai tanggal",
+  "categories" : "Kategori",
+  "searchGoods" : "Cari Nama Barang / QR Code",
+  "inventory" : "Inventori barang",
+  "manage" : "Management Stok & peminjaman",
+  "inputGood" : "Barang Masuk",
+  "inputGoodInput" : "Tambah Barang Masuk",
+  "OutputGoodInput" : "Tambah Barang Keluar",
+  "OutputGood" : "Barang Keluar"
   }

@@ -158,5 +158,20 @@
   "nb" : "Note Bonus",
   "writenb" : "Write Bonus Note Here...",
   "latenessReasonProve" : "Lateness Reason",
-  "sendLate" : "Send Lateness Confirmation"
+  "sendLate" : "Send Lateness Confirmation",
+
+
+  "addGood" : "Add Good",
+  "inputGoodList" : "Input Good Lists",
+  "outputGoodList" : "Output good Lists",
+  "startDateInvent" : "Start Date",
+  "endDateInvent" : "End Date",
+  "categories" : "Select Category",
+  "searchGoods" : "Find Good's Name / QR Code",
+  "inventory" : "Inventory",
+  "manage" : "Stock Managements & rent",
+  "inputGood" : "Input Goods",
+  "inputGoodInput" : "Add Input Good",
+  "OutputGoodInput" : "Add Output Good",
+  "OutputGood" : "Output Goods"
 }

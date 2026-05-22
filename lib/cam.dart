@@ -610,10 +610,18 @@ class _CameraState extends State<Camera> {
       "start_date": localDateTime(),
       "end_date": localDateTime(),
       "duration_days": 1,
-      "document_photo_masuk": photoData,
+      "document_photo_$_savedShiftType": photoData,
       "status": _savedStatus,
       "shift_type": _savedShiftType,
     };
+
+    setState(() {
+      _isSubmitting = false;
+    });
+
+    // print("Simulasi Pengiriman");
+    // print(body);
+    // print("ABSEN BERHASIL :)");
 
     final responses = await http.post(
       Uri.parse("https://cais.cbinstrument.com/auth/input/absensi"),

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:absence/l10n/app_localizations.dart';
 // import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class GoodOutputLists extends StatefulWidget {
@@ -816,6 +817,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
   // Scaffold body / context builder
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Color(0xFF182234),
       appBar: AppBar(
@@ -835,12 +837,10 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Column(
                 children: [
-                  Text(
-                    "Barang Keluar",
+                  Text(t.translate("OutputGood"),
                     style: TextStyle(color: Color(0xFFfca5a5)),
                   ),
-                  Text(
-                    "Management Stok & peminjaman",
+                  Text(t.translate("manage"),
                     style: TextStyle(fontSize: 10, color: Color(0xFF8b9cb6)),
                   ),
                 ],
@@ -907,8 +907,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                                 Text("🔍"),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "Cari Nama Barang / QR Code",
+                                  child: Text(t.translate("searchGoods"),
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 157, 157, 157),
                                     ),
@@ -943,7 +942,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                           ),
                           fillColor: Color(0xFF1f2937),
                           filled: true,
-                          labelText: "Pilih Kategori",
+                          labelText: t.translate("categories"),
                           labelStyle: TextStyle(
                             color: Color.fromARGB(255, 157, 157, 157),
                           ),
@@ -997,7 +996,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                               decoration: InputDecoration(
                                 fillColor: Color(0xFF1f2937),
                                 filled: true,
-                                label: Text("Start Date"),
+                                label: Text(t.translate("startDateInvent")),
                                 labelStyle: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -1035,7 +1034,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                               decoration: InputDecoration(
                                 fillColor: Color(0xFF1f2937),
                                 filled: true,
-                                label: Text("End Date"),
+                                label: Text(t.translate("endDateInvent")),
                                 labelStyle: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -1093,7 +1092,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                             Icon(MaterialCommunityIcons.plus_circle, color: Color.fromARGB(255, 189, 189, 189), size: MediaQuery.sizeOf(context).height * 0.03,),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: Text("Tambah Barang Keluar", style: TextStyle(color: Colors.white),),
+                              child: Text(t.translate("outputGoodInput"), style: TextStyle(color: Colors.white),),
                             ),
                       
                           ],
@@ -1128,7 +1127,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                                   backgroundColor: Color(0xFF065f46)
                                 ),
                                 onPressed: (){
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context, 
                                     MaterialPageRoute(builder: (context) => GoodInputList())
                                   );
@@ -1140,7 +1139,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                                     Text("📥"),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 10.0),
-                                      child: Text("List Barang Masuk", style: TextStyle(color: Colors.white, fontSize: 10),),
+                                      child: Text(t.translate("inputGoodList"), style: TextStyle(color: Colors.white, fontSize: 10),),
                                     )
                                   ],
                                 )
@@ -1168,7 +1167,7 @@ class _GoodOutputListsState extends State<GoodOutputLists> {
                                     Text("📥"),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 10.0),
-                                      child: Text("List Barang Keluar", style: TextStyle(color: Colors.white, fontSize: 10),),
+                                      child: Text(t.translate("outputGoodList"), style: TextStyle(color: Colors.white, fontSize: 10),),
                                     )
                                   ],
                                 )

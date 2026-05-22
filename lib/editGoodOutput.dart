@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
+import 'package:absence/l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
 class EditGoodOutput extends StatefulWidget {
@@ -175,6 +176,7 @@ class _EditGoodOutputState extends State<EditGoodOutput> {
   //===================== UI Scaffold ===================================
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Color(0xFF182234),
       appBar: AppBar(
@@ -193,7 +195,7 @@ class _EditGoodOutputState extends State<EditGoodOutput> {
             ),
           ),
         ),
-        title: Text("Ubah Barang Keluar", style: TextStyle(color: Color(0xFFfca5a5)),),
+        title: Text(t.translate(""), style: TextStyle(color: Color(0xFFfca5a5)),),
       ),
 
       // Body

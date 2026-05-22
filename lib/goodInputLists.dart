@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:absence/l10n/app_localizations.dart';
 // import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class GoodInputList extends StatefulWidget {
@@ -915,6 +916,7 @@ class _GoodInputListState extends State<GoodInputList> {
   // Scaffold body / context builder
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Color(0xFF182234),
       appBar: AppBar(
@@ -934,12 +936,11 @@ class _GoodInputListState extends State<GoodInputList> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Column(
                 children: [
-                  Text(
-                    "Barang Masuk",
+                  Text(t.translate("inputGood"),
                     style: TextStyle(color: Color(0xFF4a9eff)),
                   ),
                   Text(
-                    "Management Stok & peminjaman",
+                    t.translate("manage"),
                     style: TextStyle(fontSize: 10, color: Color(0xFF8b9cb6)),
                   ),
                 ],
@@ -1010,7 +1011,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                         left: 15.0,
                                       ),
                                       child: Text(
-                                        "Cari Nama Barang / QR Code",
+                                        t.translate("searchGoods"),
                                         style: TextStyle(
                                           color: Color.fromARGB(
                                             255,
@@ -1056,7 +1057,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                 ),
                                 fillColor: Color(0xFF1f2937),
                                 filled: true,
-                                labelText: "Pilih Kategori",
+                                labelText: t.translate("categories"),
                                 labelStyle: TextStyle(
                                   color: Color.fromARGB(255, 157, 157, 157),
                                 ),
@@ -1120,7 +1121,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                   decoration: InputDecoration(
                                     fillColor: Color(0xFF1f2937),
                                     filled: true,
-                                    label: Text("Start Date"),
+                                    label: Text(t.translate("startDateInvent")),
                                     labelStyle: TextStyle(
                                       color: Color.fromARGB(255, 157, 157, 157),
                                     ),
@@ -1175,7 +1176,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                   decoration: InputDecoration(
                                     fillColor: Color(0xFF1f2937),
                                     filled: true,
-                                    label: Text("End Date"),
+                                    label: Text(t.translate("endDateInvent")),
                                     labelStyle: TextStyle(
                                       color: Color.fromARGB(255, 157, 157, 157),
                                     ),
@@ -1256,8 +1257,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      "Tambah Barang Masuk",
+                                    child: Text(t.translate("inputGoodInput"),
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -1307,8 +1307,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                             padding: const EdgeInsets.only(
                                               left: 10.0,
                                             ),
-                                            child: Text(
-                                              "List Barang Masuk",
+                                            child: Text(t.translate("inputGoodList"),
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,
@@ -1335,7 +1334,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                         backgroundColor: Color(0xFF7f1d1d),
                                       ),
                                       onPressed: () {
-                                        Navigator.push(
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
@@ -1353,7 +1352,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                               left: 10.0,
                                             ),
                                             child: Text(
-                                              "List Barang Keluar",
+                                              t.translate("outputGoodList"),
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,
