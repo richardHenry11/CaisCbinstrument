@@ -345,6 +345,19 @@ class _LemurReviseState extends State<LemurRevise> {
     }
   }
 
+  Future<String> networkImageLoadertoBase64(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final bytes = response.bodyBytes;
+      final base64String = base64Encode(bytes);
+
+      return "data:image/jpeg;base64,$base64String";
+    } else {
+      throw Exception("Failed load network image");
+    }
+  } 
+
   Future<void> _submitApi() async {
     _isLoading = true;
     if (_token == null) {
@@ -352,13 +365,47 @@ class _LemurReviseState extends State<LemurRevise> {
       return;
     }
 
-    if (_photo == null || _workingPhoto == null) return;
+    if((_photo == null && approvalPhotoUrl.isEmpty) || 
+        (_workingPhoto == null && workingPhotoUrls.isEmpty)
+      ) return;
 
     // To base64image
+    // ================= APPROVAL PHOTO =================
+  String photoDataApproval = "";
+
+  // kalau upload baru
+  if (_photo != null) {
     final base64Image1 = await imageToBase64(_photo!);
-    final photoDataApproval = "data:image/jpeg;base64,$base64Image1";
+    photoDataApproval = "data:image/jpeg;base64,$base64Image1";
+  }
+
+  // kalau pakai foto lama backend
+  else {
+    photoDataApproval = await networkImageLoadertoBase64(
+      approvalPhotoUrl,
+    );
+  }
+
+  // ================= WORKING PHOTO =================
+  List<String> photoDataWorking = [];
+
+  // kalau upload baru
+  if (_workingPhoto != null) {
     final base64Image2 = await imageToBase64(_workingPhoto!);
-    final photoDataWorking = "data:image/jpeg;base64,$base64Image2";
+
+    photoDataWorking = [
+      "data:image/jpeg;base64,$base64Image2"
+    ];
+  }
+
+  // kalau pakai foto lama backend
+  else {
+    for (final url in workingPhotoUrls) {
+      final base64img = await networkImageLoadertoBase64(url);
+
+      photoDataWorking.add(base64img);
+    }
+  }
 
     // debugPrint("PHOTO LENGTH approval: ${photoDataApproval.length}");
     // debugPrint("PHOTO PREFIX approval: ${photoDataApproval.substring(0, 30)}");
@@ -384,14 +431,14 @@ class _LemurReviseState extends State<LemurRevise> {
 
       "daftar_pekerjaan": workingListCtrl.text,
       "bukti_persetujuan_atasan": photoDataApproval,
-      "bukti_pekerjaan": [photoDataWorking],
+      "bukti_pekerjaan": photoDataWorking,
     });
 
-    // setState(() {
-    //   print("Simulasi Kirim: $body"); 
-    //   _isLoading = false;
-    //   _thxForAbsence();
-    // });
+    setState(() {
+      print("Simulasi Kirim: $body"); 
+      _isLoading = false;
+      _thxForAbsence();
+    });
     
 
     final postResponse = await http.post(
@@ -414,6 +461,7 @@ class _LemurReviseState extends State<LemurRevise> {
       print("$error");
     }
   }
+
   Future<void> _fetchingRevise() async {
     _isLoading = true;
     if (_token == null) {
