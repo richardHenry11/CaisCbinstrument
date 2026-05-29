@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 
 import 'package:absence/l10n/app_localizations.dart';
@@ -117,7 +118,7 @@ class _CameraState extends State<Camera> {
     ${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}:${now.second}
     ${_lat!.toStringAsFixed(6)}, ${_lng!.toStringAsFixed(6)}
     $_address
-    $_savedAttType - MASUK
+    $_savedAttType - $_savedShiftType
     """;
 
     img.drawString(
@@ -187,7 +188,9 @@ class _CameraState extends State<Camera> {
 
     if (!mounted) return;
 
-    setState(() {});
+    setState(() {
+      
+    });
   }
 
   void _startRealtimeCapture() {
@@ -547,14 +550,34 @@ class _CameraState extends State<Camera> {
     final sim = matched['similarity'];
 
     if (!mounted) return;
+
+    final isValid = sim >= 0.95;
+
     setState(() {
       final t = AppLocalizations.of(context)!;
       _similarity = sim;
-      _faceValid = sim >= 0.95;
-      _faceMessage = _faceValid
+      _faceValid = isValid;
+
+      _faceMessage = isValid
           ? t.translate("recoged")
           : t.translate("unfaced");
     });
+
+    if (isValid) {
+      // stop realtime capture
+      _captureTimer?.cancel();
+
+      _isProcessing = false;
+
+      // turn off realtime capture
+      await _controller?.dispose();
+
+      if (!mounted) return;
+
+      setState(() {
+        _controller = null;
+      });
+    }
 
     print("similarities : $_similarity");
     print("face valid : $_faceValid");
@@ -766,10 +789,10 @@ class _CameraState extends State<Camera> {
     return Scaffold(
       backgroundColor: Color(0xFF182234),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 207, 207, 207),
         title: Text(
           t.translate("takePicture"),
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
         ),
       ),
       body: Padding(
@@ -777,36 +800,109 @@ class _CameraState extends State<Camera> {
         child: Column(
           children: [
             Expanded(
-              child: 
-              ClipRRect(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: 
-                _controller == null ||
-                        !_controller!.value.isInitialized
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : 
-                    Stack(
-                      children: [
-                        CameraPreview(_controller!),
+                child:
+                    _photo != null && _faceValid
+                        ? Image.file(
+                            _photo!,
+                            fit: BoxFit.cover,
+                          )
+                        : (_controller == null ||
+                              !_controller!.value.isInitialized)
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : 
+                        Stack(
+                    fit: StackFit.expand,
+                  children: [
+                    CameraPreview(_controller!),
 
-                        Positioned(
-                          bottom: 100,
-                          left: 20,
-                          right: 20,
-                          child: _buildGPSOverlay(),
-                        ),
-                      ]
+                    Positioned(
+                      bottom: 0,
+                      left: 20,
+                      right: 20,
+                      child: SafeArea(
+                        child: _buildGPSOverlay(),
+                      ),
                     ),
+                  ],
+                )
               ),
             ),
             SizedBox(height: 5),
+            Container(
+              decoration: BoxDecoration(
+                // border: Border.all(
+                //   color: Colors.red
+                // )
+              ),
+              child: 
+              Card(
+                shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(
+                        color: const Color.fromARGB(255, 67, 150, 217),
+                        width: 1,
+                      ),
+                    ),
+                    color: Color(0xFF334155),
+                  child: 
+                  Column(
+                    children: [
+                      
+                      // ====================== Facing Toward Camera ==========================
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15),
+                            ),
+                            Text(t.translate("facingForward"), style: TextStyle(color: Colors.white),)
+                          ],
+                        ),
+                      ),
+
+                      // ====================== Evading 2 face or more ==========================
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15),
+                            ),
+                            Text(t.translate("2ormoreevade"), style: TextStyle(color: Colors.white),)
+                          ],
+                        ),
+                      ),
+
+                      // ====================== Stay Still ==========================
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15,),
+                            ),
+                            Text(t.translate("stayStill"), style: TextStyle(color: Colors.white),)
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+              ),
+            ),
             SizedBox(height: 8),
             if (_faceMessage.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
+                child: 
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
@@ -814,13 +910,15 @@ class _CameraState extends State<Camera> {
                       color: _faceValid ? Colors.green : Colors.red,
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      _faceMessage,
-                      style: TextStyle(
-                        color: _faceValid ? Colors.green : Colors.red,
-                        fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          _faceMessage,
+                            style: TextStyle(
+                              color: _faceValid ? Colors.green : Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                       ),
-                    ),
                     // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("Test Prefs"))
                   ],
                 ),

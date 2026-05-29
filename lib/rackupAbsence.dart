@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:absence/lateness.dart';
 import 'package:absence/lemur.dart';
+import 'package:absence/lemurRevise.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart' as http;
@@ -197,6 +198,8 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
               ),
             ],
           ),
+
+          // ================= Overtime Button ====================
           SizedBox(
             width: MediaQuery.sizeOf(context).width * 0.9,
             child: ElevatedButton(
@@ -211,7 +214,12 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
                 await saveSelectedDate(item['date']);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Lemur()),
+                  item['overtime_approval'] == "revise" ?
+                  MaterialPageRoute(builder: (context) => 
+                  LemurRevise()
+                  ) 
+                  : MaterialPageRoute(builder: (context) => 
+                  Lemur())
                 );
               },
               child: Row(
@@ -285,7 +293,7 @@ Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
             ),
           ),
 
-          //================== Overtime Approval =====
+          //================== Overtime Approval ====================
           SizedBox(
             width: MediaQuery.sizeOf(context).width * 0.45,
             child: Container(

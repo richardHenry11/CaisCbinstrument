@@ -72,30 +72,30 @@ class _CamAndFileState extends State<CamAndFile> {
     return File(image.path);
   }
 
-  Future<void> _takePhoto() async {
-    final granted = await requestCameraPermission();
-    if (!granted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
-      return;
-    }
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.camera,
-      preferredCameraDevice: CameraDevice.front,
-      imageQuality: 75,
-    );
-    if (image != null) {
-      setState(() {
-        _photo = File(image.path);
-      });
+  // Future<void> _takePhoto() async {
+  //   final granted = await requestCameraPermission();
+  //   if (!granted) {
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(const SnackBar(content: Text("Camera permission denied")));
+  //     return;
+  //   }
+  //   final XFile? image = await _picker.pickImage(
+  //     source: ImageSource.camera,
+  //     preferredCameraDevice: CameraDevice.front,
+  //     imageQuality: 75,
+  //   );
+  //   if (image != null) {
+  //     setState(() {
+  //       _photo = File(image.path);
+  //     });
 
-      debugPrint("Photo Taken: ${image.path}");
+  //     debugPrint("Photo Taken: ${image.path}");
 
-      // // Continue Absence
-      // _submitAbsence();
-    }
-  }
+  //     // // Continue Absence
+  //     // _submitAbsence();
+  //   }
+  // }
 
   Future<void> _prefsCatcher() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -408,39 +408,40 @@ class _CamAndFileState extends State<CamAndFile> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.cyanAccent.withOpacity(0.3),
-                        blurRadius: 15,
-                        spreadRadius: 2,
-                      ),
-                      BoxShadow(
-                        color: Colors.cyanAccent.withOpacity(0.1),
-                        blurRadius: 30,
-                        spreadRadius: 6,
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 82, 177, 255),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    onPressed: _takePhoto,
-                    icon: const Icon(
-                      Icons.camera_alt_rounded,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      t.translate("takePicture"),
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.cyanAccent.withOpacity(0.3),
+                //         blurRadius: 15,
+                //         spreadRadius: 2,
+                //       ),
+                //       BoxShadow(
+                //         color: Colors.cyanAccent.withOpacity(0.1),
+                //         blurRadius: 30,
+                //         spreadRadius: 6,
+                //       ),
+                //     ],
+                //   ),
+                //   child: 
+                //   ElevatedButton.icon(
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: const Color.fromARGB(255, 82, 177, 255),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadiusGeometry.circular(10),
+                //       ),
+                //     ),
+                //     onPressed: _takePhoto,
+                //     icon: const Icon(
+                //       Icons.camera_alt_rounded,
+                //       color: Colors.white,
+                //     ),
+                //     label: Text(
+                //       t.translate("takePicture"),
+                //       style: TextStyle(color: Colors.white),
+                //     ),
+                //   ),
+                // ),
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [

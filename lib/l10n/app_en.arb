@@ -59,12 +59,15 @@
   "dadah" : "Goodbye.. ^_^",
   "verified" : "Face Verified",
   "oneFace" : "Make sure only one face is visible",
-  "noFace" : "No face detected, pls retry!",
+  "noFace" : "No face detected, put your face closer to cam",
   "nor" : "Failed to face verifying, please retry",
   "unrecog" : "Face is not Verified, please retaking Photo",
   "recoged" : "Face Verified",
   "unfaced" : "Face Unknown",
   "checking" : "Checking ...",
+  "facingForward" : "put your face facing Camera",
+  "2ormoreevade" : "evading 2 more faces infront of camera",
+  "stayStill" : "don't move too much",
 
 
   "reg" : "Register",
@@ -142,6 +145,7 @@
   "noPhotoWorking" : "No working photo selected",
   "fillData" : "Fill all Data to submit!",
   "submitOver" : "Submit Report",
+  "overtimingTitle" : "Overtime Form",
 
 
   "reportLateSent" : "Report Has been Sent, and will be checked by HR :)",
@@ -180,5 +184,9 @@
   "goodCategories" : "Good Categories",
   "dateAndTime" : "Date & Time",
   "Value" : "Quantity",
-  "desc" : "Description"
+  "desc" : "Description",
+
+
+  "rackupAbsen" : "Rackupitulation This Year's Attendances",
+  "todayState" : "Today's Status"
 }

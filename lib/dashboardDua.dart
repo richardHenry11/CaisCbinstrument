@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absence/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart' as http;
@@ -175,13 +176,14 @@ class _DashboardDuaState extends State<DashboardDua> {
   //========================== UI Builder here!! ===========================
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Color(0xFF182234),
 
       //============================= App Bar ==============================
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text("Dashboard", style: TextStyle(
+        title: Text(t.translate("beranda"), style: TextStyle(
                 // fontSize: 15,
                 // fontWeight: FontWeight.bold,
                 color: Colors.lightBlue,
@@ -239,7 +241,7 @@ class _DashboardDuaState extends State<DashboardDua> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: 
-                                    Text("Rekapitulasi Absensi Tahun Ini", style: TextStyle(color: Colors.white, fontSize: 18)),
+                                    Text(t.translate("rackupAbsen"), style: TextStyle(color: Colors.white, fontSize: 18)),
                                   ),
                                 )
                               ],
@@ -412,7 +414,7 @@ class _DashboardDuaState extends State<DashboardDua> {
                                           child: Icon(MaterialCommunityIcons.check_circle, color: Color(0xFF22d3ee)),
                                         ),
                                         Text("$_sick", style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold)),
-                                        Text("Sakit", style: TextStyle(color: Color(0xff94a3b8), fontSize: 15,),)
+                                        Text(t.translate("sick"), style: TextStyle(color: Color(0xff94a3b8), fontSize: 15,),)
                                       ],
                                     ),
                                   )
@@ -445,7 +447,7 @@ class _DashboardDuaState extends State<DashboardDua> {
                                           child: Icon(MaterialCommunityIcons.check_circle, color: Color(0xFF22d3ee)),
                                         ),
                                         Text("$_fieldCuti", style: TextStyle(color: Colors.white, fontSize:30, fontWeight: FontWeight.bold)),
-                                        Text("Cuti Lapangan", style: TextStyle(color: Color(0xff94a3b8), fontSize: 15,),)
+                                        Text(t.translate("cutLap"), style: TextStyle(color: Color(0xff94a3b8), fontSize: 15,),)
                                       ],
                                     ),
                                   )
@@ -532,7 +534,7 @@ class _DashboardDuaState extends State<DashboardDua> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text("$_status", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                                      Text("Status Hari ini", style: TextStyle(color: Color(0xff94a3b8)),)
+                                      Text(t.translate("todayState"), style: TextStyle(color: Color(0xff94a3b8)),)
                                     ],
                                   )
                                 ],

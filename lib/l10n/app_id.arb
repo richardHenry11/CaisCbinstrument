@@ -59,12 +59,15 @@
   "dadah" : "Selamat Tinggal ^_^",
   "verified" : "Face Verified",
   "oneFace" : "Pastikan hanya satu wajah Yang tampil",
-  "noFace" : "Wajah Tidak Terdeteksi, Ulang Foto",
+  "noFace" : "Wajah Tidak Terdeteksi, Silahkan Dekatkan Wajah ke kamera",
   "nor" : "Gagal Memverifikasi Wajah, Silahkan ulang foto",
   "unrecog" : "Wajah tidak Dikenali, Silahkan foto ulang!",
   "recoged" : "Wajah Terverifikasi",
   "unfaced" : "Wajah Tidak dikenali",
   "checking" : "Mengecek ...",
+  "facingForward" : "Hadapkan wajah ke kamera",
+  "2ormoreevade" : "Hindari menangkap 2 wajah atau lebih",
+  "stayStill" : "Jangan Bergerak terlalu banyak",
 
 
   "reg" : "Daftar",
@@ -142,6 +145,7 @@
   "noPhotoWorking" : "Belum ada Foto dipilih",
   "fillData" : "Lengkapi semua data untuk submit",
   "submitOver" : "Kirim Laporan",
+  "overtimingTitle" : "Form Lembur",
 
 
   "reportLateSent" : "Report sudah dikirim, dan akan dilihat HR :)",
@@ -179,5 +183,9 @@
   "goodCategories" : "Pilih Kategori",
   "dateAndTime" : "Tanggal Dan Jam",
   "Value" : "Jumlah",
-  "desc" : "Keterangan"
+  "desc" : "Keterangan",
+
+
+  "rackupAbsen" : "Rekapitulasi Absensi Tahun Ini",
+  "todayState" : "Status Hari ini"
   }
