@@ -290,9 +290,12 @@ class _LemurReviseState extends State<LemurRevise> {
   }
 
   Future<void> _initialized() async {
+    workingListCtrl.addListener(_validateSubmit);
+
     await _loadDateFromPrefs();
     await _fetchingRevise();
-    workingListCtrl.addListener(_validateSubmit);
+
+    _validateSubmit();
   }
 
   Future<void> _loadDateFromPrefs() async {
@@ -316,25 +319,31 @@ class _LemurReviseState extends State<LemurRevise> {
   }
 
   void _validateSubmit() {
-  final isValid =
-      (
-        _photo != null &&
-        _workingPhoto != null &&
+    final hasApproval =
+        _photo != null || approvalPhotoUrl.isNotEmpty;
+
+    final hasWorking =
+        _workingPhoto != null || workingPhotoUrls.isNotEmpty;
+
+    final isValid =
+        hasApproval &&
+        hasWorking &&
         _date.text.isNotEmpty &&
-        workingListCtrl.text.isNotEmpty
-      ) ||
+        workingListCtrl.text.isNotEmpty;
 
-      (
-        approvalPhotoUrl.isNotEmpty &&
-        workingPhotoUrls.isNotEmpty
-      );
+    print("=== VALIDATE ===");
+    print("hasApproval: $hasApproval");
+    print("hasWorking: $hasWorking");
+    print("date: ${_date.text}");
+    print("workingList: ${workingListCtrl.text}");
+    print("isValid: $isValid");
 
-  if (_isActivated != isValid) {
-    setState(() {
-      _isActivated = isValid;
-    });
+    if (_isActivated != isValid) {
+      setState(() {
+        _isActivated = isValid;
+      });
+    }
   }
-}
 
   Future<void> _submitApi() async {
     _isLoading = true;
@@ -451,7 +460,9 @@ class _LemurReviseState extends State<LemurRevise> {
               (e) => "$baseUrl$e",
             ),
           );
+        _isLoading = false;
       });
+      _validateSubmit();
     } else {
       final awak = jsonDecode(response.body);
       print(awak);
@@ -1001,14 +1012,14 @@ class _LemurReviseState extends State<LemurRevise> {
                               ),
                             ),
                           )
-                        : approvalPhotoUrl != null
+                        : approvalPhotoUrl.isNotEmpty
                             ? SizedBox(
                                 width: MediaQuery.sizeOf(context).width * 0.8,
                                 height: MediaQuery.sizeOf(context).height * 0.4,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
                                   child: Image.network(
-                                    approvalPhotoUrl!,
+                                    approvalPhotoUrl,
                                     fit: BoxFit.contain,
                                     loadingBuilder: (
                                       context,
@@ -1498,7 +1509,7 @@ class _LemurReviseState extends State<LemurRevise> {
               width: MediaQuery.sizeOf(context).width * 0.9,
               height: MediaQuery.sizeOf(context).height * 0.07,
               child: ElevatedButton(
-                onPressed: _isActivated && _isLoading == false ? (){
+                onPressed: _isActivated && !_isLoading ? (){
                   setState(() {
                     _isLoading = true;
                   });
