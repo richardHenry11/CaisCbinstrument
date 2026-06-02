@@ -313,7 +313,7 @@ class _LemurReviseState extends State<LemurRevise> {
 
         print(date);
         print(_token);
-        print(_name);
+        print("saved: $_name");
       });
     }
   }
@@ -470,7 +470,7 @@ class _LemurReviseState extends State<LemurRevise> {
     }
 
     final token = _token;
-    final url = "https://cais.cbinstrument.com/auth/absensi/lembur-detail?nama=Richard+Hendrik&tanggal=2026-05-22";
+    final url = "https://cais.cbinstrument.com/auth/absensi/lembur-detail?nama=$_name&tanggal=$date";
     final header = {
       "Authorization" : "Bearer $token",
       "Content-Type": "application/json",

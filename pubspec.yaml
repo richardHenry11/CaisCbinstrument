@@ -97,6 +97,9 @@ flutter:
       - assets/apatar.png
       - lib/l10n/
       - assets/gedeBox.png
+      - assets/loginBekgron.png
+      - assets/sms.png
+      - assets/finger-scan.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
