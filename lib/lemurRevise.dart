@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:absence/main.dart';
 import 'package:absence/rackupAbsence.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 // import 'package:http/http.dart' as http;
@@ -39,7 +40,7 @@ class LemburCounter extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.sizeOf(context).width * 0.85,
         child: Card(
-          color: const Color.fromARGB(255, 94, 129, 186),
+          color: AppTheme.cardBackground(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -51,7 +52,7 @@ class LemburCounter extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
                         title,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
                     Row(
@@ -60,8 +61,8 @@ class LemburCounter extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 8, bottom: 8),
                           child: Text(
                             "Max. ${max}Hours",
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 198, 198, 198),
+                            style: TextStyle(
+                              color: AppTheme.textSecondary(context),
                               fontSize: 10,
                             ),
                           ),
@@ -134,22 +135,22 @@ class LemburCounter extends StatelessWidget {
         readOnly: true,
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: AppTheme.textPrimary(context)),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.zero,
           filled: true,
-          fillColor: const Color.fromARGB(255, 3, 23, 58),
+          fillColor: AppTheme.cardBackground(context),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: Color.fromARGB(255, 219, 219, 219),
+            borderSide: BorderSide(
+              color: AppTheme.borderColor(context),
               width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: Color.fromARGB(255, 219, 219, 219),
+            borderSide: BorderSide(
+              color: AppTheme.borderColor(context),
               width: 1,
             ),
           ),
@@ -878,7 +879,7 @@ class _LemurReviseState extends State<LemurRevise> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("goodbye :(", style: TextStyle(color: Colors.white)),
+        content: Text("goodbye :(", style: TextStyle(color: AppTheme.textPrimary(context))),
       ),
     );
   }
@@ -893,9 +894,7 @@ class _LemurReviseState extends State<LemurRevise> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 189, 189, 189),
         title: Text(t.translate("overtimingTitle")),
       ),
       body: SingleChildScrollView(
@@ -946,23 +945,23 @@ class _LemurReviseState extends State<LemurRevise> {
               child: SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.9,
                 child: Card(
-                  color: const Color.fromARGB(255, 66, 91, 130),
+                  color: AppTheme.cardBackground(context),
                   child: Column(
                     children: [
                       TextField(
                         controller: _date,
                         readOnly: true,
                         style: TextStyle(
-                          color: const Color.fromARGB(255, 218, 218, 218),
+                          color: AppTheme.textPrimary(context),
                         ),
                         decoration: InputDecoration(
                           labelText: t.translate('dateOvertime'),
                           labelStyle: TextStyle(
-                            color: const Color.fromARGB(255, 154, 154, 154),
+                            color: AppTheme.textSecondary(context),
                           ),
                           prefixIcon: Icon(
                             Icons.calendar_today_rounded,
-                            color: const Color.fromARGB(255, 180, 180, 180),
+                            color: AppTheme.textSecondary(context),
                           ),
                         ),
                         onTap: () async {
@@ -993,7 +992,7 @@ class _LemurReviseState extends State<LemurRevise> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.9,
               child: Card(
-                color: const Color.fromARGB(255, 66, 91, 130),
+                color: AppTheme.cardBackground(context),
                 child: Column(
                   children: [
                     Padding(
@@ -1013,7 +1012,7 @@ class _LemurReviseState extends State<LemurRevise> {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
                               t.translate("leaderApproval"),
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppTheme.textPrimary(context)),
                             ),
                           ),
                         ],
@@ -1177,7 +1176,7 @@ class _LemurReviseState extends State<LemurRevise> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.9,
               child: Card(
-                color: Color.fromARGB(255, 66, 91, 130),
+                color: AppTheme.cardBackground(context),
                 child: Column(
                   children: [
                     Padding(
@@ -1194,7 +1193,7 @@ class _LemurReviseState extends State<LemurRevise> {
                           ),
                           Text(
                             t.translate("OverDur"),
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppTheme.textPrimary(context)),
                           ),
                         ],
                       ),
@@ -1204,7 +1203,7 @@ class _LemurReviseState extends State<LemurRevise> {
                       child: Row(
                         children: [
                           Card(
-                            color: const Color.fromARGB(255, 94, 129, 186),
+                            color: AppTheme.cardBackground(context),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
@@ -1301,7 +1300,7 @@ class _LemurReviseState extends State<LemurRevise> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.9,
               child: Card(
-                color: const Color.fromARGB(255, 66, 91, 130),
+                color: AppTheme.cardBackground(context),
                 child: Column(
                   children: [
                     Padding(
@@ -1321,7 +1320,7 @@ class _LemurReviseState extends State<LemurRevise> {
                           ),
                           Text(
                             t.translate("overWorkingList"),
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppTheme.textPrimary(context)),
                           ),
                         ],
                       ),
@@ -1346,20 +1345,20 @@ class _LemurReviseState extends State<LemurRevise> {
                         child: TextField(
                           controller: workingListCtrl,
                           maxLines: 4,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppTheme.textPrimary(context)),
                           decoration: InputDecoration(
                             hintText: t.translate("whatWork"),
-                            hintStyle: const TextStyle(
-                              color: Color.fromARGB(255, 180, 180, 180),
+                            hintStyle: TextStyle(
+                              color: AppTheme.textSecondary(context),
                               fontSize: 12,
                             ),
                             filled: true,
-                            fillColor: const Color.fromARGB(255, 94, 129, 186),
+                            fillColor: AppTheme.cardBackground(context),
                             contentPadding: const EdgeInsets.all(12),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 219, 219, 219),
+                              borderSide: BorderSide(
+                                color: AppTheme.borderColor(context),
                                 width: 1,
                               ),
                             ),
@@ -1383,7 +1382,7 @@ class _LemurReviseState extends State<LemurRevise> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.9,
               child: Card(
-                color: const Color.fromARGB(255, 66, 91, 130),
+                color: AppTheme.cardBackground(context),
                 child: Column(
                   children: [
                     Row(
@@ -1401,7 +1400,7 @@ class _LemurReviseState extends State<LemurRevise> {
                         ),
                         Text(
                           t.translate("workPhoto"),
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppTheme.textPrimary(context)),
                         ),
                       ],
                     ),

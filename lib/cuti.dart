@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:absence/camCutie.dart';
 import 'package:absence/main.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
@@ -245,7 +246,6 @@ class _CutiState extends State<Cuti> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -313,7 +313,7 @@ class _CutiState extends State<Cuti> {
                       width: 1,
                     ),
                   ),
-                  color: Color(0xFF334155),
+                  color: AppTheme.cardBackground(context),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -323,7 +323,7 @@ class _CutiState extends State<Cuti> {
                       Text(
                         t.translate("period"),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.textPrimary(context),
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
@@ -413,7 +413,7 @@ class _CutiState extends State<Cuti> {
                             getValidRangeTime()
                                 ? t.translate("absent")
                                 : t.translate("fillDate"),
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppTheme.textPrimary(context)),
                           ),
                         ),
                       ),
@@ -451,7 +451,7 @@ class _CutiState extends State<Cuti> {
                       width: 1,
                     ),
                   ),
-                  color: Color(0xFF334155),
+                  color: AppTheme.cardBackground(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -464,11 +464,11 @@ class _CutiState extends State<Cuti> {
                         children: [
                           Text(
                             "HR Compliance Verified",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                            style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                           ),
                           Text(
                             "Sistem terintegrasi dengan audit trail",
-                            style: TextStyle(color: Colors.white, fontSize: 8),
+                            style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 8),
                           ),
                         ],
                       ),
@@ -482,7 +482,7 @@ class _CutiState extends State<Cuti> {
                         child: Container(
                           width: 2,
                           height: MediaQuery.sizeOf(context).height * 0.04,
-                          color: Colors.grey,
+                          color: AppTheme.borderColor(context),
                         ),
                       ),
                       Column(

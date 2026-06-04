@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:absence/l10n/app_localizations.dart';
 import 'package:absence/main.dart';
 import 'package:absence/pilihdinas.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -787,9 +788,7 @@ class _CameraState extends State<Camera> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 207, 207, 207),
         title: Text(
           t.translate("takePicture"),
           style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
@@ -861,7 +860,7 @@ class _CameraState extends State<Camera> {
                               padding: const EdgeInsets.only(right: 16.0),
                               child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15),
                             ),
-                            Text(t.translate("facingForward"), style: TextStyle(color: Colors.white),)
+                            Text(t.translate("facingForward"), style: TextStyle(color: AppTheme.textPrimary(context)),)
                           ],
                         ),
                       ),
@@ -875,7 +874,7 @@ class _CameraState extends State<Camera> {
                               padding: const EdgeInsets.only(right: 16.0),
                               child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15),
                             ),
-                            Text(t.translate("2ormoreevade"), style: TextStyle(color: Colors.white),)
+                            Text(t.translate("2ormoreevade"), style: TextStyle(color: AppTheme.textPrimary(context)),)
                           ],
                         ),
                       ),
@@ -889,7 +888,7 @@ class _CameraState extends State<Camera> {
                               padding: const EdgeInsets.only(right: 16.0),
                               child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15,),
                             ),
-                            Text(t.translate("stayStill"), style: TextStyle(color: Colors.white),)
+                            Text(t.translate("stayStill"), style: TextStyle(color: AppTheme.textPrimary(context)),)
                           ],
                         ),
                       )

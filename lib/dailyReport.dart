@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:absence/dashboard.dart';
 import 'package:absence/reportLists.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -500,60 +501,55 @@ class _DailyReportState extends State<DailyReport> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Column(
             children: [
-              // Text("Data Inventori berhasil di edit", style: TextStyle(color: Colors.green)),
-              Icon(
-                MaterialCommunityIcons.alert_box,
-                color: const Color.fromARGB(255, 139, 129, 36),
-                size: 80,
+              Icon(Icons.help_outline_rounded, color: const Color(0xFFf59e0b), size: 64),
+              const SizedBox(height: 12),
+              const Text(
+                "Apakah Anda Yakin?",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-              Divider(),
             ],
           ),
-          content: Text("Apakah Anda Yakin??!!??"),
+          content: const Text("Data laporan akan dikirim ke sistem."),
           actions: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.25,
+                Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.cardBackground(context),
+                      foregroundColor: AppTheme.textPrimary(context),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: AppTheme.borderColor(context)),
                       ),
-                      backgroundColor: Colors.grey,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    onPressed: () {
-                      // button Funct
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                        color: const Color.fromARGB(255, 92, 92, 92),
-                      ),
-                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("Batal", style: TextStyle(fontWeight: FontWeight.w600)),
                   ),
                 ),
-
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.25,
+                const SizedBox(width: 12),
+                Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.cyanAccent,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      backgroundColor: Colors.green,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      textStyle: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     onPressed: () {
-                      // button Funct
                       Navigator.of(context).pop();
-                      // final id = _apiTresholder[index]["id"];
                       _systemCallback();
                     },
-                    child: Text("OK", style: TextStyle(color: Colors.white)),
+                    child: const Text("Kirim"),
                   ),
                 ),
               ],
@@ -570,33 +566,39 @@ class _DailyReportState extends State<DailyReport> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Column(
             children: [
-              Icon(MaterialCommunityIcons.check_circle, color: Colors.green, size: 80,),
-              Divider(),
+              const Icon(Icons.check_circle_rounded, color: Color(0xFF22c55e), size: 64),
+              const SizedBox(height: 12),
+              const Text(
+                "Laporan Berhasil Terkirim",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF22c55e)),
+              ),
             ],
           ),
-          content: Text("Laporan Berhasil Terkirim", style: TextStyle(color: Colors.green)),
           actions: [
             SizedBox(
-              width: MediaQuery.sizeOf(context).width * 1,
+              width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.cyanAccent,
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  backgroundColor: Colors.green,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  textStyle: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 onPressed: () {
-                  // button Funct
                   Navigator.of(context).pop();
-
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => Dashboard()),
                   );
                 },
-                child: Text("OK", style: TextStyle(color: Colors.white)),
+                child: const Text("OK"),
               ),
             ),
           ],
@@ -609,55 +611,33 @@ class _DailyReportState extends State<DailyReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
+        title: const Text("Daily Report"),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Container(
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.circular(10),
-              //   border: Border.all(
-              //     color: Color.fromRGBO(37, 99, 235, 0.2)
-              //   )
-              // ),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(37, 99, 235, 0.5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  ),
+            padding: const EdgeInsets.only(right: 12),
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.cyanAccent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: (){
-                  // Button funct here later!!
-                  Navigator.push(context, 
-                  MaterialPageRoute(builder: (context) => reportList())
-                  );
-                }, 
-                child: 
-                Row(
-                  children: [
-                    Icon(Icons.folder, color: Color.fromRGBO(147, 197, 253, 1)),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Text("List Laporan Saya", style: TextStyle(color: Color.fromRGBO(147, 197, 253, 1)),),
-                    ),
-                  ],
-                )
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                textStyle: const TextStyle(fontWeight: FontWeight.w600),
               ),
+              icon: const Icon(Icons.folder_rounded, size: 18),
+              label: const Text("List Laporan Saya"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => reportList()),
+                );
+              },
             ),
-          )
-        ],
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          "Daily Report",
-          style: TextStyle(
-            // fontSize: 15,
-            // fontWeight: FontWeight.bold,
-            color: Colors.lightBlue,
           ),
-        ),
-        backgroundColor: Color(0xFF1e293b),
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -674,7 +654,7 @@ class _DailyReportState extends State<DailyReport> {
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide(width: 2, color: Color(0xFF1f2937)),
                       ),
-                      color: Color(0xFF131927),
+                      color: AppTheme.cardBackground(context),
                       child: Column(
                         children: [
                           Padding(
@@ -702,7 +682,7 @@ class _DailyReportState extends State<DailyReport> {
                                           child: Text(
                                             "Nama",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textSecondary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -727,18 +707,13 @@ class _DailyReportState extends State<DailyReport> {
                                       ),
                                       child: TextFormField(
                                         enabled: false,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                         controller: _nameController,
                                         // onChanged: (_) => _validateSubmit(),
                                         decoration: InputDecoration(
                                           hintText: "$_savedName",
                                           hintStyle: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              145,
-                                              145,
-                                              145,
-                                            ),
+                                            color: AppTheme.textSecondary(context),
                                             fontSize: 14,
                                           ),
                                           enabledBorder: OutlineInputBorder(
@@ -760,7 +735,7 @@ class _DailyReportState extends State<DailyReport> {
                                             ),
                                           ),
                                           filled: true,
-                                          fillColor: Color(0xff334155),
+                                          fillColor: AppTheme.cardBackground(context),
                                         ),
                                       ),
                                     ),
@@ -784,7 +759,7 @@ class _DailyReportState extends State<DailyReport> {
                                           child: Text(
                                             "Lokasi Kerja",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textSecondary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -804,16 +779,10 @@ class _DailyReportState extends State<DailyReport> {
                                             10,
                                           ),
                                         ),
-                                        fillColor: Color(0xFF1f2937),
+                                        fillColor: AppTheme.cardBackground(context),
                                         filled: true,
                                         // labelText: "Pilih Lokasi Kerja",
-                                        labelStyle: TextStyle(
-                                          color: Color.fromARGB(
-                                            255,
-                                            157,
-                                            157,
-                                            157,
-                                          ),
+                                        labelStyle: TextStyle(color: AppTheme.textSecondary(context),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
@@ -833,12 +802,7 @@ class _DailyReportState extends State<DailyReport> {
                                         ),
                                       ),
                                       style: TextStyle(
-                                        color: Color.fromARGB(
-                                          255,
-                                          157,
-                                          157,
-                                          157,
-                                        ),
+                                        color: AppTheme.textSecondary(context),
                                       ),
                                       value: _selectedItem,
                                       items: _items.map((kategori) {
@@ -874,7 +838,7 @@ class _DailyReportState extends State<DailyReport> {
                                           child: Text(
                                             "Tanggal",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textSecondary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -891,24 +855,13 @@ class _DailyReportState extends State<DailyReport> {
                                       controller: _date,
                                       readOnly: true,
                                       style: TextStyle(
-                                        color: Color.fromARGB(
-                                          255,
-                                          157,
-                                          157,
-                                          157,
-                                        ),
+                                        color: AppTheme.textSecondary(context),
                                       ),
                                       decoration: InputDecoration(
-                                        fillColor: Color(0xFF1f2937),
+                                        fillColor: AppTheme.cardBackground(context),
                                         filled: true,
                                         label: Text("pilih tanggal"),
-                                        labelStyle: TextStyle(
-                                          color: Color.fromARGB(
-                                            255,
-                                            157,
-                                            157,
-                                            157,
-                                          ),
+                                        labelStyle: TextStyle(color: AppTheme.textSecondary(context),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
@@ -995,7 +948,7 @@ class _DailyReportState extends State<DailyReport> {
                                                 Text(
                                                   "Jam Masuk",
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppTheme.textPrimary(context),
                                                   ),
                                                 ),
                                               ],
@@ -1012,12 +965,7 @@ class _DailyReportState extends State<DailyReport> {
                                             child: TextField(
                                               controller: _startTime,
                                               style: TextStyle(
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  157,
-                                                  157,
-                                                  157,
-                                                ),
+                                                color: AppTheme.textSecondary(context),
                                               ),
                                               decoration: InputDecoration(
                                                 enabledBorder:
@@ -1045,15 +993,10 @@ class _DailyReportState extends State<DailyReport> {
                                                       ),
                                                     ),
                                                 filled: true,
-                                                fillColor: Color(0xFF1f2937),
+                                                fillColor: AppTheme.cardBackground(context),
                                                 suffixIcon: Icon(
                                                   MaterialCommunityIcons.clock,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    157,
-                                                    157,
-                                                    157,
-                                                  ),
+                                                  color: AppTheme.textSecondary(context),
                                                 ),
                                               ),
                                               readOnly: true,
@@ -1094,7 +1037,7 @@ class _DailyReportState extends State<DailyReport> {
                                                 Text(
                                                   "Jam Keluar",
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppTheme.textPrimary(context),
                                                   ),
                                                 ),
                                               ],
@@ -1109,12 +1052,7 @@ class _DailyReportState extends State<DailyReport> {
                                             child: TextField(
                                               controller: _endTime,
                                               style: TextStyle(
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  157,
-                                                  157,
-                                                  157,
-                                                ),
+                                                color: AppTheme.textSecondary(context),
                                               ),
                                               decoration: InputDecoration(
                                                 enabledBorder:
@@ -1130,7 +1068,7 @@ class _DailyReportState extends State<DailyReport> {
                                                       ),
                                                     ),
                                                 filled: true,
-                                                fillColor: Color(0xFF1f2937),
+                                                fillColor: AppTheme.cardBackground(context),
                                                 focusedBorder:
                                                     OutlineInputBorder(
                                                       borderRadius:
@@ -1145,12 +1083,7 @@ class _DailyReportState extends State<DailyReport> {
                                                     ),
                                                 suffixIcon: Icon(
                                                   MaterialCommunityIcons.clock,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    157,
-                                                    157,
-                                                    157,
-                                                  ),
+                                                  color: AppTheme.textSecondary(context),
                                                 ),
                                               ),
                                               readOnly: true,
@@ -1224,7 +1157,7 @@ class _DailyReportState extends State<DailyReport> {
                                           child: Text(
                                             "Pekerjaan Hari Ini",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: AppTheme.textPrimary(context),
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -1253,7 +1186,7 @@ class _DailyReportState extends State<DailyReport> {
                                                   1,
                                                 ),
                                               ),
-                                              color: Color(0xFF1f2937),
+                                              color: AppTheme.cardBackground(context),
                                               borderRadius:
                                                   BorderRadius.circular(12),
                                             ),
@@ -1336,41 +1269,32 @@ class _DailyReportState extends State<DailyReport> {
 
                                                               // ================ Delete Button for task ================
                                                               ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                  backgroundColor:
-                                                                      Color.fromRGBO(
-                                                                        84,
-                                                                        93,
-                                                                        105,
-                                                                        1,
-                                                                      ),
-                                                                  shape: RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          10,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                onPressed: () {
-                                                                  // Button Funtion here!!
-                                                                  setState(() {
-                                                                    tasks
-                                                                        .removeAt(
-                                                                          index,
-                                                                        );
-                                                                  });
-                                                                },
-                                                                child: Icon(
-                                                                  Icons.close,
-                                                                  color:
-                                                                      Color.fromRGBO(
-                                                                        220,
-                                                                        220,
-                                                                        220,
-                                                                        1,
-                                                                      ),
-                                                                ),
-                                                              ),
+                                                                 style: ElevatedButton.styleFrom(
+                                                                   backgroundColor:
+                                                                       const Color(0xFFef4444),
+                                                                   shape: RoundedRectangleBorder(
+                                                                     borderRadius:
+                                                                         BorderRadius.circular(
+                                                                           10,
+                                                                         ),
+                                                                   ),
+                                                                   elevation: 0,
+                                                                   padding: const EdgeInsets.all(8),
+                                                                 ),
+                                                                 onPressed: () {
+                                                                   setState(() {
+                                                                     tasks
+                                                                         .removeAt(
+                                                                           index,
+                                                                         );
+                                                                   });
+                                                                 },
+                                                                 child: const Icon(
+                                                                   Icons.close_rounded,
+                                                                   color: Colors.white,
+                                                                   size: 18,
+                                                                 ),
+                                                               ),
                                                             ],
                                                           ),
 
@@ -1386,12 +1310,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Project",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -1407,12 +1326,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 task["project"],
                                                             style: TextStyle(
                                                               color:
-                                                                  Color.fromARGB(
-                                                                    255,
-                                                                    157,
-                                                                    157,
-                                                                    157,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                             // maxLines: 4,
                                                             decoration: InputDecoration(
@@ -1435,9 +1349,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               hintText:
                                                                   "Contoh: Kalibrasi Sensor",
                                                               filled: true,
-                                                              fillColor: Color(
-                                                                0xFF1f2937,
-                                                              ),
+                                                              fillColor: AppTheme.cardBackground(context),
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderRadius:
                                                                     BorderRadius.circular(
@@ -1465,12 +1377,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Jenis Pekerjaan",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -1495,20 +1402,13 @@ class _DailyReportState extends State<DailyReport> {
                                                                         10,
                                                                       ),
                                                                 ),
-                                                                fillColor: Color(
-                                                                  0xFF1f2937,
-                                                                ),
+                                                                fillColor: AppTheme.cardBackground(context),
                                                                 filled: true,
                                                                 // labelText: "Pilih Lokasi Kerja",
                                                                 labelStyle:
                                                                     TextStyle(
                                                                       color:
-                                                                          Color.fromARGB(
-                                                                            255,
-                                                                            157,
-                                                                            157,
-                                                                            157,
-                                                                          ),
+                                                                          AppTheme.textSecondary(context),
                                                                     ),
                                                                 enabledBorder: OutlineInputBorder(
                                                                   borderRadius:
@@ -1535,12 +1435,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               ),
                                                               style: TextStyle(
                                                                 color:
-                                                                    Color.fromARGB(
-                                                                      255,
-                                                                      157,
-                                                                      157,
-                                                                      157,
-                                                                    ),
+                                                                    AppTheme.textSecondary(context),
                                                               ),
                                                               value:
                                                                   task["job"],
@@ -1575,12 +1470,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Judul Pekerjaan",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -1596,12 +1486,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 task["title"],
                                                             style: TextStyle(
                                                               color:
-                                                                  Color.fromARGB(
-                                                                    255,
-                                                                    157,
-                                                                    157,
-                                                                    157,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                             // maxLines: 4,
                                                             decoration: InputDecoration(
@@ -1624,9 +1509,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               hintText:
                                                                   "Contoh: Kalibrasi Sensor",
                                                               filled: true,
-                                                              fillColor: Color(
-                                                                0xFF1f2937,
-                                                              ),
+                                                              fillColor: AppTheme.cardBackground(context),
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderRadius:
                                                                     BorderRadius.circular(
@@ -1654,12 +1537,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Deskripsi Pekerjaan",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -1675,12 +1553,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 task["desc"],
                                                             style: TextStyle(
                                                               color:
-                                                                  Color.fromARGB(
-                                                                    255,
-                                                                    157,
-                                                                    157,
-                                                                    157,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                             maxLines: 4,
                                                             decoration: InputDecoration(
@@ -1703,9 +1576,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               hintText:
                                                                   "Contoh: Maintenance AQMS, Instalasi alat baru DLL",
                                                               filled: true,
-                                                              fillColor: Color(
-                                                                0xFF1f2937,
-                                                              ),
+                                                              fillColor: AppTheme.cardBackground(context),
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderRadius:
                                                                     BorderRadius.circular(
@@ -1732,12 +1603,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               "Progress",
                                                               style: TextStyle(
                                                                 color:
-                                                                    const Color.fromARGB(
-                                                                      255,
-                                                                      163,
-                                                                      163,
-                                                                      163,
-                                                                    ),
+                                                                    AppTheme.textSecondary(context),
                                                                 fontSize: 15,
                                                               ),
                                                             ),
@@ -1788,9 +1654,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                     Alignment
                                                                         .center,
                                                                 decoration: BoxDecoration(
-                                                                  color: Color(
-                                                                    0xFF0f172a,
-                                                                  ),
+                                                                  color: AppTheme.cardBackground(context),
                                                                   borderRadius:
                                                                       BorderRadius.circular(
                                                                         10,
@@ -1812,12 +1676,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                           .number,
                                                                   style: TextStyle(
                                                                     color:
-                                                                        Color.fromARGB(
-                                                                          255,
-                                                                          163,
-                                                                          163,
-                                                                          163,
-                                                                        ),
+                                                                        AppTheme.textSecondary(context),
                                                                   ),
                                                                   decoration: InputDecoration(
                                                                     border:
@@ -1883,12 +1742,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Kendala",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -1904,12 +1758,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 task["kendala"],
                                                             style: TextStyle(
                                                               color:
-                                                                  Color.fromARGB(
-                                                                    255,
-                                                                    157,
-                                                                    157,
-                                                                    157,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                             maxLines: 4,
                                                             decoration: InputDecoration(
@@ -1932,9 +1781,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               hintText:
                                                                   "Contoh: Sensor Tidak Responsif, belum update system",
                                                               filled: true,
-                                                              fillColor: Color(
-                                                                0xFF1f2937,
-                                                              ),
+                                                              fillColor: AppTheme.cardBackground(context),
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderRadius:
                                                                     BorderRadius.circular(
@@ -1962,12 +1809,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Solusi",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -1983,12 +1825,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                 task["solusi"],
                                                             style: TextStyle(
                                                               color:
-                                                                  Color.fromARGB(
-                                                                    255,
-                                                                    157,
-                                                                    157,
-                                                                    157,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                             ),
                                                             maxLines: 4,
                                                             decoration: InputDecoration(
@@ -2011,9 +1848,7 @@ class _DailyReportState extends State<DailyReport> {
                                                               hintText:
                                                                   "Contoh: Maintenance AQMS, Instalasi alat baru DLL",
                                                               filled: true,
-                                                              fillColor: Color(
-                                                                0xFF1f2937,
-                                                              ),
+                                                              fillColor: AppTheme.cardBackground(context),
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderRadius:
                                                                     BorderRadius.circular(
@@ -2042,12 +1877,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Opsional",
                                                             style: TextStyle(
                                                               color:
-                                                                  const Color.fromARGB(
-                                                                    255,
-                                                                    163,
-                                                                    163,
-                                                                    163,
-                                                                  ),
+                                                                  AppTheme.textSecondary(context),
                                                               fontSize: 15,
                                                             ),
                                                           ),
@@ -2065,7 +1895,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "File kendala",
                                                             style: TextStyle(
                                                               color:
-                                                                  Colors.white,
+                                                                  AppTheme.textPrimary(context),
                                                             ),
                                                           ),
 
@@ -2156,12 +1986,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                             )
                                                                             .last,
                                                                         style: TextStyle(
-                                                                          color: Color.fromARGB(
-                                                                            255,
-                                                                            163,
-                                                                            163,
-                                                                            163,
-                                                                          ),
+                                                                          color: AppTheme.textSecondary(context),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -2223,7 +2048,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "File Solusi",
                                                             style: TextStyle(
                                                               color:
-                                                                  Colors.white,
+                                                                  AppTheme.textPrimary(context),
                                                             ),
                                                           ),
 
@@ -2314,12 +2139,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                             )
                                                                             .last,
                                                                         style: TextStyle(
-                                                                          color: Color.fromARGB(
-                                                                            255,
-                                                                            163,
-                                                                            163,
-                                                                            163,
-                                                                          ),
+                                                                          color: AppTheme.textSecondary(context),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -2381,7 +2201,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Save Document 1",
                                                             style: TextStyle(
                                                               color:
-                                                                  Colors.white,
+                                                                  AppTheme.textPrimary(context),
                                                             ),
                                                           ),
 
@@ -2472,12 +2292,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                             )
                                                                             .last,
                                                                         style: TextStyle(
-                                                                          color: Color.fromARGB(
-                                                                            255,
-                                                                            163,
-                                                                            163,
-                                                                            163,
-                                                                          ),
+                                                                          color: AppTheme.textSecondary(context),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -2539,7 +2354,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Save Document 2",
                                                             style: TextStyle(
                                                               color:
-                                                                  Colors.white,
+                                                                  AppTheme.textPrimary(context),
                                                             ),
                                                           ),
 
@@ -2630,12 +2445,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                             )
                                                                             .last,
                                                                         style: TextStyle(
-                                                                          color: Color.fromARGB(
-                                                                            255,
-                                                                            163,
-                                                                            163,
-                                                                            163,
-                                                                          ),
+                                                                          color: AppTheme.textSecondary(context),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -2697,7 +2507,7 @@ class _DailyReportState extends State<DailyReport> {
                                                             "Save Document 3",
                                                             style: TextStyle(
                                                               color:
-                                                                  Colors.white,
+                                                                  AppTheme.textPrimary(context),
                                                             ),
                                                           ),
 
@@ -2788,12 +2598,7 @@ class _DailyReportState extends State<DailyReport> {
                                                                             )
                                                                             .last,
                                                                         style: TextStyle(
-                                                                          color: Color.fromARGB(
-                                                                            255,
-                                                                            163,
-                                                                            163,
-                                                                            163,
-                                                                          ),
+                                                                          color: AppTheme.textSecondary(context),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -2906,21 +2711,25 @@ class _DailyReportState extends State<DailyReport> {
                                         width:
                                             MediaQuery.sizeOf(context).width *
                                             1,
-                                        child: ElevatedButton(
+                                        child: ElevatedButton.icon(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color.fromRGBO(
-                                              73,
-                                              130,
-                                              253,
-                                              1,
-                                            ),
+                                            backgroundColor: AppTheme.cyanAccent,
+                                            foregroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 12,
+                                            ),
+                                            textStyle: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
+                                          icon: const Icon(Icons.add_rounded, size: 18),
+                                          label: const Text("Tambah Pekerjaan"),
                                           onPressed: () {
-                                            // Butto funct here!!
                                             setState(() {
                                               tasks.add({
                                                 "project":
@@ -2944,12 +2753,6 @@ class _DailyReportState extends State<DailyReport> {
                                               });
                                             });
                                           },
-                                          child: Text(
-                                            "Tambah Pekerjaan",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
                                         ),
                                       ),
                                     ),
@@ -3005,7 +2808,7 @@ class _DailyReportState extends State<DailyReport> {
                                         child: Text(
                                           "Rencana Pekerjaan besok",
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: AppTheme.textPrimary(context),
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -3042,7 +2845,7 @@ class _DailyReportState extends State<DailyReport> {
                                       hintText:
                                           "Contoh: Melanjutkan Kalibrasi, Rewiring, pengecekan data ke server DLL...",
                                       filled: true,
-                                      fillColor: Color(0xFF1f2937),
+                                      fillColor: AppTheme.cardBackground(context),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         borderSide: BorderSide(
@@ -3067,56 +2870,52 @@ class _DailyReportState extends State<DailyReport> {
                                         0.01,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                            0.38,
-                                        child: ElevatedButton(
+                                      Expanded(
+                                        child: ElevatedButton.icon(
                                           style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(0xFF64748b),
+                                            foregroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius.circular(12),
                                             ),
-                                            backgroundColor: Colors.grey,
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 14,
+                                            ),
+                                          ),
+                                          icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                                          label: const Text(
+                                            "Kembali",
+                                            style: TextStyle(fontWeight: FontWeight.w600),
                                           ),
                                           onPressed: () {
-                                            // Button Funct here!!
+                                            Navigator.pop(context);
                                           },
-                                          child: Text(
-                                            "back Button",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                            0.38,
-                                        child: ElevatedButton(
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: ElevatedButton.icon(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color.fromRGBO(
-                                              73,
-                                              130,
-                                              253,
-                                              1,
-                                            ),
+                                            backgroundColor: AppTheme.cyanAccent,
+                                            foregroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 14,
+                                            ),
+                                            textStyle: const TextStyle(
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
-                                          onPressed: _isActivated ? _confirmShowDialog: null,
-                                          child: Text(
-                                            "Kirim",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                          icon: const Icon(Icons.send_rounded, size: 18),
+                                          label: const Text("Kirim"),
+                                          onPressed: _isActivated ? _confirmShowDialog : null,
                                         ),
                                       ),
                                     ],

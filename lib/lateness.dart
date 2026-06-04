@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:absence/main.dart';
 import 'package:absence/rackupAbsence.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -305,7 +306,7 @@ class _LatenessState extends State<Lateness> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
-        content: Text("Token Exp :(", style: TextStyle(color: Colors.white)),
+        content: Text("Token Exp :(", style: TextStyle(color: AppTheme.textPrimary(context))),
       ),
     );
   }
@@ -315,10 +316,8 @@ class _LatenessState extends State<Lateness> {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 189, 189, 189),
         title: Text(t.translate("lateConfirm")),
       ),
-      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -327,7 +326,7 @@ class _LatenessState extends State<Lateness> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 child: Card(
-                  color: const Color.fromARGB(255, 66, 91, 130),
+                  color: AppTheme.cardBackground(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -353,7 +352,7 @@ class _LatenessState extends State<Lateness> {
                             ),
                             Text(
                               t.translate("absenDat"),
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppTheme.textPrimary(context)),
                             ),
                           ],
                         ),
@@ -368,11 +367,11 @@ class _LatenessState extends State<Lateness> {
                           left: 16.0,
                           right: 16.0,
                         ),
-                        child: Card(
-                          color: const Color.fromARGB(255, 3, 23, 58),
-                          child: Column(
-                            children: [
-                              // ======== Row Name =========
+                          child: Card(
+                            color: AppTheme.cardBackground(context),
+                            child: Column(
+                              children: [
+                                // ======== Row Name =========
                               Padding(
                                 padding: const EdgeInsets.only(
                                   left: 8.0,
@@ -388,7 +387,7 @@ class _LatenessState extends State<Lateness> {
                                           0.4,
                                       child: Text(
                                         t.translate("name"),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                     SizedBox(
@@ -397,7 +396,7 @@ class _LatenessState extends State<Lateness> {
                                           0.4,
                                       child: Text(
                                         safeText(userName),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                   ],
@@ -420,7 +419,7 @@ class _LatenessState extends State<Lateness> {
                                           0.4,
                                       child: Text(
                                         t.translate("date"),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                     SizedBox(
@@ -429,7 +428,7 @@ class _LatenessState extends State<Lateness> {
                                           0.3,
                                       child: Text(
                                         safeText(latenessData?['date']),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                   ],
@@ -452,7 +451,7 @@ class _LatenessState extends State<Lateness> {
                                           0.4,
                                       child: Text(
                                         t.translate("cekin"),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                     SizedBox(
@@ -461,7 +460,7 @@ class _LatenessState extends State<Lateness> {
                                           0.3,
                                       child: Text(
                                         safeText(latenessData?['check_in']),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                   ],
@@ -484,7 +483,7 @@ class _LatenessState extends State<Lateness> {
                                           0.4,
                                       child: Text(
                                         t.translate("location"),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                     SizedBox(
@@ -493,7 +492,7 @@ class _LatenessState extends State<Lateness> {
                                           0.3,
                                       child: Text(
                                         "........",
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                       ),
                                     ),
                                   ],
@@ -563,7 +562,7 @@ class _LatenessState extends State<Lateness> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 child: Card(
-                  color: const Color.fromARGB(255, 66, 91, 130),
+                  color: AppTheme.cardBackground(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -589,7 +588,7 @@ class _LatenessState extends State<Lateness> {
                             ),
                             Text(
                               t.translate("lateReason"),
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppTheme.textPrimary(context)),
                             ),
                           ],
                         ),
@@ -601,14 +600,14 @@ class _LatenessState extends State<Lateness> {
                         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                         child: DropdownButtonFormField<String>(
                           value: _selectedReason,
-                          dropdownColor: const Color.fromARGB(255, 3, 23, 58),
-                          iconEnabledColor: Colors.white,
-                          style: const TextStyle(color: Colors.white),
+                          dropdownColor: AppTheme.cardBackground(context),
+                          iconEnabledColor: AppTheme.textPrimary(context),
+                          style: TextStyle(color: AppTheme.textPrimary(context)),
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: const Color.fromARGB(255, 3, 23, 58),
+                            fillColor: AppTheme.cardBackground(context),
                             labelText: t.translate("selectReason"),
-                            labelStyle: const TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(color: AppTheme.textPrimary(context)),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -635,7 +634,7 @@ class _LatenessState extends State<Lateness> {
                             Text(
                               t.translate("nb"),
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppTheme.textPrimary(context),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -653,16 +652,16 @@ class _LatenessState extends State<Lateness> {
                                     Color(0xFF0A1426),
                                   ],
                                 ),
-                                border: Border.all(color: Colors.white24),
+                                border: Border.all(color: AppTheme.borderColor(context)),
                               ),
                               child: TextField(
                                 controller: _keterangan,
                                 maxLines: 5, // multiline
-                                style: TextStyle(color: Colors.white),
-                                cursorColor: Colors.white,
+                                style: TextStyle(color: AppTheme.textPrimary(context)),
+                                cursorColor: AppTheme.textPrimary(context),
                                 decoration: InputDecoration(
                                   hintText: t.translate("writenb"),
-                                  hintStyle: TextStyle(color: Colors.white54),
+                                  hintStyle: TextStyle(color: AppTheme.textSecondary(context)),
                                   contentPadding: EdgeInsets.all(16),
                                   border: InputBorder
                                       .none, // hilangkan border default
@@ -682,7 +681,7 @@ class _LatenessState extends State<Lateness> {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 1,
                 child: Card(
-                  color: const Color.fromARGB(255, 66, 91, 130),
+                  color: AppTheme.cardBackground(context),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -708,7 +707,7 @@ class _LatenessState extends State<Lateness> {
                             ),
                             Text(
                               t.translate("latenessReasonProve"),
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppTheme.textPrimary(context)),
                             ),
                           ],
                         ),

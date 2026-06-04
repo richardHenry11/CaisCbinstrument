@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:absence/main.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -18,47 +19,37 @@ class Regist extends StatefulWidget {
 class _RegistState extends State<Regist> {
   final _formKey = GlobalKey<FormState>();
 
-  // state get employees
   List<String> _employeeNames = [];
   String? _selectedEmployee;
   bool _isLoadingNames = true;
 
-  // state get Leaders
   List<String> _leaderNames = [];
   String? _selectedLeaders;
   bool _loadingLeader = true;
 
-  // TextEditingControllers
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _repassword = TextEditingController();
 
-  // state put user in parameter's url
-
-  // File? _selectedImage;
   File? _frontFace;
   File? _leftFace;
   File? _rightFace;
   bool _uploadingFace = false;
 
-  // current step
   int _currentStep = 0;
 
-  // Mapping Steps
   final steps = [
     'straight face frontfacing camera',
     'rotate ur face lil bit to the left',
     'rotate ur face lil bit to the right',
   ];
 
-  // button register state
   bool get _isPhotoCompleted {
     return _frontFace != null && _leftFace != null && _rightFace != null;
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadEmployeesNames();
     _loadLeaders();
@@ -77,84 +68,6 @@ class _RegistState extends State<Regist> {
     }
     return null;
   }
-
-  // Future<void> _takeFrontFace() async {
-  //   final image = await _captureFace();
-  //   if (image != null) {
-  //     setState(() {
-  //       _frontFace = image;
-  //     });
-  //   }
-  // }
-
-  // Future<void> _takeLeftFace() async {
-  //   final image = await _captureFace();
-  //   if (image != null) {
-  //     setState(() {
-  //       _leftFace = image;
-  //     });
-  //   }
-  // }
-
-  // Future<void> _takeRightFace() async {
-  //   final image = await _captureFace();
-  //   if (image != null) {
-  //     setState(() {
-  //       _rightFace = image;
-  //     });
-  //   }
-  // }
-
-  // Future<void> _uploadSingleFace(File image) async {
-  //   final subject = Uri.encodeComponent(_selectedEmployee!);
-  //   final xapikey = '23e225bf-8f28-4493-a870-39019954fdae';
-
-  //   final uri = Uri.parse(
-  //     'https://cais-ai.cbinstrument.com/api/v1/recognition/faces?subject=$subject',
-  //   );
-
-  //   final request = http.MultipartRequest('POST', uri)
-  //         ..headers['x-api-key'] = xapikey
-  //         ..files.add(
-  //           await http.MultipartFile.fromPath('file', image.path)
-  //   );
-
-  //   final response = await request.send();
-  //   if (response.statusCode != 200 && response.statusCode != 201) {
-  //     throw Exception("Upload Failed (${response.statusCode})");
-  //   }
-  // }
-
-  // Future<void> _uploadAllFaces() async {
-  //   if (_selectedEmployee == null) {
-  //     _showMsg('Who are you???');
-  //     return;
-  //   }
-
-  //   if (_frontFace == null || _leftFace == null || _rightFace == null) {
-  //     _showMsg('complete ur take photo');
-  //     return;
-  //   }
-
-  //   setState(() {
-  //     _uploadingFace = true;
-  //   });
-
-  //   try {
-  //     await _uploadSingleFace(_frontFace!);
-  //     await _uploadSingleFace(_leftFace!);
-  //     await _uploadSingleFace(_rightFace!);
-
-  //     _showMsg('Photo has been successfully registered');
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     _showMsg('Failed to upload');
-  //   } finally {
-  //     setState(() {
-  //       _uploadingFace = false;
-  //     });
-  //   }
-  // }
 
   Future<String> fileToBase64Image(File file) async {
     final bytes = await file.readAsBytes();
@@ -185,9 +98,7 @@ class _RegistState extends State<Regist> {
       return;
     }
 
-    setState(() {
-      _uploadingFace = true;
-    });
+    setState(() => _uploadingFace = true);
 
     try {
       final photos = [
@@ -206,8 +117,6 @@ class _RegistState extends State<Regist> {
 
       final headers = {"Content-Type": "application/json"};
 
-      print(jsonEncode(payload));
-
       final responses = await http.post(
         Uri.parse('https://cais.cbinstrument.com/api/user/register'),
         headers: headers,
@@ -215,17 +124,12 @@ class _RegistState extends State<Regist> {
       );
 
       if (responses.statusCode == 200 || responses.statusCode == 201) {
-        final body = jsonDecode(responses.body);
-        print("gebugBody: $body");
-
         _showMsg("registration successful");
         _showDialogSuccess();
       } else {
-        debugPrint(responses.body);
         _showDialogFailed();
       }
     } catch (e) {
-      debugPrint(e.toString());
       _showMsg("an internal server problem occur");
     } finally {
       setState(() => _uploadingFace = false);
@@ -238,39 +142,33 @@ class _RegistState extends State<Regist> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: AppTheme.cardBackground(context),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Column(
             children: [
               Row(
                 children: [
-                  Text(
+                  const Icon(Icons.error, color: Colors.red, size: 24),
+                  const SizedBox(width: 8),
+                  const Text(
                     "Registration Failed",
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 225, 31, 31),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  Padding(padding: EdgeInsets.all(8), child: Icon(Icons.error)),
                 ],
               ),
-              Divider(),
+              const Divider(),
             ],
           ),
           actions: [
             SizedBox(
-              width: MediaQuery.sizeOf(context).width * 1,
+              width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(10),
-                  ),
-                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  backgroundColor: const Color(0xFF2AACEB),
                 ),
-                onPressed: () {
-                  // button Funct
-                  Navigator.of(context).pop();
-                },
-                child: Text("OK", style: TextStyle(color: Colors.white)),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK", style: TextStyle(color: Colors.white)),
               ),
             ),
           ],
@@ -285,46 +183,39 @@ class _RegistState extends State<Regist> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: AppTheme.cardBackground(context),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Column(
             children: [
               Row(
                 children: [
-                  Text(
+                  const Icon(Icons.verified, color: Colors.green, size: 24),
+                  const SizedBox(width: 8),
+                  const Text(
                     "Registration Successful",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Icon(Icons.verified, color: Colors.lightGreen),
+                    style: TextStyle(color: Colors.green, fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
-              Divider(),
+              const Divider(),
             ],
           ),
           actions: [
             SizedBox(
-              width: MediaQuery.sizeOf(context).width * 1,
+              width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(10),
-                  ),
-                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  backgroundColor: const Color(0xFF2AACEB),
                 ),
                 onPressed: () {
-                  // button Funct
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),
                   );
                 },
-                child: Text("OK", style: TextStyle(color: Colors.white)),
+                child: const Text("OK", style: TextStyle(color: Colors.white)),
               ),
             ),
           ],
@@ -377,7 +268,6 @@ class _RegistState extends State<Regist> {
       });
     } catch (e) {
       _isLoadingNames = false;
-      debugPrint(e.toString());
     }
   }
 
@@ -390,10 +280,7 @@ class _RegistState extends State<Regist> {
         _loadingLeader = false;
       });
     } catch (e) {
-      debugPrint('Leader error: $e');
-      setState(() {
-        _loadingLeader = false;
-      });
+      setState(() => _loadingLeader = false);
     }
   }
 
@@ -419,8 +306,6 @@ class _RegistState extends State<Regist> {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print("response: $data");
-
       return List<String>.from(data['names']);
     } else {
       throw Exception("Failed to Get Data");
@@ -430,84 +315,62 @@ class _RegistState extends State<Regist> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenHeight = MediaQuery.sizeOf(context).height;
+
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
-      body: SingleChildScrollView(
-        // child: SizedBox(
-        //   height: MediaQuery.sizeOf(context).height * 1,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.9,
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(12),
-                  //   boxShadow: [
-                  //     // outside glowing
-                  //     BoxShadow(
-                  //       color: Colors.cyanAccent.withOpacity(0.3),
-                  //       blurRadius: 15,
-                  //       spreadRadius: 2,
-                  //     ),
-                  //     BoxShadow(
-                  //       color: Colors.cyanAccent.withOpacity(0.1),
-                  //       blurRadius: 30,
-                  //       spreadRadius: 6,
-                  //     ),
-                  //   ],
-                  // ),
-                  child: Card(
-                    color: Color(0xFF334155),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(color: const Color.fromARGB(255, 19, 89, 146), width: 1),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/loginBekgron.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: screenHeight * 0.92,
+              width: screenWidth,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    side: const BorderSide(
+                      color: Color.fromARGB(255, 19, 89, 146),
+                      width: 1,
+                    ),
+                  ),
+                  color: AppTheme.cardBackground(context),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05,
                     ),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Image.asset(
-                            'assets/logoBiru.png',
-                            width: 220,
-                            height: 65,
-                          ),
+                        SizedBox(height: screenHeight * 0.02),
+                        Image.asset(
+                          'assets/logoBiru.png',
+                          width: 200,
+                          height: 60,
                         ),
-
+                        SizedBox(
+                          width: screenWidth * 0.75,
+                          child: Divider(thickness: 1, color: AppTheme.borderColor(context)),
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(bottom: 12),
                           child: Text(
                             t.translate("registss"),
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 202, 202, 202),
+                            style: const TextStyle(
+                              color: Color.fromARGB(83, 42, 171, 235),
                               fontSize: 16,
                               fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15.0),
-                          child: SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.5,
-                            child: Container(
-                              height: 3,
-                              decoration: BoxDecoration(
-                                color: Colors.cyanAccent, // garis inti
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.cyanAccent.withOpacity(0.6),
-                                    blurRadius: 15,
-                                    spreadRadius: 2,
-                                  ),
-                                  BoxShadow(
-                                    color: Colors.cyanAccent.withOpacity(0.3),
-                                    blurRadius: 30,
-                                    spreadRadius: 6,
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
                         ),
@@ -515,474 +378,212 @@ class _RegistState extends State<Regist> {
                           key: _formKey,
                           child: Column(
                             children: [
-                              // ====== employee's lists =======
                               _isLoadingNames
                                   ? const CircularProgressIndicator()
-                                  : SizedBox(
-                                      width:
-                                          MediaQuery.sizeOf(context).width *
-                                          0.75,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.06,
-                                      child: DropdownButtonFormField(
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          label: Text(t.translate("user")),
-                                        ),
-                                        value: _selectedEmployee,
-                                        items: _employeeNames.map((name) {
-                                          return DropdownMenuItem<String>(
-                                            value: name,
-                                            child: Text(name),
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedEmployee = value;
-                                          });
-                                        },
-                                      ),
+                                  : _DropdownField(
+                                      value: _selectedEmployee,
+                                      label: t.translate("user"),
+                                      items: _employeeNames,
+                                      onChanged: (v) {
+                                        setState(() => _selectedEmployee = v);
+                                      },
                                     ),
-
-                              SizedBox(
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.01,
-                              ),
-
-                              // ====== Leader's lists =======
+                              SizedBox(height: screenHeight * 0.012),
                               _loadingLeader
                                   ? const CircularProgressIndicator()
-                                  : SizedBox(
-                                      width:
-                                          MediaQuery.sizeOf(context).width *
-                                          0.75,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.06,
-                                      child: DropdownButtonFormField(
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          label: Text(t.translate("leader")),
-                                        ),
-                                        value: _selectedLeaders,
-                                        items: _leaderNames.map((name) {
-                                          return DropdownMenuItem<String>(
-                                            value: name,
-                                            child: Text(name),
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedLeaders = value;
-                                          });
-                                        },
-                                      ),
+                                  : _DropdownField(
+                                      value: _selectedLeaders,
+                                      label: t.translate("leader"),
+                                      items: _leaderNames,
+                                      onChanged: (v) {
+                                        setState(() => _selectedLeaders = v);
+                                      },
                                     ),
-
-                              // Office Email
-                              SizedBox(
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.01,
+                              SizedBox(height: screenHeight * 0.015),
+                              _TextField(
+                                controller: _email,
+                                hint: t.translate("emailOffice"),
+                                prefixIcon: 'assets/sms.png',
                               ),
-                              SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.75,
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.06,
-                                child: TextFormField(
-                                  controller: _email,
-                                  // obscureText: true,
-                                  decoration: InputDecoration(
-                                    hintText: t.translate("emailOffice"),
-                                    hintStyle: TextStyle(
-                                      color: const Color.fromARGB(
-                                        255,
-                                        195,
-                                        195,
-                                        195,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                  ),
-                                ),
+                              SizedBox(height: screenHeight * 0.012),
+                              _TextField(
+                                controller: _password,
+                                hint: t.translate("pas"),
+                                obscure: true,
+                                prefixIcon: 'assets/finger-scan.png',
                               ),
-
-                              // Password
-                              SizedBox(
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.01,
+                              SizedBox(height: screenHeight * 0.012),
+                              _TextField(
+                                controller: _repassword,
+                                hint: t.translate("repas"),
+                                obscure: true,
+                                prefixIcon: 'assets/finger-scan.png',
                               ),
-                              SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.75,
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.06,
-                                child: TextFormField(
-                                  controller: _password,
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    hintText: t.translate("pas"),
-                                    hintStyle: TextStyle(
-                                      color: const Color.fromARGB(
-                                        255,
-                                        195,
-                                        195,
-                                        195,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                  ),
-                                ),
-                              ),
-
-                              // Re-Password
-                              SizedBox(
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.01,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.75,
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.06,
-                                child: TextFormField(
-                                  controller: _repassword,
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    hintText: t.translate("repas"),
-                                    hintStyle: TextStyle(
-                                      color: const Color.fromARGB(
-                                        255,
-                                        195,
-                                        195,
-                                        195,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                  ),
-                                ),
-                              ),
-
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Divider(
-                                  thickness: 2,
-                                  endIndent:
-                                      MediaQuery.sizeOf(context).width * 0.05,
-                                  indent:
-                                      MediaQuery.sizeOf(context).width * 0.05,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 12,
                                 ),
-                              ),
-
-                              //====== PHOTO TAKING ========
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
                                 child: Container(
-                                  width: MediaQuery.sizeOf(context).width * 0.5,
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.25,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: const Color.fromARGB(255, 19, 89, 146),
-                                      style: BorderStyle.solid,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.black12,
-                                  ),
-                                  child: Builder(
-                                    builder: (_) {
-                                      File? currentImage;
-                                      if (_currentStep == 0)
-                                        currentImage = _frontFace;
-                                      if (_currentStep == 1)
-                                        currentImage = _leftFace;
-                                      if (_currentStep == 2)
-                                        currentImage = _rightFace;
-
-                                      return currentImage == null
-                                          ? Icon(
-                                              Icons.camera_alt,
-                                              size: 60,
-                                              color: Colors.white70,
-                                            )
-                                          : ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.file(
-                                                currentImage,
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                              ),
-                                            );
-                                    },
-                                  ),
+                                  height: 1,
+                                  color: AppTheme.borderColor(context),
                                 ),
                               ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.005,
+                              Container(
+                                width: screenWidth * 0.7,
+                                height: screenHeight * 0.22,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: const Color.fromARGB(255, 19, 89, 146),
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.black12,
+                                ),
+                                child: Builder(
+                                  builder: (_) {
+                                    File? currentImage;
+                                    if (_currentStep == 0) currentImage = _frontFace;
+                                    if (_currentStep == 1) currentImage = _leftFace;
+                                    if (_currentStep == 2) currentImage = _rightFace;
+
+                                    return currentImage == null
+                                        ? Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.camera_alt,
+                                                size: 50,
+                                                color: Colors.white70,
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                t.translate(
+                                                  _currentStep == 0
+                                                      ? 'photo1'
+                                                      : _currentStep == 1
+                                                          ? 'photo2'
+                                                          : 'photo3',
+                                                ),
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : ClipRRect(
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: Image.file(
+                                              currentImage,
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                            ),
+                                          );
+                                  },
+                                ),
                               ),
+                              SizedBox(height: 6),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: List.generate(3, (index) {
                                   return Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 4),
+                                    margin: const EdgeInsets.symmetric(horizontal: 4),
                                     width: 8,
                                     height: 8,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: index <= _currentStep
-                                          ? Colors.green
-                                          : Colors.grey,
+                                          ? const Color(0xFF2AACEB)
+                                          : AppTheme.borderColor(context),
                                     ),
                                   );
                                 }),
                               ),
-
-                              // cam Button
+                              SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // ========= Retry ===========
-                                  if ((_currentStep == 0 &&
-                                          _frontFace != null) ||
-                                      (_currentStep == 1 &&
-                                          _leftFace != null) ||
+                                  if ((_currentStep == 0 && _frontFace != null) ||
+                                      (_currentStep == 1 && _leftFace != null) ||
                                       (_currentStep == 2 && _rightFace != null))
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
+                                      padding: const EdgeInsets.only(right: 8),
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.red.shade300,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                             horizontal: 24,
                                             vertical: 12,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                         ),
                                         onPressed: retryStep,
                                         child: Text(
                                           t.translate('retake'),
-                                          style: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              255,
-                                              255,
-                                              255,
-                                            ),
-                                          ),
+                                          style: const TextStyle(color: Colors.white),
                                         ),
                                       ),
                                     ),
-                                    
-                                  // ========== take Photo ==========
                                   if (!_isPhotoCompleted)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 12,
-                                        left: 5,
+                                    ElevatedButton.icon(
+                                      icon: const Icon(Icons.camera_alt, color: Colors.white),
+                                      label: Text(
+                                        t.translate("camreg"),
+                                        style: const TextStyle(color: Colors.white),
                                       ),
-                                      child: ElevatedButton.icon(
-                                        icon: Icon(Icons.camera_alt),
-                                        label: Text(
-                                          t.translate("camreg"),
-                                          style: TextStyle(color: Colors.white),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFF2AACEB),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 24,
+                                          vertical: 12,
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blueAccent,
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                          ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
-                                        onPressed: _uploadingFace
-                                            ? null
-                                            : captureStep,
                                       ),
+                                      onPressed: _uploadingFace ? null : captureStep,
                                     ),
                                 ],
                               ),
-
-                              // information Photo text
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3),
-                                child: SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.75,
-                                  child: Card(
-                                    color: Colors.green.withOpacity(0.5),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        t.translate(
-                                          _currentStep == 0
-                                              ? 'photo1'
-                                              : _currentStep == 1
-                                              ? 'photo2'
-                                              : 'photo3',
-                                        ),
-                                        style: TextStyle(
-                                          color: const Color.fromARGB(
-                                            255,
-                                            255,
-                                            255,
-                                            255,
+                              SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _ActionButton(
+                                      label: t.translate("backLogin"),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => MyHomePage(),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
+                                      outlined: true,
                                     ),
                                   ),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 10.0,
-                                  left: 10.0,
-                                  right: 10.0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    // Back To Login
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.sizeOf(context).width *
-                                          0.3,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.06,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                            255,
-                                            73,
-                                            197,
-                                            254,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed:
-                                            // button submit funct
-                                            () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyHomePage(),
-                                                ),
-                                              );
-                                            },
-                                        child: Text(
-                                          t.translate("backLogin"),
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
+                                  SizedBox(width: 12),
+                                  Expanded(
+                                    child: _ActionButton(
+                                      label: t.translate("okReg"),
+                                      disabled: _uploadingFace || !_isPhotoCompleted,
+                                      onTap: () => _regist(),
                                     ),
-
-                                    // Register
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.sizeOf(context).width *
-                                          0.3,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                          0.06,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: _isPhotoCompleted
-                                              ? const Color.fromARGB(
-                                                  255,
-                                                  73,
-                                                  197,
-                                                  254,
-                                                )
-                                              : Colors.grey,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed:
-                                            (_uploadingFace ||
-                                                !_isPhotoCompleted)
-                                            ? null
-                                            :
-                                              // button submit funct
-                                              () async {
-                                                await _regist();
-                                              },
-                                        child: Text(
-                                          t.translate("okReg"),
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
-                        // Padding(padding: EdgeInsets.all(5.0)),
                         Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(10),
                           child: Text(
                             t.translate("beta"),
                             style: TextStyle(
-                              color: const Color.fromARGB(255, 195, 195, 195),
+                              color: AppTheme.textSecondary(context),
                               fontSize: 8,
                               fontWeight: FontWeight.w800,
                             ),
@@ -993,11 +594,159 @@ class _RegistState extends State<Regist> {
                   ),
                 ),
               ),
-            ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final bool obscure;
+  final String prefixIcon;
+
+  const _TextField({
+    required this.controller,
+    required this.hint,
+    this.obscure = false,
+    required this.prefixIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const borderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      borderSide: BorderSide(color: Color.fromARGB(255, 19, 89, 146)),
+    );
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(
+            color: AppTheme.textSecondary(context),
+            fontSize: 14,
+          ),
+          enabledBorder: borderStyle,
+          focusedBorder: borderStyle,
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Image.asset(prefixIcon, width: 20, height: 20),
           ),
         ),
       ),
-      // ),
+    );
+  }
+}
+
+class _DropdownField extends StatelessWidget {
+  final String? value;
+  final String label;
+  final List<String> items;
+  final ValueChanged<String?> onChanged;
+
+  const _DropdownField({
+    required this.value,
+    required this.label,
+    required this.items,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const borderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      borderSide: BorderSide(color: Color.fromARGB(255, 19, 89, 146)),
+    );
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          enabledBorder: borderStyle,
+          focusedBorder: borderStyle,
+          label: Text(label),
+          labelStyle: TextStyle(color: AppTheme.textSecondary(context)),
+        ),
+        value: value,
+        items: items.map((name) {
+          return DropdownMenuItem<String>(
+            value: name,
+            child: Text(name),
+          );
+        }).toList(),
+        onChanged: onChanged,
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+  final bool disabled;
+  final bool outlined;
+
+  const _ActionButton({
+    required this.label,
+    this.onTap,
+    this.disabled = false,
+    this.outlined = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.05,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        gradient: outlined
+            ? null
+            : (disabled
+                ? null
+                : const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Color(0xFF186185),
+                      Color(0xFF2598CF),
+                      Color(0xFF2AACEB),
+                    ],
+                  )),
+        border: outlined
+            ? Border.all(color: const Color(0xFF2AACEB), width: 2)
+            : null,
+        color: outlined
+            ? Colors.transparent
+            : (disabled ? Colors.grey.shade300 : null),
+      ),
+      child: ElevatedButton(
+        onPressed: disabled ? null : onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: outlined
+                ? const Color(0xFF2AACEB)
+                : (disabled ? Colors.grey : Colors.white),
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+      ),
     );
   }
 }

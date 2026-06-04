@@ -4,6 +4,7 @@ import 'dart:io';
 // import 'package:absence/goodInputLists.dart';
 import 'package:absence/goodsKind.dart';
 import 'package:absence/invention.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -301,7 +302,6 @@ class _AddGoodsState extends State<AddGoods> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: const Color.fromARGB(255, 201, 201, 201)
@@ -346,9 +346,9 @@ class _AddGoodsState extends State<AddGoods> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("QR Code", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text("QR Code", style: TextStyle(color: AppTheme.textSecondary(context))),
                         TextFormField(
-                          style: TextStyle(color: Color(0xFF8b9cb6)),
+                          style: TextStyle(color: AppTheme.textSecondary(context)),
                           controller: _QRCode,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
@@ -360,7 +360,7 @@ class _AddGoodsState extends State<AddGoods> {
                                   borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                           ),
                         )
                       ],
@@ -384,9 +384,9 @@ class _AddGoodsState extends State<AddGoods> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Nama Barang", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text("Nama Barang", style: TextStyle(color: AppTheme.textSecondary(context))),
                         TextFormField(
-                          style: TextStyle(color: Color(0xFF8b9cb6)),
+                          style: TextStyle(color: AppTheme.textSecondary(context)),
                           controller: _namaBarang,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
@@ -398,7 +398,7 @@ class _AddGoodsState extends State<AddGoods> {
                                   borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                           ),
                         )
                       ],
@@ -420,11 +420,11 @@ class _AddGoodsState extends State<AddGoods> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          fillColor: Color(0xFF1f2937),
+                          fillColor: AppTheme.cardBackground(context),
                           filled: true,
                           labelText: "Pilih Kategori",
                           labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 157, 157, 157),
+                            color: AppTheme.textSecondary(context),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -435,7 +435,7 @@ class _AddGoodsState extends State<AddGoods> {
                             borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                           ),
                         ),
-                        style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                        style: TextStyle(color: AppTheme.textSecondary(context)),
                         value: _selectedKategori,
                         items: _kategoriBarang.map((kategori) {
                           return DropdownMenuItem<String>(
@@ -480,7 +480,7 @@ class _AddGoodsState extends State<AddGoods> {
                       color: Color(0xFF2d4a7c)
                     )
                   ),
-                  color: Color(0xFF1f2937),
+                  color: AppTheme.cardBackground(context),
                   child: 
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -593,16 +593,16 @@ class _AddGoodsState extends State<AddGoods> {
                           controller: _startDate,
                           readOnly: true,
                           style: TextStyle(
-                            color: const Color.fromARGB(255, 207, 207, 207),
+                            color: AppTheme.textPrimary(context),
                           ),
                           decoration: InputDecoration(
                             labelText: "Tanggal dan Jam",
                             labelStyle: TextStyle(
-                              color: const Color.fromARGB(255, 154, 154, 154),
+                              color: AppTheme.textSecondary(context),
                             ),
                             prefixIcon: Icon(
                               Icons.calendar_today_rounded,
-                              color: const Color.fromARGB(255, 180, 180, 180),
+                              color: AppTheme.textSecondary(context),
                             ),
                             enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -613,7 +613,7 @@ class _AddGoodsState extends State<AddGoods> {
                                     borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                                   ),
                                   filled: true,
-                                  fillColor: Color(0xFF1f2937),
+                                  fillColor: AppTheme.cardBackground(context),
                           ),
                           onTap: () async {
                             final picked = await _pickDateTime(context);
@@ -640,11 +640,11 @@ class _AddGoodsState extends State<AddGoods> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          fillColor: Color(0xFF1f2937),
+                          fillColor: AppTheme.cardBackground(context),
                           filled: true,
                           labelText: "Unit",
                           labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 157, 157, 157),
+                            color: AppTheme.textSecondary(context),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -655,7 +655,7 @@ class _AddGoodsState extends State<AddGoods> {
                             borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                           ),
                         ),
-                        style: TextStyle(color: Color.fromARGB(255, 157, 157, 157)),
+                        style: TextStyle(color: AppTheme.textSecondary(context)),
                         value: _selectedUnit,
                         items: _units.map((kategori) {
                           return DropdownMenuItem<String>(
@@ -688,9 +688,9 @@ class _AddGoodsState extends State<AddGoods> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Stok Awal", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text("Stok Awal", style: TextStyle(color: AppTheme.textSecondary(context))),
                         TextFormField(
-                          style: TextStyle(color: Color(0xFF8b9cb6)),
+                          style: TextStyle(color: AppTheme.textSecondary(context)),
                           controller: _stokAwal,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -703,7 +703,7 @@ class _AddGoodsState extends State<AddGoods> {
                                   borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                           ),
                         )
                       ],
@@ -728,9 +728,9 @@ class _AddGoodsState extends State<AddGoods> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Posisi Barang", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text("Posisi Barang", style: TextStyle(color: AppTheme.textSecondary(context))),
                         TextFormField(
-                          style: TextStyle(color: Color(0xFF8b9cb6)),
+                          style: TextStyle(color: AppTheme.textSecondary(context)),
                           controller: _posisiBarang,
                           // keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -743,7 +743,7 @@ class _AddGoodsState extends State<AddGoods> {
                                   borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                           ),
                         )
                       ],
@@ -768,9 +768,9 @@ class _AddGoodsState extends State<AddGoods> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Keterangan", style: TextStyle(color: Color(0xFF8b9cb6))),
+                        Text("Keterangan", style: TextStyle(color: AppTheme.textSecondary(context))),
                         TextFormField(
-                          style: TextStyle(color: Color(0xFF8b9cb6)),
+                          style: TextStyle(color: AppTheme.textSecondary(context)),
                           controller: _keterangan,
                           maxLines: 5,
                           decoration: InputDecoration(
@@ -783,7 +783,7 @@ class _AddGoodsState extends State<AddGoods> {
                                   borderSide: BorderSide(color: Color(0xFF2d4a7c)),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                           ),
                         )
                       ],

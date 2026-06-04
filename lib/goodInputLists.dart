@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:absence/addGoodInput.dart';
 import 'package:absence/editGoodInput.dart';
 import 'package:absence/goodOutputLists.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -257,7 +258,7 @@ class _GoodInputListState extends State<GoodInputList> {
           children: [
             Text(
               "QR Code: ",
-              style: TextStyle(color: Color(0xFF8b9cb6), fontSize: 15),
+              style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),
             ),
             Text(
               item['qr_code'],
@@ -270,7 +271,7 @@ class _GoodInputListState extends State<GoodInputList> {
             top: MediaQuery.sizeOf(context).height * 0.01,
             bottom: MediaQuery.sizeOf(context).height * 0.01,
           ),
-          child: Divider(color: Color(0xFF1f2937)),
+          child: Divider(color: AppTheme.cardBackground(context)),
         ),
 
         //========================== Category ========================
@@ -290,7 +291,7 @@ class _GoodInputListState extends State<GoodInputList> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Kategori",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),
                   ),
                 ),
                 Padding(
@@ -299,13 +300,13 @@ class _GoodInputListState extends State<GoodInputList> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['kategori'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
               ],
@@ -328,7 +329,7 @@ class _GoodInputListState extends State<GoodInputList> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Jenis",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),
                   ),
                 ),
                 Padding(
@@ -337,13 +338,13 @@ class _GoodInputListState extends State<GoodInputList> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['jenis_barang'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
               ],
@@ -365,13 +366,13 @@ class _GoodInputListState extends State<GoodInputList> {
         //       children: [
         //         SizedBox(
         //           width: MediaQuery.sizeOf(context).width * 0.25,
-        //           child: Text("Satuan", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
+        //           child: Text("Satuan", style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),)
         //         ),
         //         Padding(
         //           padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-        //           child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
+        //           child: Text(": ", style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),),
         //         ),
-        //         Expanded(child: Text(item['satuan'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
+        //         Expanded(child: Text(item['satuan'], style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),))
         //       ],
         //     ),
         //   ),
@@ -391,13 +392,13 @@ class _GoodInputListState extends State<GoodInputList> {
         //       children: [
         //         SizedBox(
         //           width: MediaQuery.sizeOf(context).width * 0.25,
-        //           child: Text("Stok", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
+        //           child: Text("Stok", style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),)
         //         ),
         //         Padding(
         //           padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-        //           child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
+        //           child: Text(": ", style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),),
         //         ),
-        //         Expanded(child: Text(item['stok_awal'].toString(), style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
+        //         Expanded(child: Text(item['stok_awal'].toString(), style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),))
         //       ],
         //     ),
         //   ),
@@ -417,13 +418,13 @@ class _GoodInputListState extends State<GoodInputList> {
         //       children: [
         //         SizedBox(
         //           width: MediaQuery.sizeOf(context).width * 0.25,
-        //           child: Text("Posisi", style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),)
+        //           child: Text("Posisi", style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),)
         //         ),
         //         Padding(
         //           padding: EdgeInsets.only(right: MediaQuery.sizeOf(context).width * 0.01),
-        //           child: Text(": ", style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),),
+        //           child: Text(": ", style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),),
         //         ),
-        //         Expanded(child: Text(item['posisi'], style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),))
+        //         Expanded(child: Text(item['posisi'], style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),))
         //       ],
         //     ),
         //   ),
@@ -444,7 +445,7 @@ class _GoodInputListState extends State<GoodInputList> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Tanggal",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),
                   ),
                 ),
                 Padding(
@@ -453,13 +454,13 @@ class _GoodInputListState extends State<GoodInputList> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['tanggal_jam'] == "" ? "-" : item['tanggal_jam'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
               ],
@@ -482,7 +483,7 @@ class _GoodInputListState extends State<GoodInputList> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Jumlah Masuk",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),
                   ),
                 ),
                 Padding(
@@ -491,7 +492,7 @@ class _GoodInputListState extends State<GoodInputList> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 15),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 15),
                   ),
                 ),
                 Text("+", style: TextStyle(color: Color(0xFF6ee7b7))),
@@ -918,18 +919,12 @@ class _GoodInputListState extends State<GoodInputList> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
         title: Row(
           children: [
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.1,
               child:
-                  // Image.asset(
-                  //   "assets/gedeBox.png",
-                  //   width: MediaQuery.sizeOf(context).width * 0.04,
-                  //   height: MediaQuery.sizeOf(context).height * 0.04,
-                  // ),
                   Text("📥"),
             ),
             Padding(
@@ -941,14 +936,13 @@ class _GoodInputListState extends State<GoodInputList> {
                   ),
                   Text(
                     t.translate("manage"),
-                    style: TextStyle(fontSize: 10, color: Color(0xFF8b9cb6)),
+                    style: TextStyle(fontSize: 10, color: AppTheme.textSecondary(context)),
                   ),
                 ],
               ),
             ),
           ],
         ),
-        backgroundColor: const Color(0xFF182234),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(
@@ -977,7 +971,7 @@ class _GoodInputListState extends State<GoodInputList> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFF131927),
+                    color: Theme.of(context).cardColor,
                     border: Border(
                       bottom: BorderSide(color: Color(0xff1f2937), width: 1),
                     ),
@@ -999,7 +993,7 @@ class _GoodInputListState extends State<GoodInputList> {
                             child: TextFormField(
                               controller: _search,
                               style: TextStyle(
-                                color: Color.fromARGB(255, 157, 157, 157),
+                                color: AppTheme.textSecondary(context),
                               ),
                               onChanged: (value) => _applyFilter(),
                               decoration: InputDecoration(
@@ -1037,7 +1031,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                   ),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                               ),
                             ),
                           ),
@@ -1055,11 +1049,11 @@ class _GoodInputListState extends State<GoodInputList> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                                 filled: true,
                                 labelText: t.translate("categories"),
                                 labelStyle: TextStyle(
-                                  color: Color.fromARGB(255, 157, 157, 157),
+                                  color: AppTheme.textSecondary(context),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -1075,7 +1069,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                 ),
                               ),
                               style: TextStyle(
-                                color: Color.fromARGB(255, 157, 157, 157),
+                                color: AppTheme.textSecondary(context),
                               ),
                               value: _selectedKategori,
                               items: _kategoriBarang.map((kategori) {
@@ -1116,14 +1110,14 @@ class _GoodInputListState extends State<GoodInputList> {
                                   controller: _startDate,
                                   readOnly: true,
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 157, 157, 157),
+                                    color: AppTheme.textSecondary(context),
                                   ),
                                   decoration: InputDecoration(
-                                    fillColor: Color(0xFF1f2937),
+                                    fillColor: AppTheme.cardBackground(context),
                                     filled: true,
                                     label: Text(t.translate("startDateInvent")),
                                     labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 157, 157, 157),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -1171,14 +1165,14 @@ class _GoodInputListState extends State<GoodInputList> {
                                   controller: _endDate,
                                   readOnly: true,
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 157, 157, 157),
+                                    color: AppTheme.textSecondary(context),
                                   ),
                                   decoration: InputDecoration(
-                                    fillColor: Color(0xFF1f2937),
+                                    fillColor: AppTheme.cardBackground(context),
                                     filled: true,
                                     label: Text(t.translate("endDateInvent")),
                                     labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 157, 157, 157),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -1436,7 +1430,7 @@ class _GoodInputListState extends State<GoodInputList> {
                                       color: Color(0xFF047857),
                                     ),
                                   ),
-                                  color: Color(0xFF131927),
+                                  color: Theme.of(context).cardColor,
                                   margin: const EdgeInsets.only(bottom: 12),
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),

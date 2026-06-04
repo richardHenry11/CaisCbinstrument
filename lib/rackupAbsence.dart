@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:absence/lateness.dart';
 import 'package:absence/lemur.dart';
 import 'package:absence/lemurRevise.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -14,14 +14,10 @@ const String baseImageUrl = "https://cais.cbinstrument.com/";
 
 bool isLate(String? checkIn) {
   if (checkIn == null || checkIn.isEmpty) return false;
-
   final parts = checkIn.split(':');
   if (parts.length != 2) return false;
-
   final hour = int.tryParse(parts[0]) ?? 0;
   final minute = int.tryParse(parts[1]) ?? 0;
-
-  // telat jika lewat jam 09:00
   return hour > 8 && minute > 30 || (hour == 8 && minute > 30);
 }
 
@@ -31,18 +27,39 @@ void showPhotoPreview(BuildContext context, String imagePath) {
     context: context,
     builder: (_) {
       return Dialog(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         insetPadding: const EdgeInsets.all(12),
         child: Stack(
           children: [
-            InteractiveViewer(
-              child: Image.network(
-                "$baseImageUrl$imagePath",
-                fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => Center(
-                  child: Text(
-                    t.translate("failedPict"),
-                    style: TextStyle(color: Colors.white),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: InteractiveViewer(
+                child: Image.network(
+                  "$baseImageUrl$imagePath",
+                  fit: BoxFit.contain,
+                  loadingBuilder: (ctx, child, progress) {
+                    if (progress == null) return child;
+                    return Container(
+                      height: 300,
+                      color: AppTheme.cardBackground(context),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.cyanAccent,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    );
+                  },
+                  errorBuilder: (_, __, ___) => Container(
+                    height: 300,
+                    color: AppTheme.cardBackground(context),
+                    child: Center(
+                      child: Text(
+                        t.translate("failedPict"),
+                        style: TextStyle(color: AppTheme.textSecondary(context)),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -50,9 +67,15 @@ void showPhotoPreview(BuildContext context, String imagePath) {
             Positioned(
               top: 8,
               right: 8,
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withAlpha(120),
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 20),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
             ),
           ],
@@ -64,13 +87,11 @@ void showPhotoPreview(BuildContext context, String imagePath) {
 
 Future<void> saveLatenessToPrefs(Map<String, dynamic> item) async {
   final prefs = await SharedPreferences.getInstance();
-
   await prefs.setString('lateness_data', jsonEncode(item));
 }
 
 String dateFormat(String? date) {
   if (date == null || date.isEmpty) return '-';
-
   try {
     final parsedDate = DateTime.parse(date);
     final formatter = DateFormat('EEEE, dd MMM yyyy', 'id_ID');
@@ -89,484 +110,399 @@ Future<Map<String, dynamic>?> getLatenessFromPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   final raw = prefs.getString('lateness_data');
   final name = prefs.getString('name');
-
   if (raw == null) return null;
-
   final data = jsonDecode(raw) as Map<String, dynamic>;
   data['name'] = name;
-
   return data;
+}
+
+Color _statusColor(String? status) {
+  switch (status) {
+    case 'Kantor': case 'T1': case 'T2': case 'T3':
+      return const Color(0xFF22c55e);
+    case 'sick':
+      return const Color(0xFFa855f7);
+    case 'wfh':
+      return const Color(0xFF3b82f6);
+    case 'leave':
+      return const Color(0xFFf59e0b);
+    default:
+      return const Color(0xFF94a3b8);
+  }
+}
+
+IconData _statusIcon(String? status) {
+  switch (status) {
+    case 'Kantor': case 'T1': case 'T2': case 'T3':
+      return Icons.business_center;
+    case 'sick':
+      return Icons.local_hospital;
+    case 'wfh':
+      return Icons.home;
+    default:
+      return Icons.calendar_today;
+  }
+}
+
+String _statusLabel(String? status, AppLocalizations t) {
+  if (status == "leave") return t.translate("cuti");
+  if (status == "sick") return t.translate("sick");
+  if (status != null && status.isNotEmpty) return status;
+  return "-";
+}
+
+Color _supervisorBadgeColor(String? status) {
+  switch (status) {
+    case 'approved':
+      return const Color(0xFF22c55e);
+    case 'pending':
+      return const Color(0xFFf59e0b);
+    default:
+      return const Color(0xFFef4444);
+  }
+}
+
+IconData _supervisorBadgeIcon(String? status) {
+  switch (status) {
+    case 'approved':
+      return Icons.check_circle;
+    case 'pending':
+      return Icons.access_time;
+    default:
+      return Icons.cancel;
+  }
 }
 
 Widget _absenceCard(BuildContext context, Map<String, dynamic> item) {
   final t = AppLocalizations.of(context)!;
+  final status = item['status'] as String?;
+  final sc = _statusColor(status);
+
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      // =================== DATE ===================
+      // ────────────── Date + Status ──────────────
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "📅"
-                    // MaterialCommunityIcons.calendar,
-                    // color: Colors.grey,
-                    // size: 15,
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    t.translate("dateRackup"),
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Text(
-                dateFormat(item['date']),
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-
-          // STATUS (T1, T2, dll)
-          SizedBox(
-            width: 80,
-            height: 50,
-            child: Card(
-              color:
-                  item['status'] == 'Kantor' ||
-                      item['status'] == 'T1' ||
-                      item['status'] == 'T2' ||
-                      item['status'] == 'T3'
-                  ? Colors.green
-                  : item['status'] == 'sick'
-                  ? Color(0xFFa855f7)
-                  : item['status'] == 'wfh'
-                  ? Colors.blue
-                  : Colors.yellow.withOpacity(0.8),
-              child: Center(
-                child: Text(
-                  item['status'] == "leave" ? t.translate("cuti") : item['status'] == "sick" ? t.translate("sick") : item['status'] != "leave" ? item['status'] : "-",
-                  style: TextStyle(color: item['status'] == "leave"? const Color.fromARGB(255, 39, 39, 39): Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      Divider(color: Colors.grey),
-
-      // =================== TIME ===================
-      Row(
-        children: [
-          _timeColumn(context, t.translate("in"), item['check_in']),
-          _timeColumn(context, t.translate("out"), item['check_out']),
-        ],
-      ),
-
-      Divider(color: Colors.grey),
-
-      // =================== PHOTO ===================
-      Column(
-        children: [
-          Row(
-            children: [
-              _photoButton(
-                context,
-                t.translate('in'),
-                item['has_photo_in'],
-                item['photo_check_in'],
-              ),
-              SizedBox(width: 8),
-              _photoButton(
-                context,
-                t.translate("out"),
-                item['has_photo_out'],
-                item['photo_check_out'],
-              ),
-              SizedBox(width: 8),
-              _photoButton(
-                context,
-                t.translate("prove"),
-                item['proof_photo'] != "",
-                item['proof_photo'],
-              ),
-            ],
-          ),
-
-          // ================= Overtime Button ====================
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.9,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                backgroundColor: const Color.fromARGB(255, 169, 137, 255),
-              ),
-              onPressed: () async {
-                // button funct here!
-                await saveSelectedDate(item['date']);
-                Navigator.push(
-                  context,
-                  item['overtime_approval'] == "revise" ?
-                  MaterialPageRoute(builder: (context) => 
-                  LemurRevise()
-                  ) 
-                  : MaterialPageRoute(builder: (context) => 
-                  Lemur())
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("⏰"),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text(
-                      t.translate("confirmOT"),
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      Divider(color: Colors.grey),
-
-      // =================== STATUS ===================
-      Row(
-        children: [
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.45,
-            child: Container(
-              // decoration: BoxDecoration(
-              //   border: Border.all(
-              //     color: Colors.white
-              //   )
-              // ),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.check_box, color: Colors.green, size: 15),
-                          SizedBox(width: 8),
-                          Text(
-                            t.translate("confirmation"),
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 6),
-                      Card(
-                        color: item['supervisor_status'] == 'pending'
-                            ? Colors.amber.withOpacity(0.3)
-                            : item['supervisor_status'] == 'approved'
-                            ? Colors.green.withOpacity(0.5)
-                            : Colors.red.withOpacity(0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          child: Text(
-                            item['supervisor_status'] == 'pending' ? '-' : item['supervisor_status'],
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),  
-                ],
-              ),
-            ),
-          ),
-
-          //================== Overtime Approval ====================
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.45,
-            child: Container(
-              // decoration: BoxDecoration(
-              //   border: Border.all(
-              //     color: Colors.white
-              //   )
-              // ),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          // Icon(Icons.check_box, color: Colors.green, size: 15),
-                          Text("⏰"),
-                          SizedBox(width: 8),
-                          Text(
-                            t.translate("lemurConfirmation"),
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 6),
-                      Card(
-                        color: item['supervisor_status'] == 'pending'
-                            ? Colors.amber.withOpacity(0.3)
-                            : item['supervisor_status'] == 'approved'
-                            ? Colors.green.withOpacity(0.5)
-                            : Colors.red.withOpacity(0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          child: Text(
-                            item['overtime_approval'] == '' ? t.translate('noreport') : item['overtime_approval'],
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),  
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      Divider(color: Colors.grey),
-
-      // =================== Deductions ===============
-      Column(
-        children: [
-          Row(
-            children: [
-              Icon(Icons.attach_money, color: Colors.white, size: 20),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  t.translate("deduction"),
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 5.0),
-            child: Row(
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Rp.", style: TextStyle(color: Colors.white)),
+                Row(
+                  children: [
+                    Icon(Icons.calendar_month_rounded, size: 14, color: AppTheme.textSecondary(context)),
+                    const SizedBox(width: 6),
+                    Text(
+                      t.translate("dateRackup"),
+                      style: TextStyle(fontSize: 12, color: AppTheme.textSecondary(context)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
                 Text(
-                  item['deduction'] ?? '0',
+                  dateFormat(item['date']),
                   style: TextStyle(
-                    color: item['deduction'] == '0' ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textPrimary(context),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
                   ),
                 ),
-                Text(".-", style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [sc.withAlpha(200), sc.withAlpha(100)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(_statusIcon(status), size: 14, color: Colors.white),
+                const SizedBox(width: 6),
+                Text(
+                  _statusLabel(status, t),
+                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ),
         ],
       ),
 
-      Divider(color: Colors.grey),
+      const SizedBox(height: 16),
 
-      // =================== reasoning =================
-      Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      // ────────────── Time ──────────────
+      Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceLow(context),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Expanded(child: _timeDisplay(context, Icons.login_rounded, t.translate("in"), item['check_in'])),
+            Container(width: 1, height: 32, color: AppTheme.borderColor(context)),
+            Expanded(child: _timeDisplay(context, Icons.logout_rounded, t.translate("out"), item['check_out'])),
+          ],
+        ),
+      ),
+
+      const SizedBox(height: 12),
+
+      // ────────────── Photo Buttons ──────────────
+      Row(
         children: [
-          Row(
+          Expanded(child: _photoButton(context, t.translate('in'), item['has_photo_in'], item['photo_check_in'], Icons.camera_alt_rounded)),
+          const SizedBox(width: 8),
+          Expanded(child: _photoButton(context, t.translate("out"), item['has_photo_out'], item['photo_check_out'], Icons.camera_alt_rounded)),
+          const SizedBox(width: 8),
+          Expanded(child: _photoButton(context, t.translate("prove"), item['proof_photo'] != "", item['proof_photo'], Icons.description_rounded)),
+        ],
+      ),
+
+      const SizedBox(height: 12),
+
+      // ────────────── Overtime Button ──────────────
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            backgroundColor: const Color(0xFF8b5cf6),
+            elevation: 0,
+          ),
+          onPressed: () async {
+            await saveSelectedDate(item['date']);
+            Navigator.push(
+              context,
+              item['overtime_approval'] == "revise"
+                  ? MaterialPageRoute(builder: (context) => LemurRevise())
+                  : MaterialPageRoute(builder: (context) => Lemur()),
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Icon(
-              //   MaterialCommunityIcons.file_document_edit,
-              //   color: Colors.white,
-              //   size: 15,
-              // ),
-              Text("📝"),
-              Padding(
-                padding: EdgeInsetsGeometry.only(left: 8.0),
-                child: Text(
-                  t.translate("reason"),
-                  style: TextStyle(color: Colors.grey),
-                ),
+              Icon(Icons.timer_outlined, color: Colors.white.withAlpha(200), size: 18),
+              const SizedBox(width: 8),
+              Text(
+                t.translate("confirmOT"),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
               ),
             ],
           ),
+        ),
+      ),
 
-          TextField(
-            enabled: false,
-            readOnly: true,
-            maxLines: 2,
-            decoration: InputDecoration(
-              hintText: "",
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontStyle: FontStyle.italic,
-              ),
+      const SizedBox(height: 16),
+
+      // ────────────── Status Supervisor ──────────────
+      Row(
+        children: [
+          Expanded(
+            child: _statusPill(
+              context,
+              icon: Icons.checklist_rounded,
+              label: t.translate("confirmation"),
+              value: item['supervisor_status'] == 'pending' ? '-' : item['supervisor_status'],
+              status: item['supervisor_status'],
             ),
           ),
-
-          // Lateness Button
-          if (item['status'] == "T3" || item['status'] == "late" )
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.9,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () async {
-                    await saveLatenessToPrefs(item);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(t.translate("latenessSaved"))),
-                    );
-
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Lateness()),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.warning, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text(
-                        t.translate("lateConfirm"),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _statusPill(
+              context,
+              icon: Icons.timer_outlined,
+              label: t.translate("lemurConfirmation"),
+              value: item['overtime_approval'] == '' ? t.translate('noreport') : item['overtime_approval'],
+              status: item['overtime_approval'] == '' ? null : item['overtime_approval'],
             ),
-
-          // // Lateness preferences checker button
-          // ElevatedButton(
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.deepPurple,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(10),
-          //     ),
-          //   ),
-          //   onPressed: () async {
-          //     final data = await getLatenessFromPrefs();
-
-          //     if (data == null) {
-          //       ScaffoldMessenger.of(context).showSnackBar(
-          //         const SnackBar(
-          //           content: Text("Belum ada data lateness tersimpan"),
-          //         ),
-          //       );
-          //       return;
-          //     }
-
-          //     showDialog(
-          //       context: context,
-          //       builder: (_) => AlertDialog(
-          //         title: const Text("Lateness Data"),
-          //         content: SingleChildScrollView(
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               Text("Tanggal : ${data['date']}"),
-          //               Text("Check In : ${data['check_in']}"),
-          //               Text("Status   : ${data['status']}"),
-          //               Text("ID       : ${data['id']}"),
-          //               Text("Name     : ${data['name']}")
-          //             ],
-          //           ),
-          //         ),
-          //         actions: [
-          //           TextButton(
-          //             onPressed: () => Navigator.pop(context),
-          //             child: const Text("Tutup"),
-          //           ),
-          //         ],
-          //       ),
-          //     );
-          //   },
-          //   child: const Text(
-          //     "Cek Preferences",
-          //     style: TextStyle(color: Colors.white),
-          //   ),
-          // )
+          ),
         ],
+      ),
+
+      const SizedBox(height: 16),
+
+      // ────────────── Deductions ──────────────
+      Row(
+        children: [
+          Icon(Icons.monetization_on_rounded, color: AppTheme.textPrimary(context), size: 18),
+          const SizedBox(width: 8),
+          Text(t.translate("deduction"), style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 13)),
+        ],
+      ),
+      const SizedBox(height: 4),
+      Padding(
+        padding: const EdgeInsets.only(left: 26),
+        child: Text(
+          "Rp${item['deduction'] ?? '0'},-",
+          style: TextStyle(
+            color: item['deduction'] == '0' ? const Color(0xFF22c55e) : const Color(0xFFef4444),
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+
+      const SizedBox(height: 12),
+
+      // ────────────── Reason ──────────────
+      Row(
+        children: [
+          Icon(Icons.edit_note_rounded, color: AppTheme.textPrimary(context), size: 18),
+          const SizedBox(width: 8),
+          Text(t.translate("reason"), style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 13)),
+        ],
+      ),
+      const SizedBox(height: 6),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceLow(context),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          item['reason'] ?? '-',
+          style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 13),
+        ),
+      ),
+
+      // ────────────── Lateness Button ──────────────
+      if (status == "T3" || status == "late")
+        Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: const Color(0xFFef4444),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                elevation: 0,
+              ),
+              icon: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
+              label: Text(
+                t.translate("lateConfirm"),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+              ),
+              onPressed: () async {
+                await saveLatenessToPrefs(item);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(t.translate("latenessSaved")),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Lateness()),
+                );
+              },
+            ),
+          ),
+        ),
+    ],
+  );
+}
+
+Widget _timeDisplay(BuildContext context, IconData icon, String label, String? value) {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 14, color: AppTheme.textSecondary(context)),
+          const SizedBox(width: 4),
+          Text(label, style: TextStyle(fontSize: 12, color: AppTheme.textSecondary(context))),
+        ],
+      ),
+      const SizedBox(height: 4),
+      Text(
+        value == null || value.isEmpty ? "-" : value,
+        style: TextStyle(color: AppTheme.textPrimary(context), fontWeight: FontWeight.bold, fontSize: 15),
       ),
     ],
   );
 }
 
-Widget _timeColumn(BuildContext context, String title, String? value) {
+Widget _photoButton(BuildContext context, String label, bool available, String imagePath, IconData icon) {
   return SizedBox(
-    width: MediaQuery.sizeOf(context).width * 0.45,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text("⏰"),
-            Text(title, style: TextStyle(fontSize: 12, color: Colors.grey)),
-          ],
-        ),
-        SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.only(left: 3.0),
-          child: Text(
-            value == null || value.isEmpty ? "-" : value,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    height: 42,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: available ? const Color(0xFF22c55e) : AppTheme.borderColor(context),
+            width: 1.2,
           ),
         ),
-      ],
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+      ),
+      onPressed: available ? () => showPhotoPreview(context, imagePath) : null,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 14, color: available ? const Color(0xFF22c55e) : AppTheme.textSecondary(context)),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: available ? const Color(0xFF22c55e) : AppTheme.textSecondary(context),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
 
-Widget _photoButton(
-  BuildContext context,
-  String label,
-  bool available,
-  String imagePath,
-) {
-  return SizedBox(
-    width: MediaQuery.sizeOf(context).width * 0.28,
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: available ? Colors.green : Colors.grey,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-      onPressed: available
-          ? () {
-              // Button Funct
-              showPhotoPreview(context, imagePath);
-            }
-          : null,
-      child: Row(
+Widget _statusPill(BuildContext context, {required IconData icon, required String label, required String value, String? status}) {
+  final color = status == null ? AppTheme.textSecondary(context) : _supervisorBadgeColor(status);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
         children: [
-          Text("📷"),
-          SizedBox(width: 4),
-          Text(label, style: TextStyle(fontSize: 12)),
+          Icon(icon, color: AppTheme.textSecondary(context), size: 14),
+          const SizedBox(width: 6),
+          Text(label, style: TextStyle(fontSize: 12, color: AppTheme.textSecondary(context))),
         ],
       ),
-    ),
+      const SizedBox(height: 6),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: color.withAlpha(30),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: color.withAlpha(60)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(_supervisorBadgeIcon(status), size: 14, color: color),
+            const SizedBox(width: 6),
+            Text(
+              value,
+              style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    ],
   );
 }
 
@@ -578,32 +514,25 @@ class RackupAbsence extends StatefulWidget {
 }
 
 class _RackupAbsenceState extends State<RackupAbsence> {
-  // TextEditingController
   final TextEditingController _startDate = TextEditingController();
   final TextEditingController _endDate = TextEditingController();
 
-  // Save Date Time Picker
   DateTime? startDate;
   DateTime? endDate;
 
-  // Getter Date Time prefs
   String? _startDatepref;
   String? _endDatepref;
   String? _namePref;
   String? _token;
 
-  // tresholder API Response
   List<Map<String, dynamic>> absences = [];
 
-  // dateTime picker formatter
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
-  // loader circular
   bool isLoading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initFunct();
   }
@@ -622,13 +551,10 @@ class _RackupAbsenceState extends State<RackupAbsence> {
   Future<void> _loadApi() async {
     if (_token == null) return;
 
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     await Future.delayed(const Duration(seconds: 1));
 
-    // date formatter
     final dateFrom = formatter.format(startDate!);
     final dateTo = formatter.format(endDate!);
 
@@ -645,17 +571,14 @@ class _RackupAbsenceState extends State<RackupAbsence> {
       if (responses.statusCode == 200) {
         final body = jsonDecode(responses.body);
 
-      if(!mounted) return;
+        if (!mounted) return;
         setState(() {
           absences = body.cast<Map<String, dynamic>>();
         });
       }
     } finally {
-      if(!mounted) return;
-      // 🔄 matikan loader
-      setState(() {
-        isLoading = false;
-      });
+      if (!mounted) return;
+      setState(() => isLoading = false);
     }
   }
 
@@ -665,28 +588,17 @@ class _RackupAbsenceState extends State<RackupAbsence> {
   }
 
   String? getRangeErrorMessage() {
-    if (startDate == null || endDate == null) {
-      return "Tanggal belum lengkap";
-    }
-
-    if (endDate!.isBefore(startDate!)) {
-      return "Tanggal akhir harus setelah tanggal awal";
-    }
-
-    if (endDate!.difference(startDate!).inDays > 31) {
-      return "Rentang tanggal maksimal 30 hari";
-    }
-
+    if (startDate == null || endDate == null) return "Tanggal belum lengkap";
+    if (endDate!.isBefore(startDate!)) return "Tanggal akhir harus setelah tanggal awal";
+    if (endDate!.difference(startDate!).inDays > 31) return "Rentang tanggal maksimal 30 hari";
     return null;
   }
 
   void _setDefaultDateRange() {
     final now = DateTime.now();
     final sevenDaysAgo = now.subtract(const Duration(days: 7));
-
     startDate = sevenDaysAgo;
     endDate = now;
-
     _startDate.text = formatter.format(sevenDaysAgo);
     _endDate.text = formatter.format(now);
   }
@@ -701,45 +613,24 @@ class _RackupAbsenceState extends State<RackupAbsence> {
 
     _namePref = name?.replaceAll(' ', '+');
 
-    // date checker
     if (_startDatepref == null || _endDatepref == null) {
-      _setDefaultDateRange(); // default 7 hari kebelakang
+      _setDefaultDateRange();
     } else {
       startDate = DateTime.parse(_startDatepref!);
       endDate = DateTime.parse(_endDatepref!);
-
       _startDate.text = _startDatepref!;
       _endDate.text = _endDatepref!;
     }
-
-    print("name: $_namePref");
-    print("token: $_token");
-    print("start Date: ${_startDate.text}");
-    print("end Date: ${_endDate.text}");
   }
 
   Future<DateTime?> _pickDateTime(BuildContext context) async {
-    /// PICK DATE
     final DateTime? date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-
-    if (date == null) {
-      return null;
-    }
-
-    // // Pick Time
-    // final TimeOfDay? time = await showTimePicker(
-    //   context: context,
-    //   initialTime: TimeOfDay.now());
-
-    // if (time == null) {
-    //   return null;
-    // }
-
+    if (date == null) return null;
     return DateTime(date.year, date.month, date.day);
   }
 
@@ -747,174 +638,190 @@ class _RackupAbsenceState extends State<RackupAbsence> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 189, 189, 189),
         title: Text(t.translate("rackup")),
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width * 1,
-              // height: MediaQuery.sizeOf(context).height * 0.25,
-              child: Container(
-                color: const Color.fromARGB(255, 66, 91, 130),
-                child: Column(
-                  children: [
-                    //  ================================== Start Date =======================
-                    TextField(
-                      controller: _startDate,
-                      style: TextStyle(
-                        color: const Color.fromARGB(255, 227, 227, 227),
-                      ),
-                      decoration: InputDecoration(
-                        labelText: t.translate("startDate"),
-                        labelStyle: TextStyle(
-                          color: const Color.fromARGB(255, 154, 154, 154),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.calendar_today_rounded,
-                          color: const Color.fromARGB(255, 180, 180, 180),
-                        ),
-                      ),
-                      onTap: () async {
-                        final picked = await _pickDateTime(context);
-                        if (picked != null) {
-                          setState(() {
-                            startDate = picked;
-                            _startDate.text = formatter.format(picked);
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-
-                    // ===================== End Date ======================
-                    TextField(
-                      controller: _endDate,
-                      style: TextStyle(
-                        color: const Color.fromARGB(255, 218, 218, 218),
-                      ),
-                      decoration: InputDecoration(
-                        labelText: t.translate("endDate"),
-                        labelStyle: TextStyle(
-                          color: const Color.fromARGB(255, 154, 154, 154),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.calendar_today_rounded,
-                          color: const Color.fromARGB(255, 180, 180, 180),
-                        ),
-                      ),
-                      onTap: () async {
-                        final picked = await _pickDateTime(context);
-                        if (picked != null) {
-                          setState(() {
-                            endDate = picked;
-                            _endDate.text = formatter.format(picked);
-                          });
-                        }
-                      },
-                    ),
-
-                    // submit
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-                    SizedBox(
-                      // height: MediaQuery.sizeOf(context).height * 0.05,
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: (!getValidRangeTime() || isLoading)
-                            ? null
-                            : () async {
-                                // button Funct
-                                await _saveToPrefs();
-                                await _loadApi();
-                              },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: const Color.fromARGB(255, 88, 88, 88),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                t.translate("Filter"),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15,)
-                  ],
-                ),
+            // ────────────── Filter Section ──────────────
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppTheme.cardBackground(context),
+                border: Border(bottom: BorderSide(color: AppTheme.borderColor(context))),
               ),
-            ),
+              padding: EdgeInsets.only(
+                left: 20, right: 20, top: 20,
+                bottom: MediaQuery.viewInsetsOf(context).bottom + 20,
+              ),
+              child: Column(
+                children: [
+                  // Start Date
+                  TextField(
+                    controller: _startDate,
+                    readOnly: true,
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
+                    decoration: InputDecoration(
+                      labelText: t.translate("startDate"),
+                      labelStyle: TextStyle(color: AppTheme.textSecondary(context)),
+                      prefixIcon: Icon(Icons.calendar_today_rounded, color: AppTheme.textSecondary(context)),
+                      filled: true,
+                      fillColor: AppTheme.surfaceLow(context),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    onTap: () async {
+                      final picked = await _pickDateTime(context);
+                      if (picked != null) {
+                        setState(() {
+                          startDate = picked;
+                          _startDate.text = formatter.format(picked);
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
 
-            SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
+                  // End Date
+                  TextField(
+                    controller: _endDate,
+                    readOnly: true,
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
+                    decoration: InputDecoration(
+                      labelText: t.translate("endDate"),
+                      labelStyle: TextStyle(color: AppTheme.textSecondary(context)),
+                      prefixIcon: Icon(Icons.calendar_today_rounded, color: AppTheme.textSecondary(context)),
+                      filled: true,
+                      fillColor: AppTheme.surfaceLow(context),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    onTap: () async {
+                      final picked = await _pickDateTime(context);
+                      if (picked != null) {
+                        setState(() {
+                          endDate = picked;
+                          _endDate.text = formatter.format(picked);
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
 
-            // ===================== ABSENCE CARD ======================
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              child: isLoading
-                  ? Padding(
-                      padding: const EdgeInsets.all(32),
-                      child: Column(
+                  // Filter Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: AppTheme.cyanAccent,
+                        elevation: 0,
+                      ),
+                      onPressed: (!getValidRangeTime() || isLoading)
+                          ? null
+                          : () async {
+                              await _saveToPrefs();
+                              await _loadApi();
+                            },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircularProgressIndicator(color: Colors.white),
-                          SizedBox(height: 12),
+                          Icon(Icons.search_rounded, color: Colors.white, size: 20),
+                          const SizedBox(width: 8),
                           Text(
-                            t.translate("loadingDat"),
-                            style: TextStyle(color: Colors.white),
+                            t.translate("Filter"),
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
-                    )
-                  : absences.isEmpty
-                  ? Center(
-                      child: Text(
-                        t.translate("noData"),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: absences.length,
-                      itemBuilder: (context, index) {
-                        final item = absences[index];
-
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          color: const Color.fromARGB(255, 66, 91, 130),
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: _absenceCard(context, item),
-                          ),
-                        );
-                      },
                     ),
+                  ),
+                ],
+              ),
             ),
 
-            // ElevatedButton(
-            //   onPressed: (){
-            //     _getPrefs();
-            //   },
-            //   child: Text("Test prefs")
-            // )
+            // ────────────── Content ──────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+              child: isLoading
+                  ? _loadingSkeleton(context)
+                  : absences.isEmpty
+                      ? _emptyState(context, t)
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: absences.length,
+                          itemBuilder: (context, index) {
+                            final item = absences[index];
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(color: AppTheme.borderColor(context)),
+                              ),
+                              color: AppTheme.cardBackground(context),
+                              elevation: 0,
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: _absenceCard(context, item),
+                              ),
+                            );
+                          },
+                        ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _loadingSkeleton(BuildContext context) {
+    return Column(
+      children: List.generate(
+        3,
+        (i) => Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppTheme.cardBackground(context),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppTheme.borderColor(context)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 14, width: 140, decoration: BoxDecoration(color: AppTheme.borderColor(context), borderRadius: BorderRadius.circular(4))),
+              const SizedBox(height: 8),
+              Container(height: 12, width: double.infinity, decoration: BoxDecoration(color: AppTheme.borderColor(context), borderRadius: BorderRadius.circular(4))),
+              const SizedBox(height: 12),
+              Container(height: 40, decoration: BoxDecoration(color: AppTheme.borderColor(context), borderRadius: BorderRadius.circular(10))),
+              const SizedBox(height: 12),
+              Container(height: 12, width: 100, decoration: BoxDecoration(color: AppTheme.borderColor(context), borderRadius: BorderRadius.circular(4))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _emptyState(BuildContext context, AppLocalizations t) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 48),
+        child: Column(
+          children: [
+            Icon(Icons.inbox_rounded, size: 56, color: AppTheme.textSecondary(context).withAlpha(80)),
+            const SizedBox(height: 16),
+            Text(
+              t.translate("noData"),
+              style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 15),
+            ),
           ],
         ),
       ),

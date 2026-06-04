@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:absence/main.dart';
 import 'package:absence/pilihdinas.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -594,12 +595,10 @@ class _CamPulangState extends State<CamPulang> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 3, 23, 58),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
         title: Text(
           t.translate("takePicture"),
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppTheme.textPrimary(context)),
         ),
       ),
       body: Padding(

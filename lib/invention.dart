@@ -6,6 +6,7 @@ import 'package:absence/goodInputLists.dart';
 import 'package:absence/goodOutputLists.dart';
 import 'package:absence/inputGoodsInput.dart';
 import 'package:absence/inputGoodsOutput.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -237,7 +238,7 @@ class _InventionState extends State<Invention> {
           children: [
             Text(
               "QR Code: ",
-              style: TextStyle(color: Color(0xFF8b9cb6), fontSize: 12),
+              style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
             ),
             Text(
               item['qr_code'],
@@ -265,7 +266,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Kategori",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -274,13 +275,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['kategori'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -303,7 +304,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Jenis",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -312,13 +313,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['jenis_barang'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -336,7 +337,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Satuan",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -345,13 +346,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['satuan'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -369,7 +370,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Stok",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -378,13 +379,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['stok_awal'].toString(),
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -402,7 +403,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Posisi",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -411,13 +412,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['posisi'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -440,7 +441,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Tanggal",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -449,13 +450,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['created_at'] == "" ? "-" : item['created_at'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -473,7 +474,7 @@ class _InventionState extends State<Invention> {
                   width: MediaQuery.sizeOf(context).width * 0.25,
                   child: Text(
                     "Keterangan",
-                    style: TextStyle(color: Color(0xFF6b7785), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textSecondary(context), fontSize: 12),
                   ),
                 ),
                 Padding(
@@ -482,13 +483,13 @@ class _InventionState extends State<Invention> {
                   ),
                   child: Text(
                     ": ",
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     item['keterangan'],
-                    style: TextStyle(color: Color(0xFFe1e7f5), fontSize: 12),
+                    style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                   ),
                 ),
               ],
@@ -512,7 +513,7 @@ class _InventionState extends State<Invention> {
                   height: 150,
                   color: Colors.black12,
                   child: Center(
-                    child: Icon(Icons.broken_image, color: Colors.grey),
+                    child: Icon(Icons.broken_image, color: AppTheme.textSecondary(context)),
                   ),
                 );
               },
@@ -906,7 +907,6 @@ class _InventionState extends State<Invention> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
         title: Row(
           children: [
@@ -927,15 +927,14 @@ class _InventionState extends State<Invention> {
                     t.translate("inventory"),
                     style: TextStyle(color: Color(0xFF4a9eff)),
                   ),
-                  Text( t.translate("manage"),
-                    style: TextStyle(fontSize: 10, color: Color(0xFF8b9cb6)),
+                    Text( t.translate("manage"),
+                    style: TextStyle(fontSize: 10, color: AppTheme.textSecondary(context)),
                   ),
                 ],
               ),
             ),
           ],
         ),
-        backgroundColor: const Color(0xFF182234),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(
@@ -943,8 +942,8 @@ class _InventionState extends State<Invention> {
             color: Color(0xFF2d4a7c), // warna border
           ),
         ),
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 219, 219, 219), // warna icon burger
+        iconTheme: IconThemeData(
+          color: AppTheme.textPrimary(context),
         ),
       ),
 
@@ -957,7 +956,7 @@ class _InventionState extends State<Invention> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFF131927),
+                    color: Theme.of(context).cardColor,
                     border: Border(
                       bottom: BorderSide(color: Color(0xff1f2937), width: 1),
                     ),
@@ -980,7 +979,7 @@ class _InventionState extends State<Invention> {
                               onChanged: (value) => _applyFilter(),
                               controller: _search,
                               style: TextStyle(
-                                color: Color.fromARGB(255, 157, 157, 157),
+                                color: AppTheme.textSecondary(context),
                               ),
                               decoration: InputDecoration(
                                 hint: Row(
@@ -993,12 +992,7 @@ class _InventionState extends State<Invention> {
                                       child: Text(
                                         t.translate("searchGoods"),
                                         style: TextStyle(
-                                          color: Color.fromARGB(
-                                            255,
-                                            157,
-                                            157,
-                                            157,
-                                          ),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                       ),
                                     ),
@@ -1017,7 +1011,7 @@ class _InventionState extends State<Invention> {
                                   ),
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                               ),
                             ),
                           ),
@@ -1035,11 +1029,11 @@ class _InventionState extends State<Invention> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                fillColor: Color(0xFF1f2937),
+                                fillColor: AppTheme.cardBackground(context),
                                 filled: true,
                                 labelText: t.translate("categories"),
                                 labelStyle: TextStyle(
-                                  color: Color.fromARGB(255, 157, 157, 157),
+                                  color: AppTheme.textSecondary(context),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -1055,7 +1049,7 @@ class _InventionState extends State<Invention> {
                                 ),
                               ),
                               style: TextStyle(
-                                color: Color.fromARGB(255, 157, 157, 157),
+                                color: AppTheme.textSecondary(context),
                               ),
                               value: _selectedKategori,
                               items: _kategoriBarang.map((kategori) {
@@ -1087,14 +1081,14 @@ class _InventionState extends State<Invention> {
                                   controller: _startDate,
                                   readOnly: true,
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 157, 157, 157),
+                                    color: AppTheme.textSecondary(context),
                                   ),
                                   decoration: InputDecoration(
-                                    fillColor: Color(0xFF1f2937),
+                                    fillColor: AppTheme.cardBackground(context),
                                     filled: true,
                                     label: Text(t.translate("startDateInvent")),
                                     labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 157, 157, 157),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -1110,12 +1104,7 @@ class _InventionState extends State<Invention> {
                                     ),
                                     suffixIcon: Icon(
                                       Icons.calendar_today_rounded,
-                                      color: const Color.fromARGB(
-                                        255,
-                                        180,
-                                        180,
-                                        180,
-                                      ),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                   ),
                                   onTap: () async {
@@ -1142,14 +1131,14 @@ class _InventionState extends State<Invention> {
                                   controller: _endDate,
                                   readOnly: true,
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 157, 157, 157),
+                                    color: AppTheme.textSecondary(context),
                                   ),
                                   decoration: InputDecoration(
-                                    fillColor: Color(0xFF1f2937),
+                                    fillColor: AppTheme.cardBackground(context),
                                     filled: true,
                                     label: Text(t.translate("endDateInvent")),
                                     labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 157, 157, 157),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -1165,12 +1154,7 @@ class _InventionState extends State<Invention> {
                                     ),
                                     suffixIcon: Icon(
                                       Icons.calendar_today_rounded,
-                                      color: const Color.fromARGB(
-                                        255,
-                                        180,
-                                        180,
-                                        180,
-                                      ),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                   ),
                                   onTap: () async {
@@ -1377,24 +1361,14 @@ class _InventionState extends State<Invention> {
                                   Text(
                                     "Belum ada Barang",
                                     style: TextStyle(
-                                      color: const Color.fromARGB(
-                                        255,
-                                        159,
-                                        159,
-                                        159,
-                                      ),
+                                      color: AppTheme.textSecondary(context),
                                       fontSize: 20,
                                     ),
                                   ),
                                   Text(
                                     "Klik tombol 'Tambah Barang' untuk memulai",
                                     style: TextStyle(
-                                      color: const Color.fromARGB(
-                                        255,
-                                        159,
-                                        159,
-                                        159,
-                                      ),
+                                      color: AppTheme.textSecondary(context),
                                       fontSize: 15,
                                     ),
                                   ),
@@ -1417,7 +1391,7 @@ class _InventionState extends State<Invention> {
                                       color: Color(0xFF1f2937),
                                     ),
                                   ),
-                                  color: Color(0xFF131927),
+                                  color: Theme.of(context).cardColor,
                                   margin: const EdgeInsets.only(bottom: 12),
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),

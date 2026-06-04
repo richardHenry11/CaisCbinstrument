@@ -5,6 +5,7 @@ import 'dart:io';
 
 // import 'package:absence/dashboard.dart';
 // import 'package:absence/reportLists.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -689,55 +690,13 @@ class _detailReportsState extends State<detailReports> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 20.0),
-        //     child: Container(
-        //       // decoration: BoxDecoration(
-        //       //   borderRadius: BorderRadius.circular(10),
-        //       //   border: Border.all(
-        //       //     color: Color.fromRGBO(37, 99, 235, 0.2)
-        //       //   )
-        //       // ),
-        //       child: ElevatedButton(
-        //         style: ElevatedButton.styleFrom(
-        //           backgroundColor: Color.fromRGBO(37, 99, 235, 0.5),
-        //           shape: RoundedRectangleBorder(
-        //             borderRadius: BorderRadius.circular(10)
-        //           ),
-        //         ),
-        //         onPressed: (){
-        //           // Button funct here later!!
-        //           Navigator.push(context, 
-        //           MaterialPageRoute(builder: (context) => reportList())
-        //           );
-        //         }, 
-        //         child: 
-        //         Row(
-        //           children: [
-        //             Icon(Icons.folder, color: Color.fromRGBO(147, 197, 253, 1)),
-        //             Padding(
-        //               padding: const EdgeInsets.only(left: 5.0),
-        //               child: Text("List Laporan Saya", style: TextStyle(color: Color.fromRGBO(147, 197, 253, 1)),),
-        //             ),
-        //           ],
-        //         )
-        //       ),
-        //     ),
-        //   )
-        // ],
-        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           "Details",
           style: TextStyle(
-            // fontSize: 15,
-            // fontWeight: FontWeight.bold,
             color: Colors.lightBlue,
           ),
         ),
-        backgroundColor: Color(0xFF1e293b),
       ),
 
       body: 
@@ -753,9 +712,9 @@ class _detailReportsState extends State<detailReports> {
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(width: 2, color: Color(0xFF1f2937)),
+                        side: BorderSide(width: 2, color: AppTheme.cardBackground(context)),
                       ),
-                      color: Color(0xFF131927),
+                      color: Theme.of(context).cardColor,
                       child: Column(
                         children: [
                           Padding(
@@ -774,7 +733,7 @@ class _detailReportsState extends State<detailReports> {
                                       children: [
                                         Icon(
                                           MaterialCommunityIcons.account,
-                                          color: Color(0xFF64748B),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -783,7 +742,7 @@ class _detailReportsState extends State<detailReports> {
                                           child: Text(
                                             "Nama",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textPrimary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -802,24 +761,19 @@ class _detailReportsState extends State<detailReports> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                          color: Color(0xff475569),
+                                          color: AppTheme.borderColor(context),
                                           width: 2,
                                         ),
                                       ),
                                       child: TextFormField(
                                         enabled: false,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.textPrimary(context)),
                                         controller: _nameController,
                                         // onChanged: (_) => _validateSubmit(),
                                         decoration: InputDecoration(
                                           hintText: "$_savedName",
                                           hintStyle: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              145,
-                                              145,
-                                              145,
-                                            ),
+                                            color: AppTheme.textSecondary(context),
                                             fontSize: 14,
                                           ),
                                           enabledBorder: OutlineInputBorder(
@@ -828,7 +782,7 @@ class _detailReportsState extends State<detailReports> {
                                             ),
                                             borderSide: BorderSide(
                                               width: 2,
-                                              color: const Color(0xff475569),
+                                              color: AppTheme.borderColor(context),
                                             ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
@@ -837,11 +791,11 @@ class _detailReportsState extends State<detailReports> {
                                             ),
                                             borderSide: BorderSide(
                                               width: 2,
-                                              color: const Color(0xff475569),
+                                              color: AppTheme.borderColor(context),
                                             ),
                                           ),
                                           filled: true,
-                                          fillColor: Color(0xff334155),
+                                          fillColor: AppTheme.cardBackground(context),
                                         ),
                                       ),
                                     ),
@@ -856,7 +810,7 @@ class _detailReportsState extends State<detailReports> {
                                       children: [
                                         Icon(
                                           MaterialCommunityIcons.map_marker,
-                                          color: Color(0xFF64748B),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -865,7 +819,7 @@ class _detailReportsState extends State<detailReports> {
                                           child: Text(
                                             "Lokasi Kerja",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textPrimary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -885,7 +839,7 @@ class _detailReportsState extends State<detailReports> {
                                             10,
                                           ),
                                         ),
-                                        fillColor: Color(0xFF1f2937),
+                                        fillColor: AppTheme.cardBackground(context),
                                         filled: true,
                                         // labelText: "Pilih Lokasi Kerja",
                                         labelStyle: TextStyle(
@@ -946,7 +900,7 @@ class _detailReportsState extends State<detailReports> {
                                       children: [
                                         Icon(
                                           MaterialCommunityIcons.calendar,
-                                          color: Color(0xFF64748B),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -955,7 +909,7 @@ class _detailReportsState extends State<detailReports> {
                                           child: Text(
                                             "Tanggal",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textPrimary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -980,7 +934,7 @@ class _detailReportsState extends State<detailReports> {
                                         ),
                                       ),
                                       decoration: InputDecoration(
-                                        fillColor: Color(0xFF1f2937),
+                                        fillColor: AppTheme.cardBackground(context),
                                         filled: true,
                                         label: Text("pilih tanggal"),
                                         labelStyle: TextStyle(
@@ -1009,12 +963,7 @@ class _detailReportsState extends State<detailReports> {
                                         ),
                                         suffixIcon: Icon(
                                           Icons.calendar_today_rounded,
-                                          color: const Color.fromARGB(
-                                            255,
-                                            180,
-                                            180,
-                                            180,
-                                          ),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                       ),
                                       onTap: () async {
@@ -1032,11 +981,10 @@ class _detailReportsState extends State<detailReports> {
                                       },
                                     ),
                                   ),
-
                                   Text(
                                     "Tanggal otomatis mengikuti hari ini.",
                                     style: TextStyle(
-                                      color: Color.fromRGBO(100, 116, 139, 1),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                   ),
                                   SizedBox(
@@ -1070,13 +1018,13 @@ class _detailReportsState extends State<detailReports> {
                                                     MaterialCommunityIcons
                                                         .clock,
                                                     size: 17,
-                                                    color: Color(0xFF64748B),
+                                                    color: AppTheme.textSecondary(context),
                                                   ),
                                                 ),
                                                 Text(
                                                   "Jam Masuk",
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppTheme.textPrimary(context),
                                                   ),
                                                 ),
                                               ],
@@ -1126,7 +1074,7 @@ class _detailReportsState extends State<detailReports> {
                                                       ),
                                                     ),
                                                 filled: true,
-                                                fillColor: Color(0xFF1f2937),
+                                                fillColor: AppTheme.cardBackground(context),
                                                 suffixIcon: Icon(
                                                   MaterialCommunityIcons.clock,
                                                   color: Color.fromARGB(
@@ -1169,13 +1117,13 @@ class _detailReportsState extends State<detailReports> {
                                                     MaterialCommunityIcons
                                                         .clock,
                                                     size: 17,
-                                                    color: Color(0xFF64748B),
+                                                    color: AppTheme.textSecondary(context),
                                                   ),
                                                 ),
                                                 Text(
                                                   "Jam Keluar",
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppTheme.textPrimary(context),
                                                   ),
                                                 ),
                                               ],
@@ -1211,7 +1159,7 @@ class _detailReportsState extends State<detailReports> {
                                                       ),
                                                     ),
                                                 filled: true,
-                                                fillColor: Color(0xFF1f2937),
+                                                fillColor: AppTheme.cardBackground(context),
                                                 focusedBorder:
                                                     OutlineInputBorder(
                                                       borderRadius:
@@ -1305,7 +1253,7 @@ class _detailReportsState extends State<detailReports> {
                                           child: Text(
                                             "Pekerjaan Hari Ini",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: AppTheme.textPrimary(context),
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -1334,7 +1282,7 @@ class _detailReportsState extends State<detailReports> {
                                                   1,
                                                 ),
                                               ),
-                                              color: Color(0xFF1f2937),
+                                              color: AppTheme.cardBackground(context),
                                               borderRadius:
                                                   BorderRadius.circular(12),
                                             ),
@@ -1343,7 +1291,7 @@ class _detailReportsState extends State<detailReports> {
                                                 Card(
                                                   color: Colors.transparent,
                                                   elevation: 0,
-                                                  // color: Color(0xFF1f2937),
+                                                  // color: AppTheme.cardBackground(context),
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -1589,7 +1537,7 @@ class _detailReportsState extends State<detailReports> {
                                                               disabledHint: Text(
                                                                 task["job"],
                                                                 style: TextStyle(
-                                                                  color: Color.fromARGB(255, 157, 157, 157),
+                                                                  color: AppTheme.textSecondary(context),
                                                                 ),
                                                               ),
                                                               decoration: InputDecoration(
@@ -3207,7 +3155,7 @@ class _detailReportsState extends State<detailReports> {
                           //           onChanged: (_) => _validateSubmit(),
                           //           controller: _planning,
                           //           style: TextStyle(
-                          //             color: Color.fromARGB(255, 157, 157, 157),
+                          //             color: AppTheme.textSecondary(context),
                           //           ),
                           //           maxLines: 4,
                           //           decoration: InputDecoration(
@@ -3220,7 +3168,7 @@ class _detailReportsState extends State<detailReports> {
                           //             hintText:
                           //                 "Contoh: Melanjutkan Kalibrasi, Rewiring, pengecekan data ke server DLL...",
                           //             filled: true,
-                          //             fillColor: Color(0xFF1f2937),
+                          //             fillColor: AppTheme.cardBackground(context),
                           //             focusedBorder: OutlineInputBorder(
                           //               borderRadius: BorderRadius.circular(10),
                           //               borderSide: BorderSide(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:absence/cam.dart';
 import 'package:absence/camPulang.dart';
 import 'package:absence/main.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
@@ -256,7 +257,6 @@ class _WFHState extends State<WFH> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -324,13 +324,13 @@ class _WFHState extends State<WFH> {
                       width: 1,
                     ),
                   ),
-                  color: Color(0xFF334155),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Text("testing wa atuh euy", style: TextStyle(color: Colors.white),),
-                      Card(
-                        color: Color(0xFF334155),
+                    color: AppTheme.cardBackground(context),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Text("testing wa atuh euy", style: TextStyle(color: Colors.white),),
+                        Card(
+                          color: AppTheme.cardBackground(context),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
@@ -354,10 +354,10 @@ class _WFHState extends State<WFH> {
                                         MediaQuery.of(context).size.width *
                                         0.005,
                                   ),
-                                  child: Text(
-                                    t.translate("gpsValid"),
-                                    style: TextStyle(
-                                      color: Colors.white,
+                                        child: Text(
+                                          t.translate("gpsValid"),
+                                          style: TextStyle(
+                                            color: AppTheme.textPrimary(context),
                                       fontSize: 12,
                                     ),
                                   ),
@@ -386,8 +386,8 @@ class _WFHState extends State<WFH> {
                                       const SizedBox(width: 6),
                                       Text(
                                         t.translate("badgeAllowed"),
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                            style: TextStyle(
+                                              color: AppTheme.textPrimary(context),
                                           fontSize: 8,
                                         ),
                                       ),
@@ -401,10 +401,10 @@ class _WFHState extends State<WFH> {
                                 left: MediaQuery.of(context).size.width * 0.04,
                                 top: MediaQuery.of(context).size.height * 0.01,
                               ),
-                              child: Text(
-                                "PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung",
-                                style: TextStyle(
-                                  color: Colors.white,
+                                    child: Text(
+                                      "PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung",
+                                      style: TextStyle(
+                                        color: AppTheme.textPrimary(context),
                                   fontSize: 10,
                                 ),
                               ),
@@ -424,7 +424,7 @@ class _WFHState extends State<WFH> {
                                   Text(
                                     t.translate("distance"),
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppTheme.textPrimary(context),
                                       fontSize: 12,
                                     ),
                                   ),
@@ -433,7 +433,7 @@ class _WFHState extends State<WFH> {
                                         ? "calculating..."
                                         : "${distance!.toStringAsFixed(2)} Meter",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppTheme.textPrimary(context),
                                       fontSize: 12,
                                     ),
                                   ),
@@ -523,45 +523,45 @@ class _WFHState extends State<WFH> {
                               },
                               child: Text(
                                 t.translate("inButton"),
-                                style: TextStyle(
-                                  color: _savedShiftType == "masuk"
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
+                              style: TextStyle(
+                                color: _savedShiftType == "masuk"
+                                    ? AppTheme.textPrimary(context)
+                                    : Colors.black,
                               ),
                             ),
                           ),
+                        ),
 
-                          // Pulang
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.3,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.circular(
-                                    10,
-                                  ),
+                        // Pulang
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.3,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusGeometry.circular(
+                                  10,
                                 ),
-                                backgroundColor: _savedShiftType == "pulang"
-                                    ? Colors.lightBlueAccent
-                                    : const Color.fromARGB(255, 220, 220, 220),
                               ),
-                              onPressed: () async {
-                                await _pulangShiftType();
+                              backgroundColor: _savedShiftType == "pulang"
+                                  ? Colors.lightBlueAccent
+                                  : const Color.fromARGB(255, 220, 220, 220),
+                            ),
+                            onPressed: () async {
+                              await _pulangShiftType();
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => CamPulang(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                t.translate("outButton"),
-                                style: TextStyle(
-                                  color: _savedShiftType == "pulang"
-                                      ? Colors.white
-                                      : Colors.black,
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CamPulang(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              t.translate("outButton"),
+                              style: TextStyle(
+                                color: _savedShiftType == "pulang"
+                                    ? AppTheme.textPrimary(context)
+                                    : Colors.black,
                                 ),
                               ),
                             ),
@@ -636,24 +636,24 @@ class _WFHState extends State<WFH> {
                       width: 1,
                     ),
                   ),
-                  color: Color(0xFF334155),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.01),
-                      Icon(
-                        Icons.shield_outlined,
+                    color: AppTheme.cardBackground(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: MediaQuery.sizeOf(context).width * 0.01),
+                        Icon(
+                          Icons.shield_outlined,
                         color: Colors.lightBlueAccent,
                       ),
                       Column(
                         children: [
                           Text(
                             "HR Compliance Verified",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                            style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 12),
                           ),
                           Text(
                             "Sistem terintegrasi dengan audit trail",
-                            style: TextStyle(color: Colors.white, fontSize: 8),
+                            style: TextStyle(color: AppTheme.textPrimary(context), fontSize: 8),
                           ),
                         ],
                       ),
@@ -667,7 +667,7 @@ class _WFHState extends State<WFH> {
                         child: Container(
                           width: 2,
                           height: MediaQuery.sizeOf(context).height * 0.04,
-                          color: Colors.grey,
+                          color: AppTheme.borderColor(context),
                         ),
                       ),
                       Column(

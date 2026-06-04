@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:absence/detailReports.dart';
 import 'package:absence/editdaily.dart';
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -195,21 +196,18 @@ class _reportListState extends State<reportList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF182234),
       appBar: AppBar(
-        backgroundColor: Color(0xFF1e293b),
-        iconTheme: IconThemeData(color: Colors.white),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "History Report Pekerjaan Harian",
-              style: TextStyle(color: Color.fromRGBO(245, 250, 255, 1)),
+              style: TextStyle(color: AppTheme.textPrimary(context)),
             ),
             Text(
               "Monitoring aktivitas kerja harian karyawan",
               style: TextStyle(
-                color: Color.fromRGBO(107, 140, 186, 1),
+                color: AppTheme.textSecondary(context),
                 fontSize: 15,
               ),
             ),
@@ -237,7 +235,7 @@ class _reportListState extends State<reportList> {
             child: Container(
               decoration: BoxDecoration(
                 // border: Border.all(color: Colors.white),
-                color: Color.fromRGBO(13, 26, 45, 1),
+                color: AppTheme.cardBackground(context),
               ),
               child:
                   // =========================================================== Filter =================================================
@@ -265,14 +263,14 @@ class _reportListState extends State<reportList> {
                                   controller: _dateStart,
                                   readOnly: true,
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 157, 157, 157),
+                                    color: AppTheme.textSecondary(context),
                                   ),
                                   decoration: InputDecoration(
-                                    fillColor: Color(0xFF1f2937),
+                                    fillColor: AppTheme.cardBackground(context),
                                     filled: true,
                                     label: Text("Tanggal Mulai"),
                                     labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 157, 157, 157),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -288,12 +286,7 @@ class _reportListState extends State<reportList> {
                                     ),
                                     suffixIcon: Icon(
                                       Icons.calendar_today_rounded,
-                                      color: const Color.fromARGB(
-                                        255,
-                                        180,
-                                        180,
-                                        180,
-                                      ),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                   ),
                                   onTap: () async {
@@ -319,14 +312,14 @@ class _reportListState extends State<reportList> {
                                   controller: _dateEnd,
                                   readOnly: true,
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 157, 157, 157),
+                                    color: AppTheme.textSecondary(context),
                                   ),
                                   decoration: InputDecoration(
-                                    fillColor: Color(0xFF1f2937),
+                                    fillColor: AppTheme.cardBackground(context),
                                     filled: true,
                                     label: Text("Tanggal Mulai"),
                                     labelStyle: TextStyle(
-                                      color: Color.fromARGB(255, 157, 157, 157),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -342,12 +335,7 @@ class _reportListState extends State<reportList> {
                                     ),
                                     suffixIcon: Icon(
                                       Icons.calendar_today_rounded,
-                                      color: const Color.fromARGB(
-                                        255,
-                                        180,
-                                        180,
-                                        180,
-                                      ),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                   ),
                                   onTap: () async {
@@ -383,7 +371,7 @@ class _reportListState extends State<reportList> {
                                       children: [
                                         Icon(
                                           MaterialCommunityIcons.map_marker,
-                                          color: Color(0xFF64748B),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -392,7 +380,7 @@ class _reportListState extends State<reportList> {
                                           child: Text(
                                             "Lokasi Kerja",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textPrimary(context),
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -412,7 +400,7 @@ class _reportListState extends State<reportList> {
                                             10,
                                           ),
                                         ),
-                                        fillColor: Color(0xFF1f2937),
+                                        fillColor: AppTheme.cardBackground(context),
                                         filled: true,
                                         // labelText: "Pilih Lokasi Kerja",
                                         labelStyle: TextStyle(
@@ -484,7 +472,7 @@ class _reportListState extends State<reportList> {
                                       children: [
                                         Icon(
                                           MaterialCommunityIcons.target,
-                                          color: Color(0xFF64748B),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -493,7 +481,7 @@ class _reportListState extends State<reportList> {
                                           child: Text(
                                             "Project",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textPrimary(context),
                                             ),
                                           ),
                                         ),
@@ -510,12 +498,7 @@ class _reportListState extends State<reportList> {
                                         child: TextField(
                                           controller: _project,
                                           style: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              163,
-                                              163,
-                                              163,
-                                            ),
+                                            color: AppTheme.textSecondary(context),
                                           ),
                                           decoration: InputDecoration(
                                             enabledBorder: OutlineInputBorder(
@@ -531,7 +514,7 @@ class _reportListState extends State<reportList> {
                                               ),
                                             ),
                                             filled: true,
-                                            fillColor: Color(0xFF1f2937),
+                                            fillColor: AppTheme.cardBackground(context),
                                             focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -554,7 +537,7 @@ class _reportListState extends State<reportList> {
                                       children: [
                                         Icon(
                                           MaterialCommunityIcons.briefcase,
-                                          color: Color(0xFF64748B),
+                                          color: AppTheme.textSecondary(context),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -563,7 +546,7 @@ class _reportListState extends State<reportList> {
                                           child: Text(
                                             "Jenis Pekerjaan",
                                             style: TextStyle(
-                                              color: Color(0xffe5e7eb),
+                                              color: AppTheme.textPrimary(context),
                                             ),
                                           ),
                                         ),
@@ -580,12 +563,7 @@ class _reportListState extends State<reportList> {
                                         child: TextField(
                                           controller: _jobKind,
                                           style: TextStyle(
-                                            color: const Color.fromARGB(
-                                              255,
-                                              163,
-                                              163,
-                                              163,
-                                            ),
+                                            color: AppTheme.textSecondary(context),
                                           ),
                                           decoration: InputDecoration(
                                             enabledBorder: OutlineInputBorder(
@@ -601,7 +579,7 @@ class _reportListState extends State<reportList> {
                                               ),
                                             ),
                                             filled: true,
-                                            fillColor: Color(0xFF1f2937),
+                                            fillColor: AppTheme.cardBackground(context),
                                             focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -629,7 +607,7 @@ class _reportListState extends State<reportList> {
                                   children: [
                                     Icon(
                                       MaterialCommunityIcons.briefcase,
-                                      color: Color(0xFF64748B),
+                                      color: AppTheme.textSecondary(context),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
@@ -638,7 +616,7 @@ class _reportListState extends State<reportList> {
                                       child: Text(
                                         "Project",
                                         style: TextStyle(
-                                          color: Color(0xffe5e7eb),
+                                          color: AppTheme.textPrimary(context),
                                         ),
                                       ),
                                     ),
@@ -676,7 +654,7 @@ class _reportListState extends State<reportList> {
                                           ),
                                         ),
                                         filled: true,
-                                        fillColor: Color(0xFF1f2937),
+                                        fillColor: AppTheme.cardBackground(context),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                             10,
@@ -842,43 +820,43 @@ class _reportListState extends State<reportList> {
                 DataColumn(
                   label: Text(
                     'Nama',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Lokasi',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Tanggal',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Jam Mulai',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Jam Selesai',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Jumlah Pekerjaan',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Actions',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppTheme.textPrimary(context)),
                   ),
                 ),
               ],
@@ -889,42 +867,42 @@ class _reportListState extends State<reportList> {
                     DataCell(
                       Text(
                         item['nama'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
 
                     DataCell(
                       Text(
                         item['lokasi_kerja'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
 
                     DataCell(
                       Text(
                         item['tanggal'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
 
                     DataCell(
                       Text(
                         item['jam_mulai'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
 
                     DataCell(
                       Text(
                         item['jam_selesai'],
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
 
                     DataCell(
                       Text(
                         item['jumlah_pekerjaan'].toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppTheme.textPrimary(context)),
                       ),
                     ),
 

@@ -1,3 +1,4 @@
+import 'package:absence/theme.dart';
 import 'package:flutter/material.dart';
 
 class GoodsKindRadio extends StatefulWidget {
@@ -53,12 +54,11 @@ class _GoodsKindRadioState extends State<GoodsKindRadio> {
 
     return Card(
       
-      color: const Color(0xFF1f2937),
-      // margin: const EdgeInsets.all(0),
+      color: AppTheme.cardBackground(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
         side: BorderSide(
-          color: Color(0xFF2d4a7c)
+          color: AppTheme.borderColor(context)
         )
       ),
       child: Padding(
@@ -70,13 +70,13 @@ class _GoodsKindRadioState extends State<GoodsKindRadio> {
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: TextField(
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: AppTheme.textPrimary(context)),
                 decoration: InputDecoration(
                   hintText: "Cari jenis barang...",
-                  hintStyle: const TextStyle(color: Colors.white54),
-                  prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                  hintStyle: TextStyle(color: AppTheme.textSecondary(context)),
+                  prefixIcon: Icon(Icons.search, color: AppTheme.textSecondary(context)),
                   filled: true,
-                  fillColor: const Color(0xFF131927),
+                  fillColor: Theme.of(context).cardColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
@@ -102,13 +102,13 @@ class _GoodsKindRadioState extends State<GoodsKindRadio> {
 
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
-                    color: const Color(0xFF131927),
+                    color: Theme.of(context).cardColor,
                     child: ListTile(
                       title: Text(
                         item,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Colors.white,
+                          color: AppTheme.textPrimary(context),
                         ),
                       ),
                       leading: Radio<String>(
