@@ -383,10 +383,10 @@ class _DashboardDuaState extends State<DashboardDua>
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
+                          crossAxisCount: 3,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
-                          childAspectRatio: 1.1,
+                          childAspectRatio: 0.9,
                         ),
                         itemCount: stats.length,
                         itemBuilder: (context, index) {

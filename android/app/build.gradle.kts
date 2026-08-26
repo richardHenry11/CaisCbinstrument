@@ -32,8 +32,8 @@ android {
     defaultConfig {
         applicationId = "com.cbinstrument.absence"
 
-        minSdk = 21
-        targetSdk = flutter.targetSdkVersion
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
 
         versionCode = flutter.versionCode
         versionName = flutter.versionName

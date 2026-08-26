@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 
 import 'package:absence/l10n/app_localizations.dart';
@@ -248,69 +247,98 @@ class _CameraState extends State<Camera> {
   // }
 
   Widget _buildGPSOverlay() {
-    return 
-    Container(
-      padding : EdgeInsets.all(12),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.45),
-        borderRadius: BorderRadius.circular(14),
+        gradient: LinearGradient(
+          colors: [
+            Colors.black.withValues(alpha: 0.6),
+            Colors.black.withValues(alpha: 0.35),
+          ],
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ================================= DateTime Now ===============================
-          Text(
-          DateFormat("yyyy/MMMM/dd HH:mm:ss", "en_EN").format(DateTime.now()),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          // ================================= Lattitide and Longitude =====================
-          const SizedBox(height: 5),
-          Text(
-            "${_lat?.toStringAsFixed(6)}, ${_lng?.toStringAsFixed(6)}",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-            ),
-          ),
-
-          // ================================= Address ======================================
-          const SizedBox(height: 5),
-          Text(
-            _address ?? "Loading location...",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-            ),
-          ),
-
-          // ================================= Attendance Type ===============================
-          const SizedBox(height: 5),
-          Container(
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     color: Colors.red
-            //   )
-            // ),
-            child: 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.location_on, color: Colors.red),
-                SizedBox(width: 5),
-                Text(
-                  "$_savedAttType - $_savedShiftType",
-                  style: TextStyle(color: Colors.white),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: AppTheme.cyanAccent.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-              ],
-            ),
-          )
-
+                child: Icon(Icons.access_time_rounded,
+                    color: AppTheme.cyanAccent, size: 12),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                DateFormat("HH:mm:ss", "en_EN").format(DateTime.now()),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                DateFormat("EEE, dd MMM", "en_EN").format(DateTime.now()),
+                style: const TextStyle(color: Colors.white60, fontSize: 11),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Icon(Icons.my_location_rounded, color: Colors.greenAccent, size: 13),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  _address ?? "Loading location...",
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Icon(Icons.pin_drop_rounded, color: Colors.orangeAccent, size: 13),
+              const SizedBox(width: 6),
+              Text(
+                "${_lat?.toStringAsFixed(6) ?? '---'}, ${_lng?.toStringAsFixed(6) ?? '---'}",
+                style: const TextStyle(
+                  color: Colors.white60,
+                  fontSize: 11,
+                  fontFamily: 'monospace',
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppTheme.cyanAccent.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                      color: AppTheme.cyanAccent.withValues(alpha: 0.25)),
+                ),
+                child: Text(
+                  "$_savedAttType - $_savedShiftType",
+                  style: const TextStyle(
+                    color: AppTheme.cyanAccent,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -787,253 +815,357 @@ class _CameraState extends State<Camera> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final btnActive = _photo != null && _faceValid && !_isSubmitting;
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(
-          t.translate("takePicture"),
-          style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+        title: Text(t.translate("takePicture"),
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child:
-                    _photo != null && _faceValid
-                        ? Image.file(
-                            _photo!,
-                            fit: BoxFit.cover,
-                          )
-                        : (_controller == null ||
-                              !_controller!.value.isInitialized)
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : 
-                        Stack(
-                    fit: StackFit.expand,
-                  children: [
-                    CameraPreview(_controller!),
+      body: Column(
+        children: [
+          // ========== Camera Preview Area ==========
+          Expanded(
+            child: Stack(
+              children: [
+                // Camera / Photo
+                ClipRRect(
+                  borderRadius: BorderRadius.zero,
+                  child: _photo != null && _faceValid
+                      ? Image.file(_photo!, fit: BoxFit.cover)
+                      : (_controller == null || !_controller!.value.isInitialized)
+                          ? Center(
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: (isDark ? Colors.white : Colors.black)
+                                      .withValues(alpha: 0.05),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const CircularProgressIndicator(strokeWidth: 3),
+                              ),
+                            )
+                          : CameraPreview(_controller!),
+                ),
 
-                    Positioned(
-                      bottom: 0,
-                      left: 20,
-                      right: 20,
-                      child: SafeArea(
+                // ========== Scan Frame Overlay ==========
+                if (_photo == null && _controller != null && _controller!.value.isInitialized)
+                  CustomPaint(
+                    size: Size.infinite,
+                    painter: _ScanFramePainter(
+                      color: AppTheme.cyanAccent.withValues(alpha: 0.5),
+                    ),
+                  ),
+
+                // ========== GPS Bottom Overlay ==========
+                if (_photo == null || !_faceValid)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                         child: _buildGPSOverlay(),
                       ),
                     ),
-                  ],
-                )
-              ),
-            ),
-            SizedBox(height: 5),
-            Container(
-              decoration: BoxDecoration(
-                // border: Border.all(
-                //   color: Colors.red
-                // )
-              ),
-              child: 
-              Card(
-                shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(
-                        color: const Color.fromARGB(255, 67, 150, 217),
-                        width: 1,
-                      ),
-                    ),
-                    color: Color(0xFF334155),
-                  child: 
-                  Column(
-                    children: [
-                      
-                      // ====================== Facing Toward Camera ==========================
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15),
-                            ),
-                            Text(t.translate("facingForward"), style: TextStyle(color: AppTheme.textPrimary(context)),)
-                          ],
-                        ),
-                      ),
-
-                      // ====================== Evading 2 face or more ==========================
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15),
-                            ),
-                            Text(t.translate("2ormoreevade"), style: TextStyle(color: AppTheme.textPrimary(context)),)
-                          ],
-                        ),
-                      ),
-
-                      // ====================== Stay Still ==========================
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Icon(MaterialCommunityIcons.star, color: const Color.fromARGB(255, 255, 230, 0), size: 15,),
-                            ),
-                            Text(t.translate("stayStill"), style: TextStyle(color: AppTheme.textPrimary(context)),)
-                          ],
-                        ),
-                      )
-                    ],
                   ),
-              ),
-            ),
-            SizedBox(height: 8),
-            if (_faceMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _faceValid ? Icons.verified : Icons.error,
-                      color: _faceValid ? Colors.green : Colors.red,
-                    ),
-                    const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          _faceMessage,
-                            style: TextStyle(
-                              color: _faceValid ? Colors.green : Colors.red,
-                              fontWeight: FontWeight.bold,
+
+                // ========== Full error overlay ==========
+                if (_photo != null && !_faceValid)
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withValues(alpha: 0.15),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.error_outline_rounded,
+                                  color: Colors.redAccent, size: 48),
                             ),
-                          ),
+                            const SizedBox(height: 16),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
+                              child: Text(
+                                _faceMessage,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    // ElevatedButton(onPressed: (){ _prefsCatcher(); }, child: Text("Test Prefs"))
-                  ],
+                    ),
+                  ),
+
+                // ========== Valid gradient overlay ==========
+                if (_photo != null && _faceValid)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.black.withValues(alpha: 0.3),
+                            Colors.transparent,
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.5),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          // ========== Bottom Panel ==========
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              boxShadow: [
+                BoxShadow(
+                  color: (isDark ? Colors.black : Colors.black).withValues(alpha: isDark ? 0.3 : 0.06),
+                  blurRadius: 20,
+                  offset: const Offset(0, -4),
                 ),
-              ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     if (_photo == null) {
-            //       debugPrint("Belum ada foto");
-            //       return;
-            //     }
-
-            //     final fileName = p.basename(_photo!.path);
-            //     final extension = p.extension(_photo!.path);
-            //     final fileSize = _photo!.lengthSync();
-
-            //     debugPrint("📸 File name : $fileName");
-            //     debugPrint("📂 Extension : $extension");
-            //     debugPrint("📦 Size      : ${fileSize ~/ 1024} KB");
-            //     debugPrint("📍 Full path : ${_photo!.path}");
-            //   },
-            //   child: const Text("check file Photo"),
-            // ),
-            // SizedBox(height: 8),
-            // TextField(
-            //   controller: _nameController,
-            //   decoration: const InputDecoration(
-            //     labelText: "Name",
-            //     border: OutlineInputBorder()
-            //   ),
-            // ),
-            // SizedBox(height: 8),
-            // DropdownButtonFormField(
-            //   value: _status,
-            //   items: const [
-            //     DropdownMenuItem(value: "Masuk", child: Text("Masuk")),
-            //     DropdownMenuItem(value: "Tidak Masuk", child: Text("Tidak Masuk")),
-            //   ],
-            //   onChanged: (val) => setState(() => _status = val!),
-            //   decoration: const InputDecoration(
-            //     border: OutlineInputBorder(),
-            //   labelText: "Status",
-            //   ),
-            // ),
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width * 1,
-              height: MediaQuery.sizeOf(context).height * 0.08,
-              child: Container(
-                decoration: _photo != null && _faceValid && !_isSubmitting
-                    ? BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromARGB(
-                              255,
-                              34,
-                              249,
-                              92,
-                            ).withOpacity(0.3),
-                            blurRadius: 15,
-                            spreadRadius: 2,
-                          ),
-                          BoxShadow(
-                            color: const Color.fromARGB(
-                              255,
-                              34,
-                              249,
-                              92,
-                            ).withOpacity(0.3),
-                            blurRadius: 30,
-                            spreadRadius: 6,
-                          ),
-                        ],
-                      )
-                    : null,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSubmitting
-                        ? const Color.fromARGB(255, 211, 211, 211)
-                        : const Color.fromARGB(255, 87, 201, 91),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(10),
+              ],
+            ),
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // ========== Instruction List ==========
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.04),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.06),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        _instructionItem(
+                          icon: Icons.face_rounded,
+                          label: t.translate("facingForward"),
+                          isDark: isDark,
+                        ),
+                        const SizedBox(height: 8),
+                        _instructionItem(
+                          icon: Icons.group_remove_rounded,
+                          label: t.translate("2ormoreevade"),
+                          isDark: isDark,
+                        ),
+                        const SizedBox(height: 8),
+                        _instructionItem(
+                          icon: Icons.timer_outlined,
+                          label: t.translate("stayStill"),
+                          isDark: isDark,
+                        ),
+                      ],
                     ),
                   ),
-                  onPressed: _photo != null && _faceValid && !_isSubmitting
-                      ? (){
-                        setState(() {
-                          _isSubmitting = true;
-                        }); 
-                        if (!mounted) return;
-                        _submitAbsence();
-                      }: null,
-                  child: _isSubmitting
-                        ? 
-                        // t.translate("isSubmit")
-                        SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
-                  ),
-                )
-                        : Text(t.translate("Submit"),
-                    style: TextStyle(
-                      color: _isSubmitting
-                          ? const Color.fromARGB(255, 74, 74, 74)
-                          : Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900,
+
+                  // ========== Submit Button ==========
+                  SizedBox(
+                    width: double.infinity,
+                    height: 54,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: btnActive
+                            ? LinearGradient(
+                                colors: [
+                                  AppTheme.cyanAccent,
+                                  AppTheme.cyanAccent.withValues(alpha: 0.7),
+                                ],
+                              )
+                            : LinearGradient(
+                                colors: [
+                                  Colors.grey.withValues(alpha: 0.25),
+                                  Colors.grey.withValues(alpha: 0.1),
+                                ],
+                              ),
+                        boxShadow: btnActive
+                            ? [
+                                BoxShadow(
+                                  color: AppTheme.cyanAccent.withValues(alpha: 0.35),
+                                  blurRadius: 20,
+                                  spreadRadius: 1,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        onPressed: btnActive
+                            ? () {
+                                setState(() => _isSubmitting = true);
+                                if (!mounted) return;
+                                _submitAbsence();
+                              }
+                            : null,
+                        child: _isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    btnActive
+                                        ? Icons.check_circle_outline_rounded
+                                        : Icons.lock_outline_rounded,
+                                    color: btnActive ? Colors.white : Colors.white38,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    t.translate("Submit"),
+                                    style: TextStyle(
+                                      color: btnActive ? Colors.white : Colors.white38,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  Widget _instructionItem({
+    required IconData icon,
+    required String label,
+    required bool isDark,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: AppTheme.cyanAccent.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 16, color: AppTheme.cyanAccent),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppTheme.textSecondary(context),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ScanFramePainter extends CustomPainter {
+  final Color color;
+
+  _ScanFramePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final ovalWidth = size.width * 0.7;
+    final ovalHeight = size.height * 0.5;
+    final ovalRect = Rect.fromCenter(
+      center: center,
+      width: ovalWidth,
+      height: ovalHeight,
+    );
+
+    canvas.drawOval(ovalRect, paint);
+
+    final dashPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.08)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    final hLine = Offset(center.dx - ovalWidth / 2 - 20, center.dy);
+    canvas.drawLine(hLine, Offset(center.dx - ovalWidth / 2 - 4, center.dy), dashPaint);
+    canvas.drawLine(
+      Offset(center.dx + ovalWidth / 2 + 4, center.dy),
+      Offset(center.dx + ovalWidth / 2 + 20, center.dy),
+      dashPaint,
+    );
+
+    final vLine = Offset(center.dx, center.dy - ovalHeight / 2 - 20);
+    canvas.drawLine(vLine, Offset(center.dx, center.dy - ovalHeight / 2 - 4), dashPaint);
+    canvas.drawLine(
+      Offset(center.dx, center.dy + ovalHeight / 2 + 4),
+      Offset(center.dx, center.dy + ovalHeight / 2 + 20),
+      dashPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _ScanFramePainter oldDelegate) =>
+      oldDelegate.color != color;
 }

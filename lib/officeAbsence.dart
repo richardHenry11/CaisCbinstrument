@@ -106,15 +106,22 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
     OfficeLocation(
       id: 'kip',
       name: 'KIP Office',
-      location: LatLng(-6.951720770791366, 107.53339375994186),
-      radius: 200,
+      location: LatLng(-6.951613312233824, 107.53343065982726),
+      radius: 300,
     ),
     OfficeLocation(
       id: 'tki',
       name: 'TKI Office',
-      location: LatLng(-6.9662030, 107.5500570),
-      radius: 200,
+      location: LatLng(-6.968344939493644, 107.56958810944737),
+      radius: 300,
     ),
+    // ,
+    // OfficeLocation(
+    //   id: 'tki',
+    //   name: 'TKI Office',
+    //   location: LatLng(-6.9680261, 107.5696181),
+    //   radius: 200,
+    // ),
   ];
 
   OfficeLocation? activeOffice;
@@ -235,7 +242,10 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
 
               if (!mounted) return;
 
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Camera()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Camera()),
+              );
               break;
             }
 
@@ -270,7 +280,7 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
     final prefs = await SharedPreferences.getInstance();
 
     // ========================= 00:00 - 12:00 ===========================
-    if(hour < 12 || (hour == 12 && minute == 0)) {
+    if (hour < 12 || (hour == 12 && minute == 0)) {
       await prefs.setString('shift_type', 'masuk');
 
       setState(() {
@@ -279,7 +289,6 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
 
       debugPrint("Shift Type: masuk");
     }
-
     // ========================== 12:01 - 23:59 ===========================
     else {
       await prefs.setString('shift_type', 'pulang');
@@ -336,7 +345,6 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return Scaffold(
-
       body: SingleChildScrollView(
         child: SizedBox(
           width: MediaQuery.sizeOf(context).width * 1,
@@ -439,10 +447,10 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                           MediaQuery.of(context).size.width *
                                           0.005,
                                     ),
-                                     child: Text(
-                                       t.translate("gpsValid"),
-                                       style: TextStyle(
-                                         color: AppTheme.textPrimary(context),
+                                    child: Text(
+                                      t.translate("gpsValid"),
+                                      style: TextStyle(
+                                        color: AppTheme.textPrimary(context),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -481,8 +489,10 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                                   ? ("badgeAllowed")
                                                   : ("badgeNotAllowed"),
                                             ),
-                                             style: TextStyle(
-                                               color: AppTheme.textPrimary(context),
+                                            style: TextStyle(
+                                              color: AppTheme.textPrimary(
+                                                context,
+                                              ),
                                               fontSize: 8,
                                             ),
                                           ),
@@ -499,10 +509,10 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                   top:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                 child: Text(
-                                   "PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung",
-                                   style: TextStyle(
-                                     color: AppTheme.textPrimary(context),
+                                child: Text(
+                                  "PT Cakrawala Bima Instrument, Jelegong, Kec. Kutawaringin, Kabupaten Bandung",
+                                  style: TextStyle(
+                                    color: AppTheme.textPrimary(context),
                                     fontSize: 10,
                                   ),
                                 ),
@@ -522,19 +532,19 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                     Text(
-                                       t.translate("distance"),
-                                       style: TextStyle(
-                                         color: AppTheme.textPrimary(context),
-                                         fontSize: 12,
-                                       ),
-                                     ),
-                                     Text(
-                                       distance == null
-                                           ? "calculating..."
-                                           : "${distance!.toStringAsFixed(2)} Meter",
-                                       style: TextStyle(
-                                         color: AppTheme.textPrimary(context),
+                                    Text(
+                                      t.translate("distance"),
+                                      style: TextStyle(
+                                        color: AppTheme.textPrimary(context),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      distance == null
+                                          ? "calculating..."
+                                          : "${distance!.toStringAsFixed(2)} Meter",
+                                      style: TextStyle(
+                                        color: AppTheme.textPrimary(context),
                                         fontSize: 12,
                                       ),
                                     ),
@@ -545,17 +555,17 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                   Text(
-                                     "Lat:",
-                                     style: TextStyle(
-                                       color: AppTheme.textPrimary(context),
-                                       fontSize: 12,
-                                     ),
-                                   ),
-                                   Text(
-                                     "Long:",
-                                     style: TextStyle(
-                                       color: AppTheme.textPrimary(context),
+                                  Text(
+                                    "Lat:",
+                                    style: TextStyle(
+                                      color: AppTheme.textPrimary(context),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Long:",
+                                    style: TextStyle(
+                                      color: AppTheme.textPrimary(context),
                                       fontSize: 12,
                                     ),
                                   ),
@@ -847,17 +857,17 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
                           ),
                           Column(
                             children: [
-                               Text(
-                                 "HR Compliance Verified",
-                                 style: TextStyle(
-                                   color: AppTheme.textPrimary(context),
+                              Text(
+                                "HR Compliance Verified",
+                                style: TextStyle(
+                                  color: AppTheme.textPrimary(context),
                                   fontSize: 12,
                                 ),
                               ),
-                               Text(
-                                 "Sistem terintegrasi dengan audit trail",
-                                 style: TextStyle(
-                                   color: AppTheme.textPrimary(context),
+                              Text(
+                                "Sistem terintegrasi dengan audit trail",
+                                style: TextStyle(
+                                  color: AppTheme.textPrimary(context),
                                   fontSize: 8,
                                 ),
                               ),
@@ -902,4 +912,3 @@ class _OfficeAbsenceState extends State<OfficeAbsence> {
     );
   }
 }
-

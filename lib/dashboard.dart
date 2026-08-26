@@ -14,8 +14,11 @@ import 'package:absence/dashboardDua.dart';
 import 'package:absence/invention.dart';
 import 'package:absence/l10n/app_localizations.dart';
 import 'package:absence/main.dart';
+import 'package:absence/fieldDuty.dart';
+import 'package:absence/officeAbsence.dart';
 import 'package:absence/pilihdinas.dart';
 import 'package:absence/rackupAbsence.dart';
+import 'package:absence/wfh.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -370,10 +373,9 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
               ),
               Positioned.fill(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 30),
                     Container(
                       width: 56,
                       height: 56,
@@ -394,7 +396,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                       ),
                       child: Icon(icon, size: 28, color: iconColor),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
@@ -416,6 +418,150 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _dinasKantor() {
+    SharedPreferences.getInstance().then((prefs) async {
+      await prefs.setString('attendance_type', "kantor");
+      await prefs.setString('status', "Hadir");
+      if (!mounted) return;
+      Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const OfficeAbsence()),
+      );
+    });
+  }
+
+  void _dinasLuar() {
+    SharedPreferences.getInstance().then((prefs) async {
+      await prefs.setString('attendance_type', "dinas_lapangan");
+      await prefs.setString('status', "dinas luar");
+      if (!mounted) return;
+      Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const FieldDuty()),
+      );
+    });
+  }
+
+  void _wfh() {
+    SharedPreferences.getInstance().then((prefs) async {
+      await prefs.setString('attendance_type', "wfh");
+      await prefs.setString('status', "wfh");
+      if (!mounted) return;
+      Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const WFH()),
+      );
+    });
+  }
+
+  Widget _buildBottomNav(AppLocalizations t) {
+    return SizedBox(
+      height: 96,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 28,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.cardBackground(context),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 20,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _NavItem(
+                    icon: Icons.explore_outlined,
+                    label: t.translate("field"),
+                    onTap: _dinasLuar,
+                  ),
+                  const SizedBox(width: 80),
+                  _NavItem(
+                    icon: Icons.home_outlined,
+                    label: t.translate("wfh"),
+                    onTap: _wfh,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            // bottom: 100,
+            top: -20,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                width: 80,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: AppTheme.cardBackground(context),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(200)),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: -16,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: GestureDetector(
+                onTap: _dinasKantor,
+                child: Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF38BDF8), Color(0xFF0EA5E9)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF38BDF8).withValues(alpha: 0.45),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.25),
+                      width: 2.5,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.business, color: Colors.white, size: 26),
+                      const SizedBox(height: 2),
+                      Text(
+                        t.translate("office"),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -516,6 +662,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
           }
         },
       ),
+      bottomNavigationBar: _buildBottomNav(t),
       body: Column(
         children: [
           Container(
@@ -630,10 +777,10 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
           Expanded(
             child: GridView.count(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               crossAxisSpacing: 14,
               mainAxisSpacing: 14,
-              childAspectRatio: 0.95,
+              childAspectRatio: 0.78,
               physics: const BouncingScrollPhysics(),
               children: [
                 _buildMenuCard(
@@ -709,6 +856,43 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: AppTheme.textSecondary(context), size: 26),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: AppTheme.textSecondary(context),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -36,10 +36,52 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  Widget _themeOption({
+    required IconData icon,
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: selected
+              ? AppTheme.cyanAccent.withOpacity(0.15)
+              : Colors.transparent,
+          border: Border.all(
+            color: selected
+                ? AppTheme.cyanAccent.withOpacity(0.4)
+                : AppTheme.borderColor(context),
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: selected ? AppTheme.cyanAccent : AppTheme.textSecondary(context),
+              size: 24,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                color: selected ? AppTheme.cyanAccent : AppTheme.textSecondary(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Row(
                     children: [
                       Icon(
-                        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                        Icons.palette_outlined,
                         color: AppTheme.cyanAccent,
                         size: 22,
                       ),
@@ -81,19 +123,27 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   const SizedBox(height: 16),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        isDark ? "Mode Gelap" : "Mode Terang",
-                        style: TextStyle(
-                          color: AppTheme.textSecondary(context),
-                        ),
-                      ),
-                      Switch.adaptive(
-                        value: isDark,
-                        activeColor: AppTheme.cyanAccent,
-                        onChanged: (_) => themeProvider.toggle(),
-                      ),
+                      Expanded(child: _themeOption(
+                        icon: Icons.brightness_auto_rounded,
+                        label: "Sistem",
+                        selected: themeProvider.themeMode == ThemeMode.system,
+                        onTap: () => themeProvider.setThemeMode(ThemeMode.system),
+                      )),
+                      const SizedBox(width: 10),
+                      Expanded(child: _themeOption(
+                        icon: Icons.light_mode_rounded,
+                        label: "Terang",
+                        selected: themeProvider.themeMode == ThemeMode.light,
+                        onTap: () => themeProvider.setThemeMode(ThemeMode.light),
+                      )),
+                      const SizedBox(width: 10),
+                      Expanded(child: _themeOption(
+                        icon: Icons.dark_mode_rounded,
+                        label: "Gelap",
+                        selected: themeProvider.themeMode == ThemeMode.dark,
+                        onTap: () => themeProvider.setThemeMode(ThemeMode.dark),
+                      )),
                     ],
                   ),
                 ],

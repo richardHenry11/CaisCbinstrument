@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:absence/Regist.dart';
-import 'package:absence/pilihdinas.dart';
+import 'package:absence/dashboard.dart';
+// import 'package:absence/pilihdinas.dart';
 import 'package:absence/theme.dart';
 import 'package:absence/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,7 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: widget.isLoggedIn ? const PilihDinas() : MyHomePage(),
+      home: widget.isLoggedIn ? const Dashboard() : MyHomePage(),
       builder: (context, child) =>
           _ThemeTransitionWrapper(child: child!),
     );
@@ -188,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => PilihDinas()),
+          MaterialPageRoute(builder: (_) => Dashboard()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
